@@ -1,0 +1,8 @@
+testbench.v
+../NN_code/nn_de3_memwrapper_test.v
+../NN_code/mem_ctrl_wrapper.v
+../NN_code/de3_display.v
+../NN_code/bcd_7seg_dec.v
+../NN_code/freq_div_nn.v
+../Cache_Minhaj_final/DMem.v
+../Cache_Minhaj_final/Mem_dummy.v
