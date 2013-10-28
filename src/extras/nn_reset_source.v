@@ -9,6 +9,7 @@ reg [31:0] reset_count;
 
 initial begin
 	reset_count = 32'd0;
+	reset       = 1'b0;
 end
 
 always@(posedge clk) begin
