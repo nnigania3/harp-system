@@ -235,7 +235,7 @@ template <unsigned N, unsigned R, unsigned L, unsigned SIZE>
     bvec<N> imm(in.imm);
 
 //NN- signals begin
-    bvec<L> mem_out_stall;
+    bvec<L> mem_out_stall = Input<L>("cache_stall_in");
     bvec<1> test_valid; 
     bvec<N> test_out  ; 
     bvec<1> test_pdest; 
@@ -243,7 +243,7 @@ template <unsigned N, unsigned R, unsigned L, unsigned SIZE>
     bvec<IDLEN> test_iid;
     bvec<CLOG2(R)> test_didx;
     bvec<N> fu_mem_data_out;
-    bvec<1> clkby2 = Input<1>("clkby2");
+//    bvec<1> clkby2 = Input<1>("clkby2");
 //NN- signals end
 
     for (unsigned i = 0; i < L; ++i) {	
@@ -263,9 +263,9 @@ template <unsigned N, unsigned R, unsigned L, unsigned SIZE>
     node mem_reset(!reset_in[0]);
     //node reset = Lit(1);
 
-    bvec<IDLEN> mem_out_iid;
-    bvec<1> mem_out_ready;
-    bvec<N> mem_sramout;
+    bvec<IDLEN> mem_out_iid = Input<IDLEN>("cache_id_in");
+    bvec<1> mem_out_ready = Input<1> ("cache_ready_in");
+    bvec<N> mem_sramout = Input<N>("cache_data_in");
     node ram_issue;
     node issue;
     bvec<1> pending_read, temp;
@@ -277,7 +277,17 @@ template <unsigned N, unsigned R, unsigned L, unsigned SIZE>
     issue 		= test_isReady && valid ;
     ram_issue 		= test_isReady && valid && !romsel ;
 
-    Module("cache_subsystem").inputs(clkby2)(bvec<1>(mem_reset))(addr)(r0)(bvec<1>(!op[0]))(bvec<1>(ram_issue))(in.iid).outputs(mem_sramout)(mem_out_iid)(mem_out_ready)(bvec<1>(mem_out_stall[i])); //all should be bitvec
+    bvec<N> cache_addr_out(addr), cache_data_out(r0);
+    bvec<1> cache_rw_out(bvec<1>(!op[0])), cache_valid_out((ram_issue)), cache_reset_n(mem_reset);
+    bvec<IDLEN> cache_id_out(in.iid);
+    OUTPUT(cache_reset_n);
+    OUTPUT(cache_addr_out);
+    OUTPUT(cache_data_out);
+    OUTPUT(cache_rw_out);
+    OUTPUT(cache_valid_out);
+    OUTPUT(cache_id_out);
+
+//    Module("cache_subsystem").inputs(clkby2)(bvec<1>(mem_reset))(addr)(r0)(bvec<1>(!op[0]))(bvec<1>(ram_issue))(in.iid).outputs(mem_sramout)(mem_out_iid)(mem_out_ready)(bvec<1>(mem_out_stall[i])); //all should be bitvec
  
     node test_trig = Wreg(issue, romsel);
     bvec<CLOG2(N)> memshift_out = Wreg(issue, memshift);

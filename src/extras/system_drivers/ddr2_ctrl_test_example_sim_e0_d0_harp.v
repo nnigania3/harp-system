@@ -79,60 +79,70 @@ module ddr2_ctrl_test_example_sim_e0_d0 #(
 	wire led1;
 
 	wire reset;	
-	reg [31:0] addr_in; 		// address in from the core
-	reg [DATA_WIDTH -1:0] data_in; 		// data from the core
-	reg rw_in; 								// read / write command
+	wire [31:0] addr_in; 		// address in from the core
+	wire [DATA_WIDTH -1:0] data_in; 		// data from the core
+	wire rw_in; 								// read / write command
 	wire valid_in; 							//  valid reg on the addr, data buses
-	reg [2:0] id_in; 		// ld/st Q id for request
+	wire [2:0] id_in; 		// ld/st Q id for request
 	
 	wire [DATA_WIDTH-1:0] data_out;	// data to be given to the core
 	wire [2:0] id_out;	// ld/st Q id for request being satisfied
 	wire ready_out; 						// the memory request for which data is ready
 	wire stall_out;							// the memory system cannot accept anymore requests
 
-	//wire [ADDR_WIDTH-1:0]   avl_addr;
-	//wire [LINE_WIDTH -1:0]  avl_wdata;
-	//wire [LINE_WIDTH -1:0]  avl_rdata;
-	//wire [2:0]        	avl_size;
-	//wire [31:0] 		avl_be;
+        wire cache_reset_n;
+	wire [DATA_WIDTH-1:0] harp_data_out;	// data to be given to the core
+	wire harp_ready_out; 						// the memory request for which data is ready
 
-	
-/*	mem_ctrl_wrapper #(
-		.BUFF_INDEX_BITS(2),
-		.LINE_BITS(LINE_BITS),				// LOG(LINE_SIZE)
-		.INDEX_BITS(13),						// LOG(NO_OF_SETS)
-		.LINE_WIDTH(LINE_WIDTH),			//
-		.ADDR_WIDTH(ADDR_WIDTH),
-		.CREG_ID_BITS(CREG_ID_BITS),		// ID BITS of the ld/St Q from core
-		.MSHR_ID_BITS(CREG_ID_BITS),		// ID BITS for MSHR going to L2
-		.AVL_ADDR(ADDR_WIDTH),
-		.AVL_SIZE(TG_AVL_SIZE_WIDTH),
-		.AVL_BE(TG_AVL_BE_WIDTH),
-	) 
-	mem_wrapper */
-	harmonica  #(
+
+	harmonica harp_core
+		(
+	           .phi(clk),
+	           .cache_data_in(data_out),
+	           .cache_id_in(id_out),
+	           .cache_ready_in(ready_out),
+	           .cache_stall_in(stall_out),
+	           .reset_in(reset),
+	           .cache_addr_out(addr_in),
+	           .cache_data_out(data_in),
+	           .cache_id_out(id_in),
+	           .cache_reset_n(cache_reset_n),
+	           .cache_rw_out(rw_in),
+	           .cache_valid_out(valid_in),
+	           .char_out(harp_ready_out),
+	           .char_out_val(harp_data_out)
+               );
+
+	cache_subsystem  #(
 		.AVL_ADDR(ADDR_WIDTH),
 		.AVL_SIZE(TG_AVL_SIZE_WIDTH),
 		.AVL_BE(TG_AVL_BE_WIDTH),
 		.AVL_DATA_WIDTH(LINE_WIDTH)
 	)
-	harp_core
+	cache
 		(
-		.phi(clk),
-		.clkby2(clkby2),
-		.reset_in(reset),
-		.char_out(ready_out),	// data to be given to the core
-		.char_out_val(data_out), 				// the memory request for which data is ready
-                .avl_ready(avl_ready),      
-                .avl_addr(avl_addr),       
-                .avl_size(avl_size),       
-                .avl_wdata(avl_wdata),      
-                .avl_rdata(avl_rdata),      
-                .avl_write_req(avl_write_req),  
-                .avl_read_req(avl_read_req),   
-                .avl_rdata_valid(avl_rdata_valid),
-                .avl_be(avl_be),         
-                .avl_burstbegin(avl_burstbegin)  		
+		clk,
+		clkby2,
+		cache_reset_n,
+		addr_in, 		// address in from the core
+		data_in, 		// data from the core
+		rw_in, 								// read / write command
+		valid_in, 							//  valid reg on the addr, data buses
+		id_in, 		// ld/st Q id for request
+		data_out,	// data to be given to the core
+		id_out,	// ld/st Q id for request being satisfied
+		ready_out, 				// the memory request for which data is ready
+		stall_out, 							// the memory system cannot accept anymore requests
+                avl_ready,      
+                avl_addr,       
+                avl_size,       
+                avl_wdata,      
+                avl_rdata,      
+                avl_write_req,  
+                avl_read_req,   
+                avl_rdata_valid,
+                avl_be,         
+                avl_burstbegin  		
 	);
 
 reg [9:0]count;
@@ -155,9 +165,8 @@ assign data_display = data_display_temp[11:5];
 	 data_sum <= 0;
 	 stop <= 1'b0;	
       end else begin
-	 if(ready_out == 1'b1)	begin
-		//data_sum <= data_sum + data_out;
-		data_sum <= data_out;
+	 if(harp_ready_out == 1'b1)	begin
+		data_sum <= data_sum + harp_data_out;
 		stop <= 1'b1;
 	 end
       end
@@ -169,6 +178,6 @@ assign pass = (data_sum == 95)? 1'b1 : 1'b0 ;
 assign fail = (data_sum != 95)? 1'b1 : 1'b0 ;
 //assign reset    = (reset_time < 32'd30) ? 1'b0 : 1'b1 ;
 //Display module
-de3_display   display(clk, data_sum, ready_out, disp1, disp2, led1);
+de3_display   display(clk, harp_data_out, harp_ready_out, disp1, disp2, led1);
 
 endmodule
