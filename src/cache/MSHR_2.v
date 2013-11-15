@@ -235,7 +235,7 @@ module MSHR_2
 		if (!reset)
 			comp_read_tag <= 0;
 		else if (comp_true)
-			comp_read_tag <= temp;
+			comp_read_tag <= temp;	//NN check how can you assing temp in last loop twice using non-blocking statement
 	end
 	assign comp_read = read[comp_read_tag];
 	

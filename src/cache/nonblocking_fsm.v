@@ -263,7 +263,7 @@ module nonblocking_fsm_L1
 						reg_rw_l2 <= 1'b0;
 					end
             end
-            WB_L2: begin
+            WB_L2: begin						//NN check, this state is not used anywhere!, remove it?
 					if (done_l2 | flag) begin
 						reg_flag <= 1'b1;
 				/*		reg_fstate <= L2_COMPLETE;

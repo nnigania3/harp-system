@@ -278,7 +278,7 @@ module L1_cache #(
 	assign tag_b_valid_in = data_b_we;
 	assign tag_b_dirty_in = 1'b0;	
 			
-	assign #0.5 l2_addr_o = l2_addr_en ? {tag_out_b,index_b,5'b0} : addr_b;
+	assign #0.5 l2_addr_o = l2_addr_en ? {tag_out_b,index_b,5'b0} : addr_b;	//NN Fix this for Line bits instead of 5
 	assign #0.5 l2_data_o = rd_valid_b ? cache_out2 : fullZeros;
 	assign #0.5 addr_b_cache = mshr_rn_valid ? addr_b_temp: stall_out_fsm ? mshr_get_addr : addr_b;
 	assign #0.5 index_b = addr_b_cache[INDEX_BITS+LINE_BITS-1:LINE_BITS];
