@@ -349,8 +349,8 @@ module L2_cache
 		 .stall_out_d(portA_op_en),
 		 .block_stall(block_stall)
 	);
-		
-/*	Mem_dummy #(
+/*		
+	Mem_dummy #(
 		.CACHE_SIZE(256*1024),				// in Bytes
 		.LINE_BITS(LINE_BITS),				// LOG(LINE_SIZE)
 		.INDEX_BITS(13),						// LOG(NO_OF_SETS)

@@ -8,6 +8,11 @@ module cache_subsystem #(
 	parameter DATA_WIDTH = 32,			//
 	parameter ADDR_WIDTH = 32,
 	parameter CREG_ID_BITS = 3,		// ID BITS of the ld/St Q from core
+        `ifdef SIMD
+	parameter SIMD_WIDTH = (2**(LINE_BITS-2)),      // SIMD width = no. of cache line words
+        `else
+	parameter SIMD_WIDTH = 1,			// SIMD width 
+        `endif
 	parameter AVL_ADDR       = 30,			// AVL address
 	parameter AVL_SIZE       = 3,			// AVL size
 	parameter AVL_BE         = 32,			// AVL byte enable
@@ -19,11 +24,14 @@ module cache_subsystem #(
 	input reset,
 	
 	input [ADDR_WIDTH-1:0] addr_in, 		// address in from the core
-	input [DATA_WIDTH-1:0] data_in, 		// data from the core
+	input [DATA_WIDTH*SIMD_WIDTH-1:0] data_in, 		// data from the core
 	input rw_in, 								// read / write command
 	input valid_in, 							//  valid input on the addr, data buses
 	input [CREG_ID_BITS-1:0] id_in, 		// ld/st Q id for request
-	output [DATA_WIDTH-1:0] data_out,	// data to be given to the core
+        `ifdef SIMD
+	input  [SIMD_WIDTH - 1:0] valid_word_in,	// SIMD valid/mask word bits 
+        `endif
+	output [DATA_WIDTH*SIMD_WIDTH-1:0] data_out,	// data to be given to the core
 	output [CREG_ID_BITS-1:0] id_out,	// ld/st Q id for request being satisfied
 	output ready_out, 						// the memory request for which data is ready
 	output stall_out, 							// the memory system cannot accept anymore requests
@@ -97,7 +105,8 @@ module cache_subsystem #(
 		.WORDS(2**(LINE_BITS-2)),
 		.ADDR_WIDTH(ADDR_WIDTH),
 		.CREG_ID_BITS(CREG_ID_BITS),		// ID BITS of the ld/St Q from core
-		.MSHR_ID_BITS(MSHR_ID_BITS)		// ID BITS for MSHR going to L2
+		.MSHR_ID_BITS(MSHR_ID_BITS),		// ID BITS for MSHR going to L2
+		.SIMD_WIDTH(SIMD_WIDTH)		// ID BITS for MSHR going to L2
 	)
 	L1_instance (
 		.clk(clk),
@@ -108,6 +117,9 @@ module cache_subsystem #(
 		.data_in(data_in), 					// data from the core
 		.rw_in(rw_in), 						// read / write command
 		.valid_in(valid_in), 				//  valid input on the addr, data buses
+        `ifdef SIMD
+		.valid_word_in(valid_word_in), 				//  valid input on the addr, data buses
+        `endif
 		.id_in(id_in), 						// ld/st Q id for request
 		.data_out(data_out),					// data to be given to the core
 		.id_out(id_out),						// ld/st Q id for request being satisfied

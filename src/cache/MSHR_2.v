@@ -12,18 +12,26 @@ module MSHR_2
 	
 	get, get_tag,
 	get_valid, get_addr, get_data, get_rw, get_dirty, get_cpu_id, get_victim,
-	
+         	
 	comp_addr, comp_victim,
 	comp_true, diff_line_true, same_line_true, comp_read, 
-	
+        `ifdef SIMD
+         add_word_valid, rn_word_valid, get_word_valid,
+        `endif	
 	empty, full
 );
+        localparam WORDS = 2**(LINE_BITS-2);
 
 	input clk, enable, reset;                         //These inputs and outputs are hopefully mostly self-explanatory
 	
 	input add;
 	input [addr_bits-1:0] add_addr;
 	input [data_bits-1:0] add_data;
+        `ifdef SIMD
+	input  [WORDS-1:0] add_word_valid;
+	output [WORDS-1:0] rn_word_valid;
+	output [WORDS-1:0] get_word_valid;
+        `endif	
 	input add_rw, add_dirty; 
 	input [cpu_id_bits-1:0] add_cpu_id;
 	input [ASSOC_BITS-1:0] add_victim;
@@ -66,6 +74,9 @@ module MSHR_2
 	reg val [0:2**mshr_tag_bits-1];
 	reg [addr_bits-1:0] addr [0:2**mshr_tag_bits-1];
 	reg [data_bits-1:0] data [0:2**mshr_tag_bits-1];
+        `ifdef SIMD
+	reg [WORDS-1:0] word_valid [0:2**mshr_tag_bits-1];
+        `endif	
 	reg rw [0:2**mshr_tag_bits-1];	
 	reg dirty [0:2**mshr_tag_bits-1];
 	reg [cpu_id_bits-1:0] cpu_id [0:2**mshr_tag_bits-1];
@@ -134,6 +145,9 @@ module MSHR_2
 				cpu_id[xx] <= 0;
 				victim[xx] <= 0;
 				read[xx] <= 0;
+                                `ifdef SIMD
+				word_valid[xx] <= 0;
+                                `endif
 			end
 		end
 		else if (enable == 1'b1)
@@ -147,6 +161,9 @@ module MSHR_2
 				cpu_id[next_free_reg_tag] <= add_cpu_id;
 				victim[next_free_reg_tag] <= add_victim;
 				read[next_free_reg_tag] <= 0;
+                                `ifdef SIMD
+				word_valid[next_free_reg_tag] <= add_word_valid;
+                                `endif
 			end
 			if(del_entry_signal == 1'b1)begin 							//This if statement deletes all the info from the MSHR memory
 				val[del_tag] <= 0;
@@ -157,6 +174,9 @@ module MSHR_2
 				cpu_id[del_tag] <= 0;
 				victim[del_tag] <= 0;
 				read[del_tag] <= 0;
+                                `ifdef SIMD
+				word_valid[del_tag] <= 0;
+                                `endif
 			end
 			if(rn_valid)begin										//This if statement makes that a particular MSHR entry has been read
 				read[rn_mshr_id] <= 1;
@@ -207,6 +227,11 @@ module MSHR_2
 	assign get_valid = get ? val[get_tag] : 1'b0;
 	assign get_victim = get ? victim[get_tag] : 0;
 	
+        `ifdef SIMD
+	assign rn_word_valid = word_valid[rn_mshr_id];
+	assign get_word_valid = get ? word_valid[get_tag] : 0;
+        `endif	
+
 	integer i;
 		
 	reg [mshr_tag_bits-1:0] temp;

@@ -34,6 +34,7 @@ L2_ram.v
 GenericOneHotMux.v
 array.v
 data_ram.v
+data_ram_simd.v
 GenericMux.v
 blocking.v
 #

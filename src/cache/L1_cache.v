@@ -11,7 +11,8 @@ module L1_cache #(
 	parameter WORDS = 8,
 	parameter ADDR_WIDTH = 32,
 	parameter CREG_ID_BITS = 4,		// ID BITS of the ld/St Q from core
-	parameter MSHR_ID_BITS = 4			// ID BITS for MSHR going to L2
+	parameter MSHR_ID_BITS = 4,			// ID BITS for MSHR going to L2
+	parameter SIMD_WIDTH = 1			// SIMD width 
  )
 (
 	input clk,
@@ -19,11 +20,14 @@ module L1_cache #(
 	input reset,
 	
 	input [ADDR_WIDTH-1:0] addr_in, 		// address in from the core
-	input [DATA_WIDTH-1:0] data_in, 		// data from the core
+	input [DATA_WIDTH*SIMD_WIDTH-1:0] data_in, 		// data from the core
 	input rw_in, 								// read / write command
 	input valid_in, 							//  valid input on the addr, data buses
 	input [CREG_ID_BITS-1:0] id_in, 		// ld/st Q id for request
-	output [DATA_WIDTH-1:0] data_out,	// data to be given to the core
+        `ifdef SIMD
+	input [WORDS-1:0] valid_word_in, 		// valid word in
+        `endif
+	output [DATA_WIDTH*SIMD_WIDTH-1:0] data_out,	// data to be given to the core
 	output reg [CREG_ID_BITS-1:0] id_out,	// ld/st Q id for request being satisfied
 	output reg ready_out, 						// the memory request for which data is ready
 	output stall_out, 							// the memory system cannot accept anymore requests
@@ -34,7 +38,7 @@ module L1_cache #(
 	output l2_rw_o,
 	output l2_valid_o,
 	output reg [MSHR_ID_BITS-1:0] l2_id_o,
-	input [DATA_WIDTH*8-1:0] l2_data_i,
+	input [DATA_WIDTH*WORDS-1:0] l2_data_i,
 	input l2_valid_i,
 	input [MSHR_ID_BITS-1:0] l2_id_i,
 	input l2_stall_i
@@ -84,7 +88,7 @@ module L1_cache #(
 	wire [INDEX_BITS-1:0] index_in, index_a;
 	wire [ADDR_WIDTH-LINE_BITS-INDEX_BITS-1:0] tag_in, tag_a;
 	wire [LINE_BITS-2-1:0] word_in, word_a;
-	wire [DATA_WIDTH-1:0] data_a;
+	wire [DATA_WIDTH*SIMD_WIDTH-1:0] data_a;
 	
 	// stored signals for L2
 	reg [ADDR_WIDTH-1:0] ram_addr, addr_prev;
@@ -92,18 +96,28 @@ module L1_cache #(
 	reg [ADDR_WIDTH-LINE_BITS-INDEX_BITS-1:0] tag_prev;
 	reg [LINE_BITS-2-1:0] word_prev;
 	reg [CREG_ID_BITS-1:0] id_prev;
-	reg [DATA_WIDTH-1:0] data_prev;
+	reg [DATA_WIDTH*SIMD_WIDTH-1:0] data_prev;
+        
+        `ifdef SIMD
+	reg  [SIMD_WIDTH-1:0] word_val_prev;
+	wire [SIMD_WIDTH-1:0] mshr_add_word_val;
+	wire [SIMD_WIDTH-1:0] mshr_get_word_val;
+	reg  [SIMD_WIDTH-1:0] mshr_same_word_val;
+	wire [SIMD_WIDTH-1:0] word_val_bef_reg;	// data to be given to the core
+	wire [SIMD_WIDTH-1:0] data_a_word_val;
+        `endif
+
 	reg rw_prev;
 	
 	wire mshr_add;
 	wire [ADDR_WIDTH-1:0] mshr_add_addr;
 	wire [CREG_ID_BITS-1:0] mshr_add_cpu_id;
-	wire [DATA_WIDTH-1:0] mshr_add_data;
+	wire [DATA_WIDTH*SIMD_WIDTH-1:0] mshr_add_data;
 	wire mshr_add_rw, mshr_add_dirty;
 	
 	wire [ADDR_WIDTH-1:0] mshr_get_addr;
 	wire [CREG_ID_BITS-1:0] mshr_get_cpu_id;
-	wire [DATA_WIDTH-1:0] mshr_get_data;
+	wire [DATA_WIDTH*SIMD_WIDTH-1:0] mshr_get_data;
 	wire mshr_get_rw, mshr_get_valid, mshr_get_dirty;
 	
 	wire mshr_rn_valid;
@@ -118,7 +132,7 @@ module L1_cache #(
 	wire mshr_read_next, mshr_get, mshr_del;
 			
 	reg [ADDR_WIDTH-1:0] mshr_same_addr;
-	reg [DATA_WIDTH-1:0] mshr_same_data;
+	reg [DATA_WIDTH*SIMD_WIDTH-1:0] mshr_same_data;
 	reg [CREG_ID_BITS-1:0] mshr_same_id;
 	reg [ASSOC_BITS-1:0] mshr_same_victim;
 	reg mshr_same_rw, mshr_same_dirty;
@@ -136,13 +150,13 @@ module L1_cache #(
 	wire valid_real;
 	
 	// blocking fsm control signals	 
-   wire rd_valid_b;
-   wire l2_addr_en;
+        wire rd_valid_b;
+        wire l2_addr_en;
 	wire stall_out_fsm;
 	wire portA_op_en;
 	wire block_stall;
-	reg block_signal_same;
-	reg block_signal_diff;
+	reg  block_signal_same;
+	reg  block_signal_diff;
 	wire block_signal;
 
 	reg [ASSOC_BITS-1:0] counter, victim_temp;
@@ -153,21 +167,24 @@ module L1_cache #(
 	wire [ADDR_WIDTH-1:0] addr_bef_reg;
 	wire [CREG_ID_BITS-1:0] id_temp;
 	wire rw_bef_reg;
-	wire [DATA_WIDTH-1:0] data_bef_reg;
-	
+	wire [DATA_WIDTH*SIMD_WIDTH-1:0] data_bef_reg;	// data to be given to the core
+
 	wire [DATA_WIDTH*WORDS-1:0] fullZeros; 
 	wire [DATA_WIDTH*(WORDS-1)-1:0] lessZeros;
 	
 	assign fullZeros = {DATA_WIDTH*WORDS{1'b0}};
 	assign lessZeros = fullZeros[DATA_WIDTH*(WORDS-1)-1:0];
 	 
-   assign #0.5 hit = ( valid_real & valid_out) ? (tag_in == tag_out) : 1'b0;
+        assign #0.5 hit = ( valid_real & valid_out) ? (tag_in == tag_out) : 1'b0;
 //	assign miss = ~hit & valid_in;
 	
 	assign #0.5 index_a = portA_op_en ? index_prev : index_in;
 	assign #0.5 tag_a = portA_op_en ? tag_prev : tag_in;
 	assign #0.5 word_a = portA_op_en ? word_prev : word_in;
 	assign #0.5 data_a = portA_op_en ? data_prev : data_bef_reg;
+        `ifdef SIMD
+	assign #0.5 data_a_word_val = portA_op_en ? word_val_prev : word_val_bef_reg;
+        `endif
 	
 	assign #0.5 data_a_we = portA_op_en ? rw_prev : rw_in & hit;
 	assign #0.5 tag_a_we = portA_op_en ? rw_prev : rw_in & hit;
@@ -241,6 +258,17 @@ module L1_cache #(
 		end
 	end
 	
+        `ifdef SIMD
+	data_array_simd #(.DATA_WIDTH(DATA_WIDTH*WORDS), .INDEX_WIDTH(INDEX_BITS), .WORD_BITS(LINE_BITS-2))
+		data_ram
+		(
+			.data_a(data_a), .data_b(cache_in2),
+			.addr_a(index_a), .addr_b(index_b),
+			.valid_word_a(data_a_word_val), //.word_b(0),
+			.we_a(data_a_we), .we_b(data_b_we), .mode_a(1'b0), .clk(clk),
+			.q_a(cache_out), .q_b(cache_out2)
+		);
+        `else
 	data_array #(.DATA_WIDTH(DATA_WIDTH*WORDS), .INDEX_WIDTH(INDEX_BITS), .WORD_BITS(LINE_BITS-2))
 		data_ram
 		(
@@ -250,13 +278,20 @@ module L1_cache #(
 			.we_a(data_a_we), .we_b(data_b_we), .mode_a(1'b0), .clk(clk),
 			.q_a(cache_out), .q_b(cache_out2)
 		);
-		
+        `endif
+	
+	
+        `ifdef SIMD
+         assign data_out = cache_out;
+        `else
 	GenericMux #(.WIDTH(DATA_WIDTH),.SEL_BITS(LINE_BITS-2)) mux1
 	(
 		.in_bus(cache_out), 
 		.sel(word_a_d),
 		.out(data_out)
 	);
+        `endif
+
 	
 	L1_tag_array #(.TAG_BITS(ADDR_WIDTH-LINE_BITS-INDEX_BITS), .INDEX_WIDTH(INDEX_BITS))
 		tag_ram
@@ -292,6 +327,9 @@ module L1_cache #(
 	assign #0.5 tag_in = addr_in[ADDR_WIDTH-1:INDEX_BITS+LINE_BITS];
 	assign #0.5 word_in = addr_in[LINE_BITS-1:2];
 	assign #0.5 data_bef_reg = data_in;
+        `ifdef SIMD
+	assign #0.5 word_val_bef_reg = valid_word_in;
+        `endif
 		
 	//////// Values that needs to be saved in MSHR and used on return ///////
 	always@ (posedge clk or negedge reset)
@@ -301,6 +339,10 @@ module L1_cache #(
 			rw_prev <= 1'b0;
 			id_prev <= 0;
 			data_prev <= 0;
+
+                        `ifdef SIMD
+			word_val_prev <= 0;
+                        `endif
 			victim_prev <= 0;
 			
 			l2_id_o <= 0;
@@ -314,6 +356,9 @@ module L1_cache #(
 			mshr_same_dirty <= 1'b0;
 			block_signal_same <= 1'b0;
 			block_signal_diff <= 1'b0;
+                        `ifdef SIMD
+			mshr_same_word_val <= 0;
+                        `endif
 		end
 		else begin
 			if (mshr_get_valid) begin
@@ -321,6 +366,9 @@ module L1_cache #(
 				rw_prev <= mshr_get_rw;
 				id_prev <= mshr_get_cpu_id;
 				data_prev <= mshr_get_data;
+                                `ifdef SIMD
+				word_val_prev <= mshr_get_word_val;
+                                `endif
 				victim_prev <= mshr_get_victim;
 			end
 			if (mshr_rn_valid) begin
@@ -334,6 +382,9 @@ module L1_cache #(
 				mshr_same_id <= id_temp;
 				mshr_same_data <= data_bef_reg;
 				mshr_same_dirty <= dirty_out;
+                                `ifdef SIMD
+		                mshr_same_word_val <= word_val_bef_reg;
+                                `endif
 		//		mshr_same_victim <= victim_temp;
 				if (mshr_same_true & miss_bef_reg)
 					block_signal_same <= 1'b1;
@@ -350,6 +401,9 @@ module L1_cache #(
 				rw_prev <= mshr_same_rw;
 				id_prev <= mshr_same_id;
 				data_prev <= mshr_same_data;
+                                `ifdef SIMD
+		                word_val_prev <= mshr_same_word_val;
+                                `endif
 		//		victim_prev <= mshr_same_victim;
 			end
 			mshr_same_true_d <= mshr_same_true;
@@ -371,8 +425,11 @@ module L1_cache #(
 	assign mshr_add_rw = (block_signal_diff & ~mshr_comp_true) ? mshr_same_rw : rw_bef_reg;
 	assign mshr_add_cpu_id = (block_signal_diff & ~mshr_comp_true) ? mshr_same_id : id_temp;
 	assign mshr_add_dirty = (block_signal_diff & ~mshr_comp_true) ? mshr_same_dirty : dirty_out;
+        `ifdef SIMD
+	assign mshr_add_word_val = (block_signal_diff & ~mshr_comp_true) ? mshr_same_word_val : word_val_bef_reg;
+        `endif
 
-	MSHR_2 #(.addr_bits(32), .data_bits(32), .mshr_tag_bits(3), .cpu_id_bits(3), .ASSOC_BITS(1)) mshr
+	MSHR_2 #(.addr_bits(ADDR_WIDTH), .data_bits(DATA_WIDTH*SIMD_WIDTH), .mshr_tag_bits(MSHR_ID_BITS), .cpu_id_bits(CREG_ID_BITS), .ASSOC_BITS(1)) mshr
 	(
 		.clk(clk), .enable(1'b1), .reset(reset),
 		
@@ -389,7 +446,9 @@ module L1_cache #(
 
 		.comp_addr(mshr_comp_addr), .comp_victim(1'b0),
 		.comp_true(mshr_comp_true), .diff_line_true(mshr_diff_true), .same_line_true(mshr_same_true), .comp_read(mshr_comp_read), 
-		
+        `ifdef SIMD
+         .add_word_valid(mshr_add_word_val), .rn_word_valid(), .get_word_valid(mshr_get_word_val),
+        `endif	
 		.empty(mshr_empty), .full(mshr_full)
 	);
 	

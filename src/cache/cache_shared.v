@@ -8,6 +8,11 @@ module cache_shared #(
 	parameter DATA_WIDTH = 32,			//
 	parameter ADDR_WIDTH = 32,
 	parameter CREG_ID_BITS = 3,			// ID BITS of the ld/St Q from core
+        `ifdef SIMD
+	parameter SIMD_WIDTH = (2**(LINE_BITS-2)),      // SIMD width = no. of cache line words
+        `else
+	parameter SIMD_WIDTH = 1,			// SIMD width 
+        `endif
 	parameter AVL_ADDR       = 30,			// AVL address
 	parameter AVL_SIZE       = 3,			// AVL size
 	parameter AVL_BE         = 32,			// AVL byte enable
@@ -19,22 +24,28 @@ module cache_shared #(
 	input reset,
 	
 	input [ADDR_WIDTH-1:0] addr_in1, 		// address in from the core
-	input [DATA_WIDTH-1:0] data_in1, 		// data from the core
+	input [DATA_WIDTH*SIMD_WIDTH-1:0] data_in1, 		// data from the core
 	input rw_in1, 					// read / write command
 	input valid_in1, 				//  valid input on the addr, data buses
 	input [CREG_ID_BITS-1:0] id_in1, 		// ld/st Q id for request
-	output [DATA_WIDTH-1:0] data_out1,		// data to be given to the core
+        `ifdef SIMD
+	input  [SIMD_WIDTH - 1:0] valid_word_in1,	// SIMD valid/mask word bits 
+        `endif
+	output [DATA_WIDTH*SIMD_WIDTH-1:0] data_out1,		// data to be given to the core
 	output [CREG_ID_BITS-1:0] id_out1,		// ld/st Q id for request being satisfied
 	output ready_out1, 				// the memory request for which data is ready
 	output stall_out1, 				// the memory system cannot accept anymore requests
 							// stall the pipeline when this line is high
 	
 	input [ADDR_WIDTH-1:0] addr_in2, 		// address in from the core
-	input [DATA_WIDTH-1:0] data_in2, 		// data from the core
+	input [DATA_WIDTH*SIMD_WIDTH-1:0] data_in2, 		// data from the core
 	input rw_in2, 					// read / write command
 	input valid_in2, 				//  valid input on the addr, data buses
 	input [CREG_ID_BITS-1:0] id_in2, 		// ld/st Q id for request
-	output [DATA_WIDTH-1:0] data_out2,		// data to be given to the core
+        `ifdef SIMD
+	input  [SIMD_WIDTH - 1:0] valid_word_in2,	// SIMD valid/mask word bits 
+        `endif
+	output [DATA_WIDTH*SIMD_WIDTH-1:0] data_out2,		// data to be given to the core
 	output [CREG_ID_BITS-1:0] id_out2,		// ld/st Q id for request being satisfied
 	output ready_out2, 				// the memory request for which data is ready
 	output stall_out2, 				// the memory system cannot accept anymore requests
@@ -74,8 +85,11 @@ module cache_shared #(
 	wire [NUM_L1-1:0] valid_L1;
 	wire [NUM_L1-1:0] rw_L1;
 	wire [(ADDR_WIDTH*NUM_L1)-1:0] addr_L1;
-	wire [DATA_WIDTH*NUM_L1-1:0] data_L1;
+	wire [DATA_WIDTH*SIMD_WIDTH*NUM_L1-1:0] data_L1;
 	wire [MSHR_ID_BITS*NUM_L1-1:0] id_L1;
+        `ifdef SIMD
+	wire [SIMD_WIDTH*NUM_L1-1:0] valid_word_L1;
+        `endif
 	
 	wire [NUM_L1-1:0] l2_valid_L1;
 	wire [NUM_L1-1:0] l2_rw_L1;
@@ -90,7 +104,7 @@ module cache_shared #(
 	
 	wire [NUM_L1-1:0] ready_out_L1;
 	wire [NUM_L1-1:0] stall_out_L1;
-	wire [DATA_WIDTH*NUM_L1-1:0] data_out_L1;
+	wire [DATA_WIDTH*SIMD_WIDTH*NUM_L1-1:0] data_out_L1;
 	wire [CREG_ID_BITS*NUM_L1-1:0] id_out_L1;
 	
 	wire [MSHR_ID_BITS:0] l2_id_temp;
@@ -98,21 +112,23 @@ module cache_shared #(
 	wire [NUM_L1_LOG-1:0] L1_no;
 
 	assign addr_L1[(0+1)*ADDR_WIDTH-1:0*ADDR_WIDTH] = addr_in1;
-	assign data_L1[(0+1)*DATA_WIDTH-1:0*DATA_WIDTH] = data_in1;
+	assign data_L1[(0+1)*DATA_WIDTH*SIMD_WIDTH-1:0*DATA_WIDTH*SIMD_WIDTH] = data_in1;
 	assign rw_L1[(0+1)-1:0] = rw_in1;
 	assign valid_L1[(0+1)-1:0] = valid_in1;
 	assign id_L1[(0+1)*CREG_ID_BITS-1:0*CREG_ID_BITS] = id_in1;
-	assign data_out1 = data_out_L1[(0+1)*DATA_WIDTH-1:0*DATA_WIDTH];
+	assign valid_word_L1[(0+1)*SIMD_WIDTH-1:0*SIMD_WIDTH] = valid_word_in1;
+	assign data_out1 = data_out_L1[(0+1)*DATA_WIDTH*SIMD_WIDTH-1:0*DATA_WIDTH*SIMD_WIDTH];
 	assign id_out1 = id_out_L1[(0+1)*CREG_ID_BITS-1:0*CREG_ID_BITS];
 	assign ready_out1 = ready_out_L1[(0+1)-1:0];
 	assign stall_out1 = stall_out_L1[(0+1)-1:0] || (~reset);
 	
 	assign addr_L1[(1+1)*ADDR_WIDTH-1:1*ADDR_WIDTH] = addr_in2;
-	assign data_L1[(1+1)*DATA_WIDTH-1:1*DATA_WIDTH] = data_in2;
+	assign data_L1[(1+1)*DATA_WIDTH*SIMD_WIDTH-1:1*DATA_WIDTH*SIMD_WIDTH] = data_in2;
 	assign rw_L1[(1+1)-1:1] = rw_in2;
 	assign valid_L1[(1+1)-1:1] = valid_in2;
 	assign id_L1[(1+1)*CREG_ID_BITS-1:1*CREG_ID_BITS] = id_in2;
-	assign data_out2 = data_out_L1[(1+1)*DATA_WIDTH-1:1*DATA_WIDTH];
+	assign valid_word_L1[(1+1)*SIMD_WIDTH-1:1*SIMD_WIDTH] = valid_word_in2;
+	assign data_out2 = data_out_L1[(1+1)*DATA_WIDTH*SIMD_WIDTH-1:1*DATA_WIDTH*SIMD_WIDTH];
 	assign id_out2 = id_out_L1[(1+1)*CREG_ID_BITS-1:1*CREG_ID_BITS];
 	assign ready_out2 = ready_out_L1[(1+1)-1:1];
 	assign stall_out2 = stall_out_L1[(1+1)-1:1] || (~reset);
@@ -129,7 +145,8 @@ module cache_shared #(
 				.WORDS(2**(LINE_BITS-2)),
 				.ADDR_WIDTH(ADDR_WIDTH),
 				.CREG_ID_BITS(CREG_ID_BITS),		// ID BITS of the ld/St Q from core
-				.MSHR_ID_BITS(MSHR_ID_BITS)		// ID BITS for MSHR going to L2
+				.MSHR_ID_BITS(MSHR_ID_BITS),		// ID BITS for MSHR going to L2
+				.SIMD_WIDTH(SIMD_WIDTH)		// ID BITS for MSHR going to L2
 			)
 			L1_instance1 (
 				.clk(clk),
@@ -137,12 +154,15 @@ module cache_shared #(
 				.reset(reset),
 				
 				.addr_in(addr_L1[(j+1)*ADDR_WIDTH-1:j*ADDR_WIDTH]), 					// address in from the core
-				.data_in(data_L1[(j+1)*DATA_WIDTH-1:j*DATA_WIDTH]), 					// data from the core
+				.data_in(data_L1[(j+1)*DATA_WIDTH*SIMD_WIDTH-1:j*DATA_WIDTH*SIMD_WIDTH]), 					// data from the core
 				.rw_in(rw_L1[(j+1)-1:j]), 														// read / write command
 				.valid_in(valid_L1[(j+1)-1:j]), 				//  valid input on the addr, data buses
+        		`ifdef SIMD
+				.valid_word_in(valid_word_L1[(j+1)*SIMD_WIDTH-1:j*SIMD_WIDTH]), 				//  valid/mask data word
+        		`endif
 				.id_in(id_L1[(j+1)*CREG_ID_BITS-1:j*CREG_ID_BITS]), 					// ld/st Q id for request
 				
-				.data_out(data_out_L1[(j+1)*DATA_WIDTH-1:j*DATA_WIDTH]),				// data to be given to the core
+				.data_out(data_out_L1[(j+1)*DATA_WIDTH*SIMD_WIDTH-1:j*DATA_WIDTH*SIMD_WIDTH]),				// data to be given to the core
 				.id_out(id_out_L1[(j+1)*CREG_ID_BITS-1:j*CREG_ID_BITS]),				// ld/st Q id for request being satisfied
 				.ready_out(ready_out_L1[(j+1)-1:j]), 										// the memory request for which data is ready
 				.stall_out(stall_out_L1[(j+1)-1:j]), 										// the memory system cannot accept anymore requests
