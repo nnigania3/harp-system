@@ -128,8 +128,6 @@ module L2_cache
 	// random signals
 	wire [ASSOCIATIVITY-1:0] hit_temp_a, hit_temp_b; 
 	wire hit;
-//	reg miss;
-//	reg dirty_out_d;
 	wire miss_bef_reg;
 	wire valid_real;
 	
@@ -139,8 +137,8 @@ module L2_cache
 	wire [DATA_WIDTH-1:0] data_bef_reg;
 	
 	// blocking fsm control signals	 
-   wire rd_valid_b;
-   wire mem_addr_en;
+	wire rd_valid_b;
+	wire mem_addr_en;
 	wire stall_out_fsm;
 	wire portA_op_en;
 	wire block_stall;
@@ -177,19 +175,9 @@ module L2_cache
 		end
 	end
 	
-/*	always @ (posedge clk or negedge reset) begin
-		if (!reset)
-			stall_out <= 1'b0;
-		else if (miss_bef_reg & ~miss)
-			stall_out <= 1'b1;
-		else if (portA_op_en & ~stall_out_fsm)
-			stall_out <= 1'b0;
-	end
-*/
 	assign stall_out = mshr_full | portA_op_en | block_stall | block_signal;
 	assign valid_real = valid_in & ~stall_out;
 		
-//	wire [ASSOC_BITS-1:0] victim; 
 	always @(negedge clk or negedge reset) begin
 		if (!reset) begin
 			counter <= 0;
@@ -201,31 +189,17 @@ module L2_cache
 				victim_temp <= counter;
 		end
 	end
-//	assign victim = victim_temp & {ASSOC_BITS{~stall_out}};
 			
 	assign #0.25 miss_bef_reg = ~hit & valid_real;
-/*	always @ (posedge clk or negedge reset) begin
-		if (!reset) begin
-			miss <= 1'b0;
-	//		dirty_out_d <= 1'b0;
-		end
-		else begin
-			miss <= miss_bef_reg;
-			dirty_out_d <= dirty_a_o[victim_a];	
-		end
-	end
-*/
 
 	always @ (posedge clk or negedge reset) begin
 		if (!reset) begin
 			sel_a_temp = 0;
 			sel_b_temp = 0;
-	//		rw_neg = 1'b0;
 		end
 		else begin
 			sel_a_temp = 0;
 			sel_b_temp = 0;
-		//	rw_neg = rw_in;
 			if (stall_out_fsm)
 				sel_b_temp[victim_b] = 1'b1;
 			if (portA_op_en)
@@ -237,23 +211,19 @@ module L2_cache
 		end
 	end
 	assign sel_a = sel_a_temp;	
-//	assign sel_a = sel_a_temp | sel_a_temp2; //(rw_neg ? sel_a_temp2 : hit_temp_a);
 
 	reg [MSHR_ID_BITS-1:0] mem_id_d, mem_id_d_d;
-//	reg mshr_rn_valid_d;
 	always @ (posedge clk or negedge reset) begin
 		if (!reset) begin
 			cache_in2 <= 0;
 			mem_id_d <= 1'b0;
 			mem_id_d_d <= 1'b0;
-	//		mshr_rn_valid_d <= 1'b0;
 		end
 		else begin
 			if (mem_valid_i) begin
 				cache_in2 <= mem_data_i;
 				mem_id_d <= mem_id_i;
 			end
-	//		mshr_rn_valid_d <= mshr_rn_valid;
 			mem_id_d_d <= mem_id_d;
 		end
 	end
@@ -377,7 +347,6 @@ module L2_cache
 	mem_ctrl_wrapper #(
 		.BUFF_INDEX_BITS(2),			// LOG(Size of Buffer)
 		.LINE_BITS(LINE_BITS),			// LOG(LINE_SIZE)
-		.INDEX_BITS(13),			// LOG(NO_OF_SETS)
 		.LINE_WIDTH(DATA_WIDTH),			//
 		.ADDR_WIDTH(ADDR_WIDTH),
 		.CREG_ID_BITS(MSHR_ID_BITS),		// ID BITS of the ld/St Q from core
@@ -501,7 +470,6 @@ module L2_cache
 	(
 		.clk(clk), .enable(1'b1), .reset(reset),
 		
-	//	.add(miss_bef_reg & ~mshr_comp_true), .add_addr(addr_bef_reg), .add_data(data_bef_reg), .add_rw(rw_bef_reg), .add_dirty(dirty_a_o[victim_temp]), .add_cpu_id(id_temp), .add_victim(victim_temp),
 		.add(mshr_add), .add_addr(mshr_add_addr), .add_data(mshr_add_data), .add_rw(mshr_add_rw), .add_dirty(mshr_add_dirty[mshr_add_victim]), .add_cpu_id(mshr_add_cpu_id), .add_victim(mshr_add_victim),
 		
 		.del(mshr_del), .del_tag(mem_id_d_d),

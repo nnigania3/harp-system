@@ -33,17 +33,8 @@ module Mem_dummy
 	wire [LINE_WIDTH-1:0] mem_data;
 	reg [CREG_ID_BITS-1:0] id_temp;
 	
-//	wire new_clk;
 	reg ready_temp;
 	reg [MEM_CYCLE_BITS:0] count;
-	
-//	wire [MEM_CYCLE_BITS:0]	One;
-//	wire [MEM_CYCLE_BITS:0]	setMax;
-
-//	assign One = {{MEM_CYCLE_BITS{1'b0}}, 1'b1};
-//	assign setMax = {MEM_CYCLE_BITS+1{1'b1}};
-	
-//	Frequency_Divider #(.Divisor(4), .Bits(2)) f1 (clk,reset,new_clk);
 	
 	DMem #(.DATA_WIDTH(LINE_WIDTH), .ADDR_WIDTH(INDEX_BITS), .SIZE(CACHE_SIZE/32)) memory
 	(
@@ -55,8 +46,6 @@ module Mem_dummy
 		.mem_data_out(mem_data)	
 	);
 	
-//	assign data_out = (addr_in < 100) ? mem_data : data_delay[MEM_CYCLE-2];
-//	assign id_out = (addr_in < 100) ? id_temp : id_delay[MEM_CYCLE-2];
 	assign data_out = data_delay[MEM_CYCLE-2];
 	assign id_out = id_delay[MEM_CYCLE-2];
 
@@ -79,7 +68,6 @@ module Mem_dummy
 		end
 	end
 	
-//	assign data_out = (addr_in < 32'h100) ? 256'h05050505_03030303_09090909_08080808 : 256'h00010002_00030004_00050006_00070008;
 	assign stall_out = 1'b0;
 	assign ready_out = valid_delay[MEM_CYCLE-1];
 	
@@ -101,52 +89,12 @@ module Mem_dummy
 	always @ (posedge clk or negedge reset)
 	begin
 		if (!reset) begin
-//			ready_out <= 1'b0;
 			id_temp <= 0;
 		end
 		else begin
-//			if (ready_temp & ready_out !=1'b1)
-	//			ready_out <= 1'b1;
-	//		else	
-		//		ready_out <= 1'b0;
 			if (valid_in)
 				id_temp <= id_in;
 		end
 	end
-	
-//	assign ready_out = (posedge clk & ready_temp) ? 1'b0 : ready_temp;
-	
-/*	always@ (posedge clk or negedge reset)
-	begin
-		if (!reset) begin
-			ready_temp <= 1'b0;
-			count <= setMax;
-		end
-		else begin
-			if (rw_in)
-				ready_temp <= 1'b0;
-			else if (addr_in < 100)
-				ready_temp <= valid_in;
-			else if (valid_in) begin
-				count <= One;
-				ready_temp <= 1'b0;
-			end	
-			else begin	
-				if (count < MEM_CYCLE-1) begin
-					count <= count + One;
-					ready_temp <= 1'b0;
-				end	
-				else if (count == MEM_CYCLE-1) begin
-					count <= setMax;
-					ready_temp <= 1'b1;	
-				end
-				else begin
-					count <= setMax;
-					ready_temp <= 1'b0;
-				end				
-			end
-		end
-	end
-*/
 	
 endmodule

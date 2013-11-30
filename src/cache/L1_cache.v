@@ -44,18 +44,7 @@ module L1_cache #(
 	input l2_stall_i
 
 );
-//	localparam WORDS = 2**(LINE_BITS-2);
 	
-/*	wire [ADDR_WIDTH-1:0] l2_addr_o;
-	wire [DATA_WIDTH*8-1:0] l2_data_o;
-	wire l2_rw_o;
-	wire l2_valid_o;
-	wire [MSHR_ID_BITS-1:0] l2_id_o;
-	wire [DATA_WIDTH*8-1:0] l2_data_i;
-	wire l2_valid_i;
-	wire [MSHR_ID_BITS-1:0] l2_id_i;
-	wire l2_stall_i;
-*/	
 	localparam ASSOC_BITS=1;
 	
 	// signals for  proc side data array
@@ -73,7 +62,6 @@ module L1_cache #(
 	// signals for L2 data array
 	wire data_b_we;
 	wire [DATA_WIDTH*WORDS-1:0] cache_out2;
-//	wire [INDEX_BITS-1:0] index_b;
 	reg [DATA_WIDTH*WORDS-1:0] cache_in2;
 	
 	// signals for L2 tag array
@@ -142,10 +130,7 @@ module L1_cache #(
 	
 	// random signals
 	wire hit; 
-//	reg miss;
 	reg [LINE_BITS-2-1:0] word_a_d;
-//	reg miss_d;
-//	reg dirty_out_d;
 	wire miss_bef_reg;
 	wire valid_real;
 	
@@ -246,7 +231,6 @@ module L1_cache #(
 			cache_in2 <= 0;
 			l2_id_d <= 1'b0;
 			l2_id_d_d <= 1'b0;
-	//		mshr_rn_valid_d <= 1'b0;
 		end
 		else begin
 			if (l2_valid_i) begin
@@ -254,7 +238,6 @@ module L1_cache #(
 				l2_id_d <= l2_id_i;
 			end
 			l2_id_d_d <= l2_id_d;
-	//		mshr_rn_valid_d <= mshr_rn_valid;
 		end
 	end
 	
@@ -313,7 +296,7 @@ module L1_cache #(
 	assign tag_b_valid_in = data_b_we;
 	assign tag_b_dirty_in = 1'b0;	
 			
-	assign #0.5 l2_addr_o = l2_addr_en ? {tag_out_b,index_b,5'b0} : addr_b;	//NN Fix this for Line bits instead of 5
+	assign #0.5 l2_addr_o = l2_addr_en ? {tag_out_b,index_b,{LINE_BITS{1'b0}}} : addr_b;	//NN Fix this for Line bits instead of 5
 	assign #0.5 l2_data_o = rd_valid_b ? cache_out2 : fullZeros;
 	assign #0.5 addr_b_cache = mshr_rn_valid ? addr_b_temp: stall_out_fsm ? mshr_get_addr : addr_b;
 	assign #0.5 index_b = addr_b_cache[INDEX_BITS+LINE_BITS-1:LINE_BITS];
@@ -385,7 +368,6 @@ module L1_cache #(
                                 `ifdef SIMD
 		                mshr_same_word_val <= word_val_bef_reg;
                                 `endif
-		//		mshr_same_victim <= victim_temp;
 				if (mshr_same_true & miss_bef_reg)
 					block_signal_same <= 1'b1;
 				else if (mshr_diff_true & miss_bef_reg)
@@ -404,7 +386,6 @@ module L1_cache #(
                                 `ifdef SIMD
 		                word_val_prev <= mshr_same_word_val;
                                 `endif
-		//		victim_prev <= mshr_same_victim;
 			end
 			mshr_same_true_d <= mshr_same_true;
 		end
@@ -433,7 +414,6 @@ module L1_cache #(
 	(
 		.clk(clk), .enable(1'b1), .reset(reset),
 		
-	//	.add(miss_bef_reg & ~mshr_comp_true), .add_addr(addr_bef_reg), .add_data(data_bef_reg), .add_rw(rw_bef_reg), .add_dirty(dirty_out), .add_cpu_id(id_temp), .add_victim(1'b0),
 		.add(mshr_add), .add_addr(mshr_add_addr), .add_data(mshr_add_data), .add_rw(mshr_add_rw), .add_dirty(mshr_add_dirty), .add_cpu_id(mshr_add_cpu_id), .add_victim(1'b0),
 		
 		.del(mshr_del), .del_tag(l2_id_d_d),

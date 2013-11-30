@@ -1,29 +1,28 @@
 module mem_ctrl_wrapper
-#(	parameter BUFF_INDEX_BITS = 2,	// entries in the buffer
-	parameter LINE_BITS  = 5,			// LOG(LINE_SIZE)
-	parameter INDEX_BITS = 9,			// LOG(NO_OF_SETS)
+#(	parameter BUFF_INDEX_BITS = 2,		// entries in the buffer
+	parameter LINE_BITS  = 5,		// LOG(LINE_SIZE)
 	parameter LINE_WIDTH = 32,			//
 	parameter ADDR_WIDTH = 32,
 	parameter CREG_ID_BITS = 4,		// ID BITS of the ld/St Q from core
-	parameter MSHR_ID_BITS = 4,			// ID BITS for MSHR going to L2
-	parameter AVL_ADDR   = 30,			// AVL address
-	parameter AVL_SIZE   = 3,			// AVL size
+	parameter MSHR_ID_BITS = 4,		// ID BITS for MSHR going to L2
+	parameter AVL_ADDR   = 30,		// AVL address
+	parameter AVL_SIZE   = 3,		// AVL size
 	parameter AVL_DATA_WIDTH     = LINE_WIDTH,			// AVL data width. cache lie width
-	parameter AVL_BE     = 32			// AVL byte enable
+	parameter AVL_BE     = 32		// AVL byte enable
 )
 (
 	input clk,
 	input reset,
 	
-	input [ADDR_WIDTH-1:0] addr_in, 		// address in from the core
-	input [LINE_WIDTH-1:0] data_in, 		// data from the core
-	input rw_in, 								// read / write command
-	input valid_in, 							//  valid input on the addr, data buses
-	input [CREG_ID_BITS-1:0]  id_in, 		// ld/st Q id for request
+	input [ADDR_WIDTH-1:0] addr_in, 	// address in from the core
+	input [LINE_WIDTH-1:0] data_in, 	// data from the core
+	input rw_in, 				// read / write command
+	input valid_in, 			//  valid input on the addr, data buses
+	input [CREG_ID_BITS-1:0]  id_in, 	// ld/st Q id for request
 	output [LINE_WIDTH-1:0]   data_out,	// data to be given to the core
 	output [CREG_ID_BITS-1:0] id_out,	// ld/st Q id for request being satisfied
-	output ready_out, 						// the memory request for which data is ready
-	output stall_out, 							// the memory system cannot accept anymore requests
+	output ready_out, 			// the memory request for which data is ready
+	output stall_out, 			// the memory system cannot accept anymore requests
 													// stall the pipeline when this line is high
 	input      		     avl_ready,       //          .ready
 	output [AVL_ADDR-1:0]        avl_addr,        //          .address
@@ -37,7 +36,6 @@ module mem_ctrl_wrapper
 	output                       avl_burstbegin   //          .beginbursttransfer
 ); 
 	//local params
-//	localparam AVL_DATA_WIDTH = LINE_WIDTH;	// AVL size
 	localparam BUFF_SIZE      = 1 << BUFF_INDEX_BITS;
 
 	//local variables
@@ -59,7 +57,7 @@ module mem_ctrl_wrapper
 	assign stall_out          = (req_fifo_full || read_id_fifo_full);
 
 	//Reqs going to DDR2
-	assign avl_addr           = addr_in_store[head_pending_counter] >> LINE_BITS;//CHECK!
+	assign avl_addr           = addr_in_store[head_pending_counter] >> LINE_BITS;//CHECK!, OK, the address which goes to DDR2 is 25bit cache line address
 	assign avl_wdata          = data_in_store[head_pending_counter];
 	assign avl_read_req       = r_in_store[head_pending_counter];
 	assign avl_write_req      = w_in_store[head_pending_counter];

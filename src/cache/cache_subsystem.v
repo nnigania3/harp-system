@@ -1,13 +1,15 @@
 `timescale 1ns/100ps
 
 module cache_subsystem #(
-	parameter L1_CACHE_SIZE = 16*1024,	// in Bytes
-	parameter L2_CACHE_SIZE = 128*1024,	// in Bytes
+	parameter L1_CACHE_SIZE = 16*1024,		// in Bytes
+	parameter L2_CACHE_SIZE = 128*1024,		// in Bytes
 	parameter LINE_BITS 	= 5,			// LOG(LINE_SIZE)
 	parameter ASSOC_BITS = 2,
 	parameter DATA_WIDTH = 32,			//
 	parameter ADDR_WIDTH = 32,
-	parameter CREG_ID_BITS = 3,		// ID BITS of the ld/St Q from core
+	parameter CREG_ID_BITS = 3,	 		// ID BITS of the ld/St Q from core
+	parameter L1_INDEX_BITS = 9,			// LOG(L1_CACHE_SIZE) - LINE_BITS
+	parameter L2_INDEX_BITS = 10,			// LOG(L2_CACHE_SIZE) - ASSOC_BITS - LINE_BITS
         `ifdef SIMD
 	parameter SIMD_WIDTH = (2**(LINE_BITS-2)),      // SIMD width = no. of cache line words
         `else
@@ -24,17 +26,17 @@ module cache_subsystem #(
 	input reset,
 	
 	input [ADDR_WIDTH-1:0] addr_in, 		// address in from the core
-	input [DATA_WIDTH*SIMD_WIDTH-1:0] data_in, 		// data from the core
-	input rw_in, 								// read / write command
-	input valid_in, 							//  valid input on the addr, data buses
+	input [DATA_WIDTH*SIMD_WIDTH-1:0] data_in, 	// data from the core
+	input rw_in, 					// read / write command
+	input valid_in, 				//  valid input on the addr, data buses
 	input [CREG_ID_BITS-1:0] id_in, 		// ld/st Q id for request
         `ifdef SIMD
 	input  [SIMD_WIDTH - 1:0] valid_word_in,	// SIMD valid/mask word bits 
         `endif
 	output [DATA_WIDTH*SIMD_WIDTH-1:0] data_out,	// data to be given to the core
-	output [CREG_ID_BITS-1:0] id_out,	// ld/st Q id for request being satisfied
-	output ready_out, 						// the memory request for which data is ready
-	output stall_out, 							// the memory system cannot accept anymore requests
+	output [CREG_ID_BITS-1:0] id_out,		// ld/st Q id for request being satisfied
+	output ready_out, 				// the memory request for which data is ready
+	output stall_out, 				// the memory system cannot accept anymore requests
 	//DDR2 controller signals
 	input      		     avl_ready,       //          .ready
 	output [AVL_ADDR-1:0]        avl_addr,        //          .address
@@ -48,19 +50,6 @@ module cache_subsystem #(
 	output                       avl_burstbegin   //          .beginbursttransfer
 );
 													// stall the pipeline when this line is high
-/*	output [ADDR_WIDTH-1:0] l2_addr_o,
-	output [DATA_WIDTH*8-1:0] l2_data_o,
-	output l2_rw_o,
-	output l2_valid_o,
-	output [MSHR_ID_BITS-1:0] l2_id_o,
-	input [DATA_WIDTH*8-1:0] l2_data_i,
-	input l2_valid_i,
-	input [MSHR_ID_BITS-1:0] l2_id_i,
-	input l2_stall_i
-);
-*/
-	localparam L1_INDEX_BITS = 9;				// LOG(L1_CACHE_SIZE) - LINE_BITS
-	localparam L2_INDEX_BITS = 10;			// LOG(L2_CACHE_SIZE) - ASSOC_BITS - LINE_BITS
 	localparam WORDS = 2**(LINE_BITS-2);
 	localparam MSHR_ID_BITS = 3;				// ID BITS for MSHR going to L2
 	
@@ -92,20 +81,19 @@ module cache_subsystem #(
 	
 	Frequency_Divider #(.Divisor(2), .Bits(1)) f1 (clk,reset,new_clk);
 	assign new_clkby2 = clk;
-//	Frequency_Divider #(.Divisor(2), .Bits(1)) f2 (clk,reset,new_clkby2);
 //NN_code
 	wire L1_stall_out;
 	assign stall_out = L1_stall_out || (~reset) ;
 //End NN_code	
 	L1_cache #(
-		.CACHE_SIZE(L1_CACHE_SIZE),		// in Bytes
-		.LINE_BITS(LINE_BITS),				// LOG(LINE_SIZE)
-		.INDEX_BITS(L1_INDEX_BITS),			// LOG(NO_OF_SETS)
-		.DATA_WIDTH(DATA_WIDTH),			//
+		.CACHE_SIZE(L1_CACHE_SIZE),	// in Bytes
+		.LINE_BITS(LINE_BITS),		// LOG(LINE_SIZE)
+		.INDEX_BITS(L1_INDEX_BITS),	// LOG(NO_OF_SETS)
+		.DATA_WIDTH(DATA_WIDTH),	//
 		.WORDS(2**(LINE_BITS-2)),
 		.ADDR_WIDTH(ADDR_WIDTH),
-		.CREG_ID_BITS(CREG_ID_BITS),		// ID BITS of the ld/St Q from core
-		.MSHR_ID_BITS(MSHR_ID_BITS),		// ID BITS for MSHR going to L2
+		.CREG_ID_BITS(CREG_ID_BITS),	// ID BITS of the ld/St Q from core
+		.MSHR_ID_BITS(MSHR_ID_BITS),	// ID BITS for MSHR going to L2
 		.SIMD_WIDTH(SIMD_WIDTH)		// ID BITS for MSHR going to L2
 	)
 	L1_instance (
@@ -113,19 +101,19 @@ module cache_subsystem #(
 		.clkby2(clkby2),
 		.reset(reset),
 		
-		.addr_in(addr_in), 					// address in from the core
-		.data_in(data_in), 					// data from the core
-		.rw_in(rw_in), 						// read / write command
+		.addr_in(addr_in), 				// address in from the core
+		.data_in(data_in), 				// data from the core
+		.rw_in(rw_in), 					// read / write command
 		.valid_in(valid_in), 				//  valid input on the addr, data buses
         `ifdef SIMD
-		.valid_word_in(valid_word_in), 				//  valid input on the addr, data buses
+		.valid_word_in(valid_word_in), 			//  valid input on the addr, data buses
         `endif
-		.id_in(id_in), 						// ld/st Q id for request
-		.data_out(data_out),					// data to be given to the core
-		.id_out(id_out),						// ld/st Q id for request being satisfied
+		.id_in(id_in), 					// ld/st Q id for request
+		.data_out(data_out),				// data to be given to the core
+		.id_out(id_out),				// ld/st Q id for request being satisfied
 		.ready_out(ready_out), 				// the memory request for which data is ready
-		.stall_out(L1_stall_out), 				// the memory system cannot accept anymore requests
-													// stall the pipeline when this line is high
+		.stall_out(L1_stall_out), 			// the memory system cannot accept anymore requests
+								// stall the pipeline when this line is high
 
 		.l2_addr_o(l2_addr_small),
 		.l2_data_o(l2_data_small),
@@ -155,17 +143,6 @@ module cache_subsystem #(
 		end
 	end
 	
-/*	reg l2_rw_temp;
-	always @(posedge clk or negedge reset)
-	begin
-		if (!reset)
-			l2_rw_temp <= 1'b0;
-		else if (l2_rw_small)
-			l2_rw_temp <= 1'b1;
-		else if (l2_rw_o)
-			l2_rw_temp <= 1'b0;
-	end
-*/	
 	always @(posedge new_clk or negedge reset)
 	begin
 		if (!reset) begin
@@ -209,11 +186,11 @@ module cache_subsystem #(
 		.CACHE_SIZE(L2_CACHE_SIZE),		// in Bytes
 		.LINE_BITS(LINE_BITS),			// LOG(LINE_SIZE)
 		.ASSOC_BITS(ASSOC_BITS),
-		.INDEX_BITS(L2_INDEX_BITS),			// LOG(NO_OF_SETS)
-		.DATA_WIDTH(DATA_WIDTH*WORDS),			//
+		.INDEX_BITS(L2_INDEX_BITS),		// LOG(NO_OF_SETS)
+		.DATA_WIDTH(DATA_WIDTH*WORDS),		//
 		.ADDR_WIDTH(ADDR_WIDTH),
 		.CREG_ID_BITS(CREG_ID_BITS),		// ID BITS of the ld/St Q from core
-		.MSHR_ID_BITS(MSHR_ID_BITS),			// ID BITS for MSHR going to L2
+		.MSHR_ID_BITS(MSHR_ID_BITS),		// ID BITS for MSHR going to L2
 		.AVL_ADDR(AVL_ADDR),
 		.AVL_SIZE(AVL_SIZE),
 		.AVL_BE(AVL_BE)
@@ -224,20 +201,20 @@ module cache_subsystem #(
 		.clk(clk),
 		.clkby2(clkby2),
 		.reset(reset),
-		//.addr_in(l2_addr_o), 	// address to L2
+		//.addr_in(l2_addr_o), 		// address to L2
 		//.data_in(l2_data_o), 		// data to L2
-		//.rw_in(l2_rw_o), 			// read / write command
+		//.rw_in(l2_rw_o), 		// read / write command
 		//.valid_in(l2_valid_o), 	//  valid input on the addr, data buses
-		//.id_in(l2_id_o), 			// MSHR id for l2 request
+		//.id_in(l2_id_o), 		// MSHR id for l2 request
 		.addr_in(l2_addr_small), 	// address to L2
-		.data_in(l2_data_small), 		// data to L2
-		.rw_in(l2_rw_small), 			// read / write command
+		.data_in(l2_data_small), 	// data to L2
+		.rw_in(l2_rw_small), 		// read / write command
 		.valid_in(l2_valid_small), 	//  valid input on the addr, data buses
-		.id_in(l2_id_small), 			// MSHR id for l2 request
-		.data_out(l2_data_i),	// data from the l2
-		.id_out(l2_id_i),			// MSHR id for request being satisfied
+		.id_in(l2_id_small), 		// MSHR id for l2 request
+		.data_out(l2_data_i),  		// data from the l2
+		.id_out(l2_id_i),		// MSHR id for request being satisfied
 		.ready_out(l2_valid_big), 	// the memory request for which data is ready
-		.stall_out(l2_stall_i),  // the memory system cannot accept anymore requests, stall the pipeline
+		.stall_out(l2_stall_i),  	// the memory system cannot accept anymore requests, stall the pipeline
 		//DDR2 controller signals!
                 .avl_ready	(avl_ready	),      
                 .avl_addr	(avl_addr	),       

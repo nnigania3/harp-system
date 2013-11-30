@@ -22,12 +22,6 @@ module L1_tag_array
 	assign  addr_a_t = addr_a;
 	assign  addr_b_t = addr_b;
 	
-//	wire delayed_clk /* synthesis keep */, inv_clk /* synthesis keep */, new_clk;
-//	assign #1 inv_clk = ~clk;
-//	assign #1 delayed_clk = ~inv_clk;
-//	assign new_clk = clk ^ delayed_clk;
-
-
 	integer i;
 	initial 
 	begin
@@ -36,8 +30,6 @@ module L1_tag_array
 			dirty_ram[i] = 1'b0;
 		end
 	end
-	
-//	assign 
 	
 	// Port A 
 	always @ (posedge new_clk)

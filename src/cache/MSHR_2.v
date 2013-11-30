@@ -236,10 +236,9 @@ module MSHR_2
 		
 	reg [mshr_tag_bits-1:0] temp;
 	reg [2**mshr_tag_bits-1:0] comp, comp2;
-//	wire comp_temp, comp_temp2;
+
 	always @* begin
 		for (i=0; i<2**mshr_tag_bits; i=i+1) begin
-	//		temp = addr[i];
 			comp2[i] <= (val[i]) & (addr[i][LINE_BITS+INDEX_BITS:LINE_BITS] == comp_addr[LINE_BITS+INDEX_BITS:LINE_BITS]) & (victim[i] == comp_victim);
 			if ((val[i]) & (addr[i][LINE_BITS+INDEX_BITS:LINE_BITS] == comp_addr[LINE_BITS+INDEX_BITS:LINE_BITS]) & (victim[i] == comp_victim))
 				temp <= i;
@@ -248,8 +247,7 @@ module MSHR_2
 				temp <= i;
 		end
 	end
-//	assign comp_temp2 = |comp2;
-//	assign comp_temp = |comp;
+
 	assign diff_line_true = |comp2;
 	assign same_line_true = |comp;
 	assign comp_true = same_line_true | diff_line_true;
@@ -265,7 +263,7 @@ module MSHR_2
 	assign comp_read = read[comp_read_tag];
 	
 	//Finally we assing the empty and full signals. The occupied spaces variable is used to generate these signals  
-	assign empty = (entries_read >= occupied_spaces)?1'b1:1'b0;
-	assign full = (occupied_spaces == 2**mshr_tag_bits)?1'b1:1'b0;
+	assign empty = (entries_read >= occupied_spaces)? 1'b1 : 1'b0;
+	assign full = (occupied_spaces == 2**mshr_tag_bits)? 1'b1 : 1'b0;
 
 endmodule
