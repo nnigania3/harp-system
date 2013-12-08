@@ -116,7 +116,9 @@ module cache_shared #(
 	assign rw_L1[(0+1)-1:0] = rw_in1;
 	assign valid_L1[(0+1)-1:0] = valid_in1;
 	assign id_L1[(0+1)*CREG_ID_BITS-1:0*CREG_ID_BITS] = id_in1;
+        `ifdef SIMD
 	assign valid_word_L1[(0+1)*SIMD_WIDTH-1:0*SIMD_WIDTH] = valid_word_in1;
+        `endif
 	assign data_out1 = data_out_L1[(0+1)*DATA_WIDTH*SIMD_WIDTH-1:0*DATA_WIDTH*SIMD_WIDTH];
 	assign id_out1 = id_out_L1[(0+1)*CREG_ID_BITS-1:0*CREG_ID_BITS];
 	assign ready_out1 = ready_out_L1[(0+1)-1:0];
@@ -127,7 +129,9 @@ module cache_shared #(
 	assign rw_L1[(1+1)-1:1] = rw_in2;
 	assign valid_L1[(1+1)-1:1] = valid_in2;
 	assign id_L1[(1+1)*CREG_ID_BITS-1:1*CREG_ID_BITS] = id_in2;
+        `ifdef SIMD
 	assign valid_word_L1[(1+1)*SIMD_WIDTH-1:1*SIMD_WIDTH] = valid_word_in2;
+        `endif
 	assign data_out2 = data_out_L1[(1+1)*DATA_WIDTH*SIMD_WIDTH-1:1*DATA_WIDTH*SIMD_WIDTH];
 	assign id_out2 = id_out_L1[(1+1)*CREG_ID_BITS-1:1*CREG_ID_BITS];
 	assign ready_out2 = ready_out_L1[(1+1)-1:1];

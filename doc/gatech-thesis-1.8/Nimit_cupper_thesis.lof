@@ -1,0 +1,11 @@
+\contentsline {figure}{\numberline {1}{\ignorespaces Basic system components }}{5}
+\contentsline {figure}{\numberline {2}{\ignorespaces Simple Counter in CHDL and Verilog }}{7}
+\contentsline {figure}{\numberline {3}{\ignorespaces Basic ALU in CHDL }}{7}
+\contentsline {figure}{\numberline {4}{\ignorespaces Altera Stratix III Board }}{8}
+\contentsline {figure}{\numberline {5}{\ignorespaces Harp Core Pipeline }}{11}
+\contentsline {figure}{\numberline {6}{\ignorespaces MMU or Load\/Store Unit Interface }}{13}
+\contentsline {figure}{\numberline {7}{\ignorespaces MMU Components }}{14}
+\contentsline {figure}{\numberline {8}{\ignorespaces Cache Interface Signals for Core and Memory Sides }}{16}
+\contentsline {figure}{\numberline {9}{\ignorespaces Test Setup for Memory Controller IP and Internal Block Diagram }}{19}
+\contentsline {figure}{\numberline {10}{\ignorespaces DDR cache side signals for read / write Operation }}{20}
+\contentsline {figure}{\numberline {11}{\ignorespaces Possible System Designs }}{22}

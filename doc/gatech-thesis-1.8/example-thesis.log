@@ -1,0 +1,17 @@
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9 64-bit) (preloaded format=pdftex 2013.12.3)  3 DEC 2013 23:21
+entering extended mode
+**C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/example-thesis.b
+ib
+
+(C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/example-thesis.bi
+b
+! Undefined control sequence.
+l.91 	TITLE = {{\LaTeX
+                      }: A Document Preparation System. User's Guide and
+? 
+! Emergency stop.
+l.91 	TITLE = {{\LaTeX
+                      }: A Document Preparation System. User's Guide and
+End of file on the terminal!
+
+!  ==> Fatal error occurred, no output PDF file produced!

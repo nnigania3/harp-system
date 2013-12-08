@@ -1,0 +1,120 @@
+\setcounter{equation}{0}
+
+\chapter{System Design}
+\label{chap: System Design}
+
+\section{System Components}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Harp ISA}
+The ISA used as part of this work was a custom RISC based ISA. The ISA was developed under the name \textbf{HARP} which stands for Heterogeneous Architecture Research Project \cite{schreier}. The main features of the ISA are: Full Predication, SIMD support and customizability. Many features of this ISA are customizable like the vector width, instruction length, number of general purpose and predicate registers etc. The main reason to do this was to add support for new instructions for future architectures and to also allow adapting the ISA quickly to various architectural configurations. There are several types of instructions depending on the number of arguments (register, immediate, predicate registers etc.) but all instructions are encoded in similar fashion. That is most significant bit of each instruction indicates if it's predicate or not, next field specifies the predicate register, the next field stands for the opcode and so on. More details can be found in \cite{schreier}.
+\\
+The HARP ISA is also supported by its tool chain called Harptool which acts as an assembler, linker and emulator. For this work the benchmarks used were written directly in Harp Assembly which is very much similar to RISC based assembly programs. The benchmarks mainly written and used in our study for testing and performance purposes were as follows:
+\\
+Single Lane apps:
+\begin{itemize}
+\item Vector Sum
+\item Sieve of Eratosthenes (finding prime numbers in a range of numbers)
+\item Bubble sort
+\item Exponential sum
+\item Matrix multiplication
+\end{itemize}
+
+SIMD apps:
+\begin{itemize}
+\item Vector Sum using coalesced and un-coalesced accesses
+\item Matrix multiplication
+\end{itemize}
+
+We varied the input size (array size for array sum, matrix size for matrixmul, input range for sorting) and ran it on our design which was used to not only test the overall design but also to get an idea of the performance. These are very naïve applications compared to some of the complex benchmarks which are available out there but these do provided a good credibility to the design if not the performance as of now. One of the main focuses of writing these applications was to stress corner cases. One of the future work which is being done as part of this whole project is the design of a tool which can translate CUDA or OpenCL code to HARP assembly, once that is in place it will allow us to do more thorough testing.
+\\
+The HARP ISA also in its current version supports only a single simple console I/O to help debug and display the output. Any store instruction at an address 0x800…0 causes the harp core to send the required data to the display (7-segment display or LEDs or VGA).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Core}
+\subsubsection {Core Pipeline}
+
+The base Harp Core design used as part of this work was a design written completely in CHLD by \cite{schreier}. This section will give an overview of the base design of the core which was modified for use as part of this work. The Harp Core is an in-order issue and out of order completion pipelined processor. The pipeline stages are mainly: Instruction Fetch, Decode / Register File access / Issue, Execute and WriteBack stage. The function of each of the stages is implied from their names and showed in Figure~\ref{fig:harmonica_chad}. 
+% LEFT, BOTTOM, RIGHT,TOP
+% \figput{harp_core}{6.0in}{0.0in 1.5in 0.0in 1.5in}{Harp Core Pipeline}
+ \figput{harmonica_chad}{6.0in}{0.0in 0.0in 0.0in 0.0in}{Harp Core Pipeline}
+
+The instruction fetch stage reads the instruction stored in the instruction ROM and passes it to the next stage. There is also a GHB (global history based) branch predictor and a BTB (branch target buffer). The PHT (pattern history table) of the GHB and BTB is index by XORing the PC and the branch history. The target branch address is obtained from the BTB and the direction from the PHT (pattern history table). Next, the decode stage decodes the instruction and reads all the registers required for each instruction. It also checks for dependencies and stalls the pipeline is the register it depends on is not updated by the responsible instruction yet. The prediction logic is also implemented here where we convert the instruction to a NOP depending on the value of the predicate register. There is no support for data forwarding in this design right now. To handle dependencies the design assigns a unique Instruction ID (IID) to each instruction and this is used to determine which instruction is responsible to update the register file to its latest value. The execute stage has all the ALU units to implement the functions offered by the ISA. Additional modules like faster ALU units say for faster pipelined multiply, divide or floating point operations can be written in verilog and integrated with our current design as and when needed. This stage also has the memory management unit to handle memory accesses. The write-back stage writes back the updated data to the register files and updates the state of the registers so the dependent instructions can now progress. \\
+
+Factors such as SIMD width, number of register, ROM size can be varied.  We will discuss more about the SIMD support in the next part and the later sections will discuss more about the memory management unit. We also allow for a version of the core without any cache support but with each lane having a small RAM and a ROM on its own. This variation is just to explore different architecture possibilities.
+
+\subsubsection {SIMD support}
+
+Writing code in CHDL allowed us to easily extend of core design for SIMD support. The whole register file was instantiated as many times as number of lanes, hence converting each register to a vector register. For a given vector instruction the same operation was done for each WORD in the vector register. Once all the vector register are read they are sent to the execute stage. If the instruction involved an immediate then the same immediate was used for all the lanes.\\
+In the execution unit each of the ALU units were instantiated as many times as number of lanes and their corresponding inputs were passed on from the decode stage. Everything else (checking for dependencies logic etc.) remained mostly the same as in the case of single lane (branch outcomes, predication outputs were determined only by the first lane). As of now the core does not support any mask operations so the same operation is done on all the words of the vector register. Adding support for masking via mask registers and also support for branch divergence will be part of the future work. The only big change in order to support SIMD instructions was done in the memory management unit. To enable this, a complex load store queue shown in Figure ~\ref{fig:mmu} was designed as will be discussed in the next section. Also for SIMD support changes had to be done in the cache as the L1 cache now has to send and receive data at cache line granularity rather than word granularity, also the cache had to support masked writes in case of un-coalesced accesses.
+% LEFT, BOTTOM, RIGHT,TOP
+\figput{mmu}{5.0in}{0.0in 1.5in 0.0in 1.0in}{MMU or Load\/Store Unit Interface}
+
+\subsubsection {Memory management unit}
+
+The whole memory management unit and the cache were among more complex portions of the design. This section talks about the memory management unit / load-store queue / coalescing unit used in the execute stage of the core to send requests to the cache subsystem.  The MMU can be divided into 4 major components as can be seen in Figure ~\ref{fig:mmu2}:
+
+\begin{itemize}
+\item Front End
+\item Load Queue
+\item Store Queue
+\item Cache Interface logic
+\end{itemize}
+
+We will now briefly discuss the functionality of each of the components for a SIMD Harp core. This SIMD support requires the address / data granularity of a cache line between MMU and cache. We also have a design variation without the MMU and blocking memory requests to save on logic resources.
+\\
+% LEFT, BOTTOM, RIGHT,TOP
+\figput{mmu2}{6.0in}{0.0in 1.5in 0.0in 1.0in}{MMU Components}
+
+\textbf{Front End}: Receives the request from the core with addresses and data for each lane. It then tries to pack all lane requests to the same cache line together. Hence each entry in the load/store queue corresponds to a cache-line. For an un-coalesced request the front end keeps creating new entries and passing it on to the load or store queue. Along with the cache line address each entry also keeps information about the lanes requesting or writing that cache line along with their corresponding words offsets in the cache line.\\
+\\
+\textbf{Load Queue}: All load requests are passed on to this queue. The first request for an instruction is called the leader and all the following requests derived from same instruction (in case of un-coalesced) are followers. The leader checks if data for all lanes are loaded by waiting till its followers return the required data. The followers writes the data it receives from the memory to the corresponding lane data slot in the leader entry. Once data for all lanes are loaded (we use a loaded bit for each lane) we mark the entry as done and ready to retire. The load requests can be serviced in any order. We also enable LSF (Load Store Forwarding) feature where if an incoming load request sees data for the corresponding cache line in the store queue then it directly gets the data from the store queue entry and is marked as done. The current implementation is conservative in the sense it get data forwarded only when the whole cache line is being written by a store queue entry. If only a partial store is done to line we make the load entry wait until the store entry commits.\\
+\\
+\textbf{Store Queue}: The store queue gets store data along with cache line address from the front end. It then checks if there is a pending load entry for the same address, if there is then we make this request wait until the matching load request is serviced to handle WAR hazard. Once the store request is ready to commit then we send the data along with the valid/mask bits for each word to the cache. We give higher preference to requests from load queue over store queue.\\
+\\
+\textbf{Cache Interface logic}: This part of the MMU takes each pending entry from load or store queue and sends it to the cache. There is lot of switching logic involved mainly to handle requests from the store queue entry. We allow for cross lane stores wherein each lane can write to any word in a cache line except when they try to write the same word in the same line. We also have a broad cast logic built in which allows multiple lanes in the same request to ask for any/same word in the cache line. 
+\\
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Cache}
+We use a 2-level non-blocking, write-back, single-cycle latency cache for this design written completely in Verilog. A CHDL implementation was not written mainly because for the FPGA prototyping part we already had a base implementation of the cache design in verilog and for the software simulation part we already have a cache design tightly integrated with our simulation infrastructure. 
+The input and output signals to the cache can be seen in Figure ~\ref{fig:cache_block}. The cache is parameterizable where we can configure the cache line size(32 bytes used for our design), address/data width and also make data input/output granularity to be word or cache line(for SIMD). Since we have designed a single cycle latency cache, we need an extra 2x clock do to tag read and write in the same clock cycle. This clock is fed in the top level system block generated via a PLL. The L1 cache is a direct mapped cache and the L2 is 4-way set associative cache. We will now discuss the main building blocks of the L1 cache, L2 is designed in the similar way except it uses a random cache line replacement policy and extra tag/data RAM.
+% LEFT, BOTTOM, RIGHT,TOP
+ \figput{cache_block}{5.0in}{0.0in 1.5in 0.0in 1.0in}{Cache Interface Signals for Core and Memory Sides}
+ \begin{itemize}
+\item  \textbf{Data/Tag ram}: These storage elements hold the data and also tags along with dirty and valid bits. The actual data and tags are stored in 8 2-ported 32bit RAMs (8x32 = 256 bit cache line). We need 2 ports as we need to service request coming from the core as well as lower level memory (L2 cache). 
+
+\item  \textbf{MSHR} (Miss Status Handling Register): Since we implemented a non blocking cache we need an MSHR. This stores the request which miss in the cache and need to be stored till the cache lines it misses on is serviced by the lower level caches. This stores the data, addresses, read/write and core request id for each read/write operation. When a second request to the same cache line happens we stall the cache and store the new request in a separate data structure. This new request is serviced only after the matching entry in the MSHR is serviced. A future extension to improve the performance will be to allow some kind of a piggy back feature where instead of stalling on the same cache line we keep adding the requests to the same MSHR entry and service them all at once (though this will save us only a few cycles).
+
+\item  \textbf{Non blocking FSM} (finite state machine): This state machine controls the overall operation of the cache. Since we are handling requests from the core and lower level caches, the FSM keeps track of whenever a new request arrives from either side. Depending on the request it issues control signals to the MSHR or the data/tag rams to update their state or generates a stall signal to tell the core to stop sending more requests.
+
+\item  \textbf{Arbiter}: This is used for the multi-core versions of our system where each core has a private L1 cache and they share a L2 cache. The arbiter gets requests from L1 caches of all the cores and sends only one cache line request to the L2. It appends the core-id to the request-id coming from each core so it can return the data to the appropriate core when it is returned from the L2. Various arbitration schemes can be used, but for this work we used a priority encoder. The arbiter like other components is completely configurable allowing it to instantiate as many L1 caches as possible with only a small change in the verilog code (input signals will be more for more caches). %\TODO{many the priority encoder parameterizable}.
+\end{itemize}
+
+\noindent Basic read and write operations are serviced in the following way.\\
+\noindent \textbf{Read/Write Hit operation}: When a new request arrives in the cache we read the tag ram to see if there is a match (1st cycle of the 2x clock), if there is a hit we then send the data from the data ram to the core in the next cycle along with asserting the valid out bit for a load request. For a store request we update our data and tags (2nd cycle of 2x clock) and don't need to reply anything to the core.
+\\
+\\
+\noindent \textbf{Read/Write Miss operation}: In case of a cache line miss the FSM allocates a new entry in the MSHR for this request. If the L2 cache is not stalled then it sends the request to the L2 and waits for the data. The L1 cache in the mean time can receive new requests if there is free space left in the MSHR. Each cache miss is treated in a similar way unless the new request is for the same line waiting in the MSHR. In this case we stall the L1 cache and wait until the matching MSHR entry is freed. Once the data from L2 arrives, it directly updates the cache data and tag rams. Then the FSM gets the MSRH entry responsible for the miss and issues it again, making it a cache hit this time. Once issued, the MSHR entry is freed and data along with valid output is sent to the core.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{Memory Controller}
+The memory controller supported by the DE3 FPGA board used as part of this work is a DDR2 memory controller with operating frequency ranging from 125 MHz - 533 MHz. We used a 1GB DDR2 RAM for this work running at the 125MHz due to limitations set by other components of the system. The DDR2 is connected on the board via 200 pins for clock and control signals coming from the FPGA. Figure ~\ref{fig:ddr_block} shows the top view of the memory controller block, more details can be found here \cite{schreier}. The user side signal uses Altera's Avlon interface and this is the suffix given to these signals. The command generator receives the signals from the user side and passes it to the timing bank pool. The timing bank pool then checks for signal timings and if valid data is present in the data buffers. Then it passes the request to the arbiter which finally passes the command forward. The rank timer maintains rank specific information to maintain correct functionality.
+
+% LEFT, BOTTOM, RIGHT,TOP
+ \figput{ddr_block}{5.0in}{0.0in 0.0in 0.0in 0.0in}{Test Setup for Memory Controller IP and Internal Block Diagram}
+
+The DDR2 controller IP was generated using the `Altera's MegaWizard ' which automatically generates the IP along with some example files for simulation purposes. Although it might seem straight forward but creating this IP with the correct parameters set was very critical. Many times the RTL simulation (using a system verilog model for a DDR2 memory) of generated controller IP was found to be working but it failed on the board because one of the timing parameters was set incorrectly. Even using timing presets present in the Altera tool for the actual DDR2 DIMM used in the board were not correct and the correct parameters were later obtained from an example DDR2 IP project from the FPGA board vendor (Terasic). Also since the number of pins which need to be connected to the DDR2 were significant they all had to be set very carefully again using the parameter obtained from board vendor which was also a confusing part as Altera by default recommended another configuration. The incorrect pin and parameter configurations were the main reasons behind failures seen initially. Many DDR IP parameters like the frequency and the row open/close policy were configurable via Altera's IP generator. Though we can customize the IP RTL itself but we can't reuse all of Altera's propriety IP. Different scheduling policies like FRFCFS etc. can be tried and can be one research direction going forward for different types of system architectures.\\
+
+% LEFT, BOTTOM, RIGHT,TOP
+ \figput{ddr_wave}{6.0in}{0.0in 0.5in 0.0in 0.5in}{DDR cache side signals for read / write Operation }
+Before using the controller with the rest of the system it had to be tested using a random traffic generator (generated along with IP). It does a thorough test to make sure the DDR2 runs for the parameters set on the board. We first tested the controller in RTL using a DDR2 memory model and then on the FPGA board. Once DDR2 was tested then we started integrating it with rest of the system. Since the cache interface is slight different from the user interface signals of the memory controller a memory controller wrapper block was written to interface them. The main difference was that the cache identifies each request via a unique ID where as the DDR2 just returns the data along with valid bit as can be seen in the DDR2 wave diagrams in Figure ~\ref{fig:ddr_wave}. This wrapper is mainly a FIFO based structure which stores the request along with the id of incoming request coming from the cache and sends the data returned from main memory back to the cache along with the original request id.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Putting it together: A Multicore and multilane GP-GPU system}
+Figure~\ref{fig:full_system} shows the final system which was designed and tested on the FPGA board. We saw in previous sections in this chapter as to how each of the components namely the SIMD core, MMU, cache and the memory controller was designed. Now the aim of the work was to integrate each of these components to make the overall system. This although might sound simple to start with but was a fairly time consuming task as it was thorugh this process that many hidden bugs were discovered. Firstly, we had to test each module before integrating them; this was done by writing separate test cases for each of the verilog blocks. This led us know if we were getting the basic functionality out of the desired block. As many blocks were complex and had many inputs/outputs it was hard to test them. Then we started integrating the whole system and debug it in a step by step way. We first started by testing a single lane Harp core system and made sure this was working on the board and meeting all the timing constrains. For a system of this magnitude it is generally hard to test all the corner cases and even now there were some hidden bugs in the design. Since we tested our system by writing applications rather than creating stimuli or verilog testbench, our tests were to a good extent thorough. 
+\figput{full_system}{6.5in}{0.0in 0.0in 0.0in 0.0in}{Possible System Designs}
+First step was to do RTL simulation of the whole system and make sure it was passing. Many functional bugs can be easily found and fixed at this stage. Next, we synthesize and do gate level simulation, this is hard to debug as signal names are changed or synthesized away. The best way to debug issues at this stage was to fix the warnings which were thrown by Altera's Quartus tool and this for me fixed many bugs in the design. Although many issues including the errors due to DDR2 timing issues were hard to fix and took a lot of time. After this stage, we test the system on the board by downloading the FPGA programming binary on the board. If it does not run even now then the reasons which I came across were mainly due to issues in the reset logic or the clock or the DDR timings parameters. One good practice is to use PLLs to generate cleaner clocks with less jitter. Most of the problems in my design were fixed using the above process, in case if one is still not able to isolate issues then the next step is to use hardware debug IPs which can monitor signals on board and display it on the screen. This was also used to debug some issues in the DDR as part of this design.
+% LEFT, BOTTOM, RIGHT,TOP
+% \figput{full_system}{6.5in}{0.0in 0.0in 0.0in 0.0in}{Possible System Designs}
+Once a single lane version of the whole system was working on the board we then tested a multiple lane version of the core using different tests to stress most of the commonly used cases, for example we wrote test cases for doing lot of un-coalesced memory requests and also coalesced requests to make sure if the complex memory management unit was working properly or not. Once the single core (one lane or SIMD) was tested on the board then it was easy to create multiple core versions by instantiating more instances of the core with each core running its own separate application. Figure~\ref{fig:full_system} shows one such system, as we can see we have 2 cores each having its own private L1 cache and sharing a L2 cache. As mentioned previously we don't have support for coherence as of now. The extra component needed to make this multi-core system was the L1 cache arbitrator which schedules requests from different cores to the L2. For this work a priority arbiter was used but other possibilities can also be explored.  To test we tried to run different combination of applications on each of the core accessing different data in the main memory. The results from the simulation experiments are discussed in the next section.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

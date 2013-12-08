@@ -1,0 +1,671 @@
+%% jules-verne.sty 
+%%   Rather than crud up the main root file with a lot of boilerplate,
+%%   it's good latex style to separate that stuff out into a separate
+%%   custom 'style' for your document.  Since the bells-and-whistles
+%%   example is MUCH to complicated to put all the cruft in the preamble,
+%%   I've pulled it into this style
+%%
+%%   Feel free to make a copy (renaming it to, oh, johnthesis.sty, or 
+%%   something), and customize.  Don't forget to change the 
+%%   'PackageProvides' line, below.  If you feel the need to modify 
+%%   something in gatech-thesis.cls, DON'T.  Instead, copy the 
+%%   relevant function  as a whole into your new 'johnthesis.sty', 
+%%   and make the changes there.
+%%
+%% REQUIRES: gatech-thesis class file
+%%           hyperref, url, graphicx, color, subfigure, fontenc
+%%           caption2, latexsym, 
+%%           textcomp, amsmath, amsfonts, amssymb, listings,
+%%           ifthen, thumbpdf, txfonts, longtable, colortbl,
+%%           dcolumn
+%%
+%% OPTIONS:
+%%  'official': the default when gatech-thesis called in 'final' mode
+%%  'unofficial': the default when gatech-thesis called in 'draft' mode
+%%     Since drafts are never official, the 'official' option has no effect 
+%%     in 'draft' mode.  However, in 'final' mode, you can create either 
+%%     official copies or unofficial copies (of course, 'official'
+%%     is the default).  If for some silly reason, you specify both official and
+%%     unofficial, unofficial takes precedence (but (a) no warning is produced,
+%%     and (b) why would you do that?)
+%%     Currently, these two options affect the settings of 'strictmargins' and
+%%     'signaturepage'.
+%%  'printcode': always print listings, even in draft mode
+%%
+\NeedsTeXFormat{LaTeX2e}[1995/06/01]
+\ProvidesPackage{jules-verne}
+          [2002/08/08  Custom settings for a thesis]
+%%%%%          here:  http://www.atscire.de/products/listings/   
+%%%%%          Also, see http://www.lyx.org/help/listings/listings.php3 
+
+%% define these here so they can be used both in the document setup, 
+%% and hyperref setup.
+\newcommand{\docauthor}{Frodo Baggins}
+\newcommand{\doctitle}{\texorpdfstring%
+{20,000 Leagues Under the Sea \protect\\ by Jules Verne}% include formatting here
+{20,000 Leagues Under the Sea by Jules Verne}}%   but not here
+\newcommand{\dockeywords}{nemo, submarine, science fiction}
+     
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Initial setup and options 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newif\ifhyper
+\hyperfalse         % initially false by default
+\newif\if@official
+\if@draft           % This is an internal gatech-thesis variable!
+  \@officialfalse   % false in draft mode
+\else
+  \@officialtrue    % true by default otherwise
+\fi
+\newif\if@printcode
+\if@draft           % This is an internal gatech-thesis variable!
+  \@printcodefalse  % false in draft mode by default
+\else
+  \@printcodetrue   % always true in 'final' mode
+\fi
+\newif\ifpdf
+\pdffalse           % initially false by default
+
+\ifx\pdfoutput\undefined
+  \pdffalse         % we are not running PDFLaTeX
+\else
+  \pdfoutput=1      % we are running PDFLaTeX
+  \pdftrue
+\fi
+
+\if@hyperref    % This is an internal gatech-thesis variable!
+  \hypertrue
+\else
+  \hyperfalse
+\fi  
+
+\DeclareOption{official}{%
+  \if@draft     % This is an internal gatech-thesis variable!
+    \PackageWarn{option `official' specified, but draft mode.}
+    \PackageWarn{Honoring `draft', resetting `official' to FALSE.}
+    \@officialfalse
+  \else
+    \@officialtrue
+  \fi
+}
+% but we need some way to turn it off in 'final' mode 
+% (for "unofficial" final copies)
+\DeclareOption{unofficial}{%
+  \@officialfalse
+}
+\DeclareOption{printcode}{%
+  \@printcodetrue
+}
+\ProcessOptions
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Load packages
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\ifpdf
+  \PassOptionsToPackage{pdftex,final}{graphicx}
+  \PassOptionsToPackage{pdftex,usenames}{color}
+  \PassOptionsToPackage{pdftex,backref}{hyperref}
+  \pdfcompresslevel=9
+\else
+  \PassOptionsToPackage{dvips,final}{graphicx}
+  \PassOptionsToPackage{dvips,usenames}{color}
+  \PassOptionsToPackage{dvips,backref}{hyperref}
+\fi%
+\PassOptionsToPackage{bf}{subfigure}
+\PassOptionsToPackage{T1}{fontenc}
+% Ordinarily, the url{} package will not line-break on a hyphen (is
+% the '-' character a line-continuation mark, or is it actually
+% part of the url itself?)  However, in my experience that's usually
+% pretty obvious, and NOT allowing line breaks at the hyphens 
+% causes most of the problems.  So, allow those line breaks, and live
+% with the confusion.
+\PassOptionsToPackage{T1,hyphens}{url}
+
+%
+% Fonts.
+%
+% Fonts are terribly complicated.  For OGS compliant thesis written 
+% using TeX, there are a few choices.  One choice is "Type 1" (postscript)
+% fonts versus "normal tex" fonts.  You want postscript fonts; especially
+% if you want to create electronic versions (pdf files, ps files) for 
+% distribution.  "normal" tex fonts look VERY bad onscreen, although
+% hardcopy printouts look great.  Fortunately, postscript fonts look
+% great in BOTH situations, so use them.  The only downside is that
+% your favorite decorative font may not be available in postscript
+% form (or, specifically, in TeX-compatible postscript form).  Fortunately,
+% the important OGS-compliant fonts ARE all available in TeX-compatible
+% postscript form -- but it takes a little work to get things set up.
+%
+% Now, the REALLY good news is that postscript fonts are installed and
+% used by DEFAULT under MikTeX (the most common PC implementation of TeX)
+% and by TeXshop (the most common Mac implementation of TeX).
+%
+% First, if you are not using ANY math, then you are free to use
+% almost any of the fonts specified in the OGS-SM.  However, if
+% you DO have math in your thesis, then you're pretty much restricted
+% to computer Modern (the default TeX fontset), or Times.  You want
+% a *complete* fontset; you don't want to use 'Chicago' for most of
+% your text, but have math still use Computer Modern Math; that wouldn't
+% look good.
+%
+% If you want to use Computer Modern throughout, then simply do nothing 
+% (font-related).  You'll get nice serif'ed fonts, nice san-serif'ed
+% fonts, nice monospace fonts, nice math fonts, etc.  You MAY need some
+% or all of the following commands to load additional characters
+%
+%  % For Computer Modern Fonts, we still must load some extra symbols
+%  \RequirePackage{textcomp}
+%  \RequirePackage{latexsym}
+%  % And additional math support from the American Mathematical Society
+%  \RequirePackage{amsmath} % environments
+%  \RequirePackage{amsfonts}% specialty fonts (Blackboard bold, italic capital greek
+%  \RequirePackage{amssymb} % other missing symbols
+%
+% Now, if you choose to use Times fonts instead, there are several
+% ways to do that.  The simplest and best is to use the txfonts package, 
+% which uses Times for body text (and Times Italic for 
+% \mathnormal).  It also provides a Times-harmonious san serif font,
+% monospace font, boldmath, all of the amsfonts, latexsym symbols,
+% and textcomp symbols (all in type-1 postscript form).  To use this 
+% option, you should use the following commands:
+%
+%  % for txfonts (Times) fonts.
+%  % We must call the the specialty font packages first -- that way,
+%  % the commands and envionments get defined, and then the txfonts package
+%  % will force them to use the Times-like txfonts instead of their
+%  % built-in versions.  If you prefer the true AMSfonts, call the 
+%  % ams packages *after* loading txfonts.
+%  \RequirePackage{textcomp}
+%  \RequirePackage{latexsym}
+%  \RequirePackage{amsmath}
+%  \RequirePackage{amsfonts}
+%  \RequirePackage{amssymb}
+%  \RequirePackage{txfonts}
+%
+% ------- HERE FOLLOWS EXTREMELY GORY TECHNICAL FONT INFO -------
+% You may see older documentation on the webm which says to use
+% Times fonts for \rmfamily and math, Helvetica fonts for \sffamily,
+% and Courier fonts for \ttfamily.  That's fine, but be warned:
+% the normal Times fonts do NOT provide all of the math symbols you
+% need (txfonts do, but that is described above).  Let's suppose
+% you're just stubborn, and don't want to use txfonts.  Fine.
+%
+% First, you need to load all three of those fonts (but helvetica
+% is optically 'larger' than other fonts at the same pointsize, so
+% we must shrink it slightly)
+%
+%  \PassOptionsToPackage{scaled=0.92}{helvet}%
+%  \RequirePackage{mathptmx}% load times as \rmfamily and math
+%  \RequirePackage{helvet}  % load helvetica as \sffamily
+%  \RequirePackage{courier} % load courier as \ttfamily
+%
+% Followed by the standard set of 'load some other symbols' commands
+%
+%  % We need this for other symbols that aren't available in Times
+%  \RequirePackage{textcomp}
+%  \RequirePackage{textcompsym}% a HACK provided in 
+%                              % gatech-thesis/julesverne/bellswhistles
+%                              % Read its commentblock for more info
+%  \RequirePackage{textcompsym}
+%  % define some symbols that aren't available in the normal
+%  % fonts (Computer Modern, Times, ...)
+%  \RequirePackage{latexsym}
+%  % And additional math support from the American Mathematical Society
+%  \RequirePackage{amsmath} % environments
+%  \RequirePackage{amsfonts}% fonts (Blackboard bold, italic capital greek
+%  \RequirePackage{amssymb} % other missing symbols
+%
+% You may have read that the 'times.sty' can be used in place
+% of the first four commands; when loaded it will redefine
+% \rmfamily, \sffamily, AND the \ttfamily all at once,
+% eliminating the need for three separate commands.  True -- but
+% it handles the MATH portion very badly, and doesn't scale the
+% helvetica font.  Trust me, use 'mathptmx', and avoid times.sty.
+% (Better, use txfonts -- and then you won't even need the textcompsym
+% hack! -- but you've already decided to be stubborn)
+% The mathptmx package uses Times for normal text, and creates a 
+% virtual font for math symbols, taking symbols from Times,
+% Computer Modern, and rsfs postscript fonts. 
+%
+% -- Note that there is a similar 'decision tree' for Palatino-based
+% -- fonts; you can use 'pxfonts', or you can use 'mathpazo' + 
+% -- 'helvet' + 'courier' (you'll also need the "load a bunch of
+% -- other symbols" block of commands, above).  However, that's a 
+% -- moot point, because  Palatino is not an approved font for 
+% -- Georgia Tech theses. The mathpazo package uses Palatino for 
+% -- normal text, and creates a virtual font for math symbols, 
+% -- taking symbols from palatino, Euler, and rsfs postscript fonts.  
+% -- Additionally, the mathpazo package comes with some additional 
+% -- "mathpazo" fonts of its own...
+%
+% The choices are fairly limited in PostScript fonts with TeX, because
+% most freely available PostScript fonts do not include all of the Math
+% characters needed for good TeX typesetting.  If you don't have any
+% math in your thesis, experiment with other fonts (within the bounds
+% specified by the OGS Guidelines for theses, of course) -- but good Math
+% support in alternate fonts usually costs $$$.  See MicroPress font
+% foundry's website, or the Y&Y font foundry's website.
+%
+% Another alternative for Times, is to use the free Belleek postscript 
+% fonts for math.  To do this you install the "mathtime" package -- which
+% provides support for the $$$ MathTime fonts but not the fonts themselves.
+% You then install the Belleek fonts, which are freely available clones of the
+% mathtime fonts -- and *hand-edit* the .fd files from
+% the mathtime package so that they point to the Belleek fonts (blex,
+% blsy, and rblmi) instead of the "real" MathTime fonts (mtex, mtsy, and rmtmi)
+% (see Richard Kinch's paper: http://www.truetex.com/belleek.pdf: but print
+% it out, that document looks horrible onscreen).  Unfortunately, this procedure 
+% is not well defined.  You best bet is to download the belleek-extra.zip archive
+%  (http://www.neuro.gatech.edu/users/cwilson/gatech-thesis/)
+% and follow the instructions in the internal README.  However, there are
+% some drawbacks to the belleek fonts; long arrows are broken, and no boldmath.
+% Plus, you still need the textcompsym HACK.  Trust me, txfonts is THE WAY 
+% TO GO.
+% 
+% For more info on fonts, math, and postscript, see...
+% http://www.ibiblio.org/pub/packages/TeX/macros/latex/required/psnfss/psnfss2e.pdf
+% http://www.lyx.org/help/mathstuff/mathmode.php#mathfont`
+% http://www.csit.fsu.edu/support/tex/doc/fontinst/talks/et99-font-tutorial.pdf
+
+% Here, we just use txfonts. 
+\RequirePackage{fontenc}
+\RequirePackage{latexsym}
+\RequirePackage{textcomp}
+\RequirePackage{amsmath}
+\RequirePackage{amsfonts}
+\RequirePackage{amssymb}
+\RequirePackage{txfonts}
+
+% We'll use the url{} command from the url package to typeset
+% filenames (unlike \texttt{}, it allows hyphenation and line
+% breaks, which is good -- filenames can sometimes be long,
+% and \texttt{alongfilename} = overful hboxes (eg. stuff
+% sticking out in the margins).
+\RequirePackage{url}
+% But, since hyperref redefines \Url, let's make an opaque
+% copy of the command before loading hyperref
+\let\noHyperUrl\Url
+% More on this later...
+
+% Defines the \includegraphics command, which is the normal
+% LaTeX2e mechanism for incorporating figures. Don't mess around
+% with epsfig or other (older, LaTeX 2.09) hacks.
+\RequirePackage{graphicx}
+% Yes, the OGS allows colored figures in official theses.  However,
+% this package is used for changing the color of text (which is 
+% a Bad Thing in official copies), and for drawing colored lines
+% if you happen to use the `picture' environment for some simple
+% figures.  It is used in jules-verne(bellswhistles) to enable
+% colored hyperlinks in .pdf output, and the \markup commands.
+\RequirePackage{color}
+
+% longtable lets us typeset tables that extend over more than
+% one page; don't use it for every table (a four row table
+% that linebreaks after row 3 looks really silly).
+\RequirePackage{longtable}
+% need to redefine longtable's makecaption macro to match
+% gatech-thesis format.  (Or, optionally, use the caption2 package --
+% but load caption2 AFTER longtable.)
+\long\def\LT@makecaption#1#2#3{%
+  \LT@mcol\LT@cols c{\hbox to\z@{\hss\parbox[t]\LTcapwidth{%
+    \sbox\@tempboxa{\textbf{#1{#2: }}#3}%
+    \ifdim\wd\@tempboxa>\hsize
+      \textbf{#1{#2: }}#3%
+    \else
+      \hbox to\hsize{\hfil\box\@tempboxa\hfil}%
+    \fi
+    \endgraf\vskip\baselineskip}%
+  \hss}}}
+\RequirePackage{colortbl}
+\RequirePackage{dcolumn}
+
+% caption2 docs say 'ignore subfig docs; load caption2 first'
+% This package allows us to manipute that figure and title caption
+% format.  Don't use it except for personal copies; the default
+% caption format is the approved one.  Note that to duplicate the
+% captioning style defined by gatech-thesis.cls, you must call
+% caption2 with the options below (which causes the 'Figure X:' 
+% part of the caption to be typeset bold in the normal font).
+\if@official
+%\RequirePackage[bf]{caption2}%gatech-thesis does this by default
+\else
+\RequirePackage[bf,sf]{caption2}%but for UNofficial copies, I like
+                                %switching to san-serif for 'Figure X:'
+\fi
+
+% subfigure allows us to create a single figure environment 
+% that \includegraphics{} more than one external ``figure''.
+\RequirePackage{subfigure}[1995/03/06]
+
+% A package for including program listings in your document
+\RequirePackage{listings}
+% Needs the {lstpatch.sty}[2002/08/06 1.0g (Carsten Heinz)] or newer
+%  available here:  http://www.atscire.de/products/listings/   
+%  Also, see http://www.lyx.org/help/listings/listings.php3 
+
+\RequirePackage{ifthen}% used by "inputXfile{}" macros for listing sourcecode.
+
+% thumbpdf helps in adding .png thumbnails to a pdf document.
+% These load much quicker than the ones generated automatically by
+% Acroreader5.0 -- and Acroreader4.0 could ONLY display .png thumbnails.
+% It requires additional, external programs, including perl and ghostscript
+\ifpdf% It IS okay to load "thumbpdf" after "hyperref", but...
+  \RequirePackage{thumbpdf}
+\fi
+
+% When using hyperref, we use the \AtEndOfPackage command to make sure
+% it is loaded last -- unless you include other packages after this
+% one within your preamble.  We also set the hyperref options depending on
+% whether we're using pdflatex or latex.
+\ifhyper% only load hyperref if it is specified in the documentclass options
+  \AtEndOfPackage{%
+    \RequirePackage{hyperref}
+    \ifpdf% hyperref must be last package loaded
+      \hypersetup{%
+        plainpages=true,
+        %bookmarks=true,% default, not necessary to specify
+        %breaklinks=true,% default in pdf mode
+        bookmarksopen=true,
+        bookmarksopenlevel=1,
+        bookmarksnumbered=true,
+        pdftitle={\doctitle},
+        pdfauthor={\textcopyright\ \docauthor},
+        pdfsubject={Dissertation},
+        pdfkeywords={\dockeywords},
+        pdfcreator={\LaTeX\ with package \flqq hyperref\frqq},
+        pdfproducer={pdfTeX-0.\the\pdftexversion\pdftexrevision},
+        pdfpagemode={UseOutlines},
+        hypertexnames=false,%not ideal, but needed when pagenums duplicate (`i' vs. `1')
+        pageanchor=true,
+        colorlinks=true,
+        linkcolor={blue},
+        citecolor={green},
+        urlcolor={red},
+        pagecolor={cyan},
+        anchorcolor={black}
+      }
+    \else
+      \hypersetup{%
+        plainpages=true,
+        breaklinks=true,% not default in dvips mode, so we must specify
+        hypertexnames=false,%not ideal, but needed when pagenums duplicate (`i' vs. `1')
+        pageanchor=true,
+        colorlinks=true,
+        linkcolor={blue},
+        citecolor={green},
+        urlcolor={red},
+        pagecolor={cyan},
+        anchorcolor={black}
+      }
+    \fi
+  }
+\fi
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Set up graphics
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% shouldn't be necessary, but we want to prefer .pdf figs
+% over .png when doing pdftex.  Default is opposite.
+\ifpdf%
+  \DeclareGraphicsExtensions{.pdf,.png,.jpg,.mps,.gif}%
+\else%
+  \DeclareGraphicsExtensions{.eps}%
+\fi
+
+% if your figures are all in a subdirectory, do this and you
+% won't have to specify the subdir in the \includegraphics{}
+% command:
+%
+\graphicspath{{fig/}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Useful macros
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand{\figref}[1]{\mbox{Figure~\ref{#1}}}
+\newcommand{\tabref}[1]{\mbox{Table~\ref{#1}}}
+\newcommand{\secref}[1]{\mbox{Section~\ref{#1}}}
+\newcommand{\chpref}[1]{\mbox{Chapter~\ref{#1}}}
+\newcommand{\appref}[1]{\mbox{Appendix~\ref{#1}}}
+\newcommand{\eqnref}[1]{\mbox{Eq.~(\ref{#1})}}
+\newcommand{\listref}[1]{\mbox{Listing~(\ref{#1})}}
+\newcommand{\markup}[1]{\textcolor{Blue}{#1}}
+\newcommand{\attention}[1]{\textcolor{Red}{#1}}
+\newcommand{\goodgap}{%
+  \hspace{\subfigtopskip}%
+  \hspace{\subfigbottomskip}%
+}
+% Here's where we use the Url{} command...
+\newcommand{\programname}{\begingroup \urlstyle{tt}\noHyperUrl}
+% this \texttt allows hyphenation at `discretionary hyphens' (\-)
+% it won't hyphenate on its own.  See also \programname.
+\newcommand\hyphtt[1]{% keywords
+  \texttt{\spaceskip .5em plus .3em minus .3em
+    \hyphenchar\font=`\-\relax #1}}
+%\newcommand\degrees[1]{\ensuremath{#1^\circ}}
+\newcommand\degrees[1]{#1\textdegree}
+% for '5 V' or '2 cm'
+\newcommand\units[2]{\mbox{$#1\,\mathrm{#2}$}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Code Listings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%  As follows:
+% \inputmatlabfile[captionpos=b,caption={[mymacro.m]{mymacro.m caption  
+% text.}},label={lst:mymacro.m}]{code/mymacro.m}
+
+\if@printcode
+  \lstdefinestyle{base}{print=true,breaklines,prebreak=\textdownarrow,
+  postbreak=\llap{\rlap{\textrightarrow}\kern\lst@breakcurrindent}}
+\else
+  \lstdefinestyle{base}{print=false,breaklines,prebreak=\textdownarrow,
+  postbreak=\llap{\rlap{\textrightarrow}\kern\lst@breakcurrindent}}
+\fi  
+\lstdefinestyle{numbers}{style=base,numbers=left,stepnumber=5,%
+  numberstyle=\tiny,numbersep=10pt,numberfirstline,numberblanklines,%
+  xleftmargin=22pt}% 20pt indent should be sufficient to insure that
+  % the linenumbers remain completely inside the "real" margins, even
+  % if the linenumbers grow to four digits...
+\lstdefinestyle{full}{columns=fixed,fontadjust=true,%
+  showspaces=false,showtabs=true,tab=\rightarrowfill,%
+  basicstyle=\ttfamily,commentstyle=\scriptsize\itshape,
+  frame=lines,style=numbers}%
+\lstdefinestyle{matlabfull}{language=matlab,style=full}
+\lstdefinestyle{cfull}{language={[ANSI]C},style=full}
+\lstdefinestyle{cxxfull}{language={[GNU]C++},style=full}
+
+%%
+% \inputcodefile[args]{style}{filename}
+%    where args = other arguments for \lstinputlisting
+%          style = defined style to use for \lstinputlisting}
+%                  e.g. {matlabfull} or {cfull}
+\newcommand{\inputcodefile}[3][none]{%
+  \begin{singlespaced}
+    \par\vskip\parskip\vskip\baselineskip
+    \ifthenelse{\equal{#1}{none}}
+      {\lstinputlisting[style=#2]{#3}}
+      {\lstinputlisting[style=#2,#1]{#3}}
+    \par\vskip\parskip\vskip\baselineskip
+  \end{singlespaced}
+}
+%%
+% \inputmatlabfile[args]{filename}
+%    where args = other arguments for \lstinputlisting
+\newcommand{\inputmatlabfile}[2][none]{%
+  \ifthenelse{\equal{#1}{none}}
+    {\inputcodefile{matlabfull}{#2}}
+    {\inputcodefile[#1]{matlabfull}{#2}}
+}
+%%
+% \inputcfile[args]{filename}
+%    where args = other arguments for \lstinputlisting
+\newcommand{\inputcfile}[2][none]{%
+  \ifthenelse{\equal{#1}{none}}
+    {\inputcodefile{cfull}{#2}}
+    {\inputcodefile[#1]{cfull}{#2}}
+}
+%%
+% \inputcxxfile[args]{filename}
+%    where args = other arguments for \lstinputlisting
+\newcommand{\inputcxxfile}[2][none]{%
+  \ifthenelse{\equal{#1}{none}}
+    {\inputcodefile{cxxfull}{#2}}
+    {\inputcodefile[#1]{cxxfull}{#2}}
+}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Settings for gatech-thesis class
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\if@official
+\else
+  % for unofficial copies, I like the running headers
+  % and pagenums at upper corners.   Footers are for
+  % footnotes, dadgumit.
+  \setfrontpagestyle{tcplain}
+  \setbodypagestyle{gtthesis}
+  \setbackpagestyle{gtthesis}
+  \pagestyle{gtthesis}
+  % Nice monospace font WITH a true bold version
+  %   ftp://ftp.dante.de/tex-archive/fonts/LuxiMono/
+  % but follow the instructions to install...
+  % \usepackage[scaled]{luximono}
+\fi
+\degree{Doctor of Philosophy}%
+\department{School of Electrical and Computer Engineering}%
+\title{\doctitle}
+\author{\docauthor}%
+\principaladvisor{Elrond Halfelven}
+\committeechair{Gandalf Ol\'orin}
+\firstreader{Samwise Gamgee}
+\secondreader{Peregrin Took}
+\thirdreader{Meriadoc Brandybuck}
+\submitdate{August 2002}%
+\copyrightyear{2002}%add one if thesis submitted in Dec.
+
+\copyrighttrue               % NOT default
+\if@official
+\else
+  \strictmarginsfalse        % NOT default
+  \signaturepagefalse        % NOT default
+\fi
+
+% \thesisproposalfalse       % default
+% \titlepagetrue             % default
+% \signaturepagetrue         % default
+% \copyrightfalse            % default
+% \figurespagetrue           % default
+% \tablespagetrue            % default
+% \contentspagetrue          % default
+% \dedicationheadingfalse    % default
+% \multivolumefalse          % default
+% \bibpagetrue               % default
+% \strictmarginstrue         % default  (needed for official copies, but looks bad)
+\multivolumetrue
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Miscellaneous special settings
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibfiles{jules-verne-bib}
+
+% to teach latex how to hyphenate strange words, include them here:
+%\hyphenation{neuro-science photo-receptors parvo-cellular}
+
+\setchaptertocdepth{2}
+\setcounter{page}{1}
+\special{papersize=8.5in,11in}
+
+%%%%%%
+% listings.sty customizations
+%%%%%%
+\lstset{MoreSelectCharTable=%
+  \lst@ReplaceInput{>}{\hspace{0.2em}\lst@ProcessOther{\hspace{-0.2em}>}}%
+  \lst@ReplaceInput{<}{\hspace{0.2em}\lst@ProcessOther{\hspace{-0.2em}<}}%
+}
+\lstset{escapeinside={/*@}{@*/}}
+% inside a listing, you can do this 'int x;  /*@\label{x-lbl}@*/'
+% and then \ref{x-lbl}
+
+%% Customizations to help make the List of Listings
+%% generated by the 'listings.sty' package look more
+%% like the gatech-thesis style (List of Figures, etc)
+%% and to make it play nicely with pdflatex and hyperref.
+
+%% dummy commands to prevent recursion errors
+\newcommand{\gtlistlistingname}{}
+\newcommand{\lolcontentlinestring}{}
+\newcommand{\lolpdfbookmarkstring}{}
+\newcommand{\setlolstring}[1]{%
+  \renewcommand{\gtlistlistingname}{#1}
+  \renewcommand{\lstlistlistingname}{\Makeuppercase{#1}}
+  \renewcommand{\lolcontentlinestring}{%
+    \texorpdfstring{\Makeuppercase{#1}}{#1}
+  }
+  \renewcommand{\lolpdfbookmarkstring}{#1}
+}
+\setlolstring{List of Listings}%                       default is Listings
+\renewcommand{\lstlistingname}{Listing}%               default is Listing
+\renewcommand{\thelstlisting}{\@arabic\c@lstlisting}%  captionstyle
+\@removefromreset{lstlisting}{chapter}% don't reset the listing # for each chpter
+
+%%%%% Here's how to add an additional "List of..." page to the 
+%%%%% frontmatter.  (Don't do this, the Georgia Tech OGS is 
+%%%%% very specific about what can and cannot go there)
+%%% First, create the command that will do the work -- adding it
+%%% to the TOC, setting up the hyperref bookmarks, dealing with
+%%% twoside printing, etc.
+\newcommand{\do@listingspage}{%
+  \if@openright\cleardoublepage\else\clearpage\fi%
+  % must clear page here, so that phantomsection\addcontentsline
+  % is on the correct page
+  \phantomsection%
+  \addcontentsline{toc}{chapter}{\lolcontentlinestring}
+  \settoheight{\gt@tmpa}{A}
+  \set@gttocskip{\gt@tmpa}
+  {\newlinestretch{1}
+   \lstlistoflistings
+  }%
+  \newpage
+}
+%% redefine this command, which controls how each listingname & number 
+%% is printed in the List of Listings.  We copy the l@figure defintion,
+%% so that these entries look the same as those in the List of Figures
+\renewcommand*\l@lstlisting[2]{%
+  \let\gt@@toclineskip=\gt@beforefigskip@value
+  \gt@dottedtocline{1}{1.5em}{2.3em}{#1}{#2}}% this is indented 1.5em so that 
+                    % if you wish, you can a 'Program' header
+                    % centered above the numbers using \addtocontents
+                                             
+                                             
+%% Then, fix up the lstlistoflistings command (the "real" one is a 
+%% true piece of work...)
+\renewcommand\lstlistoflistings{%
+  \if@twocolumn
+    \@restonecoltrue\onecolumn
+  \else
+    \@restonecolfalse
+  \fi
+  \chapter*{\lstlistlistingname}%
+  \@mkboth{\MakeUppercase\lstlistlistingname}%
+          {\MakeUppercase\lstlistlistingname}%
+  \@starttoc{lol}%
+  \if@restonecol\twocolumn\fi
+}
+
+%% Finally, override the \contents command in gatech-thesis.cls
+%% (just copy the original and add your \do@X function):
+\renewcommand{\contents}{%
+  \newpage
+  \newlinestretch{\@spacing}
+  \do@contentspage
+  \do@tablespage
+  \do@figurespage
+  \do@losapage  
+  \do@glossarypage
+  \if@hyperref
+%    \NoHyper
+    \do@listingspage
+%    \endNoHyper
+  \else
+    \do@listingspage
+  \fi
+}
+

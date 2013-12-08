@@ -1,0 +1,282 @@
+This is pdfTeX, Version 3.1415926-1.40.10 (TeX Live 2009) (format=pdflatex 2009.11.7)  2 JUL 2010 13:31
+entering extended mode
+ %&-line parsing enabled.
+**\input jules-verne.tex
+(./jules-verne.tex (./gatech-thesis.cls
+Document Class: gatech-thesis 2010/07/02 1.8 (Mitchel T. Keller)
+(/usr/local/texlive/2009/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2007/08/22 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count79
+\calc@Bcount=\count80
+\calc@Adimen=\dimen102
+\calc@Bdimen=\dimen103
+\calc@Askip=\skip41
+\calc@Bskip=\skip42
+LaTeX Info: Redefining \setlength on input line 76.
+LaTeX Info: Redefining \addtolength on input line 77.
+\calc@Ccount=\count81
+\calc@Cskip=\skip43
+)
+(/usr/local/texlive/2009/texmf-dist/tex/latex/base/report.cls
+Document Class: report 2007/10/19 v1.4h Standard LaTeX document class
+(/usr/local/texlive/2009/texmf-dist/tex/latex/base/size11.clo
+File: size11.clo 2007/10/19 v1.4h Standard LaTeX file (size option)
+)
+\c@part=\count82
+\c@chapter=\count83
+\c@section=\count84
+\c@subsection=\count85
+\c@subsubsection=\count86
+\c@paragraph=\count87
+\c@subparagraph=\count88
+\c@figure=\count89
+\c@table=\count90
+\abovecaptionskip=\skip44
+\belowcaptionskip=\skip45
+\bibindent=\dimen104
+)
+\signature@width=\skip46
+\c@signatures=\count91
+\c@cnt@Lsig=\count92
+\c@cnt@Rsig=\count93
+\gt@tocentryskip@value=\skip47
+\gt@beforepartskip@value=\skip48
+\gt@beforechapskip@value=\skip49
+\gt@beforesecskip@value=\skip50
+\gt@beforesubsecskip@value=\skip51
+\gt@beforesubsubsecskip@value=\skip52
+\gt@beforeparaskip@value=\skip53
+\gt@beforesubparaskip@value=\skip54
+\gt@beforefigskip@value=\skip55
+\gt@beforetableskip@value=\skip56
+\gt@tmpa=\skip57
+\c@part@savepagenum=\count94
+\c@part@pagenum=\count95
+
+(./gatech-thesis-patch.sty
+File: gatech-thesis-patch.sty 2010/07/02 1.8 (Mitchel T. Keller)
+
+gatech-thesis-patch loaded
+)) (/usr/local/texlive/2009/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 1999/02/16 v1.0f Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2009/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 1999/03/16 v1.13 key=value parser (DPC)
+\KV@toks@=\toks14
+)
+(/usr/local/texlive/2009/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2009/02/05 v1.0o Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2009/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 1999/03/16 v1.09 sin cos tan (DPC)
+)
+(/usr/local/texlive/2009/texmf-dist/tex/latex/latexconfig/graphics.cfg
+File: graphics.cfg 2009/08/28 v1.8 graphics configuration of TeX Live
+)
+Package graphics Info: Driver file: pdftex.def on input line 91.
+
+(/usr/local/texlive/2009/texmf-dist/tex/latex/pdftex-def/pdftex.def
+File: pdftex.def 2009/08/25 v0.04m Graphics/color for pdfTeX
+\Gread@gobject=\count96
+))
+\Gin@req@height=\dimen105
+\Gin@req@width=\dimen106
+)
+(/usr/local/texlive/2009/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2005/11/14 v1.0j Standard LaTeX Color (DPC)
+
+(/usr/local/texlive/2009/texmf-dist/tex/latex/latexconfig/color.cfg
+File: color.cfg 2007/01/18 v1.5 color configuration of teTeX/TeXLive
+)
+Package color Info: Driver file: pdftex.def on input line 130.
+)
+(./jules-verne.aux)
+\openout1 = `jules-verne.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 43.
+LaTeX Font Info:    ... okay on input line 43.
+
+(/usr/local/texlive/2009/texmf-dist/tex/context/base/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count97
+\scratchdimen=\dimen107
+\scratchbox=\box26
+\nofMPsegments=\count98
+\nofMParguments=\count99
+\everyMPshowfont=\toks15
+\MPscratchCnt=\count100
+\MPscratchDim=\dimen108
+\MPnumerator=\count101
+\everyMPtoPDFconversion=\toks16
+)
+Underfull \hbox (badness 10000) has occurred while \output is active
+ 
+ []
+
+
+Underfull \hbox (badness 10000) has occurred while \output is active
+ 
+ []
+
+[1
+
+{/usr/local/texlive/2009/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+SIGNATURES: 5
+\c@halfsig=\count102
+LEFTCNT: 3 HALF: 3
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 47.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 47.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 47.
+***************** Dedication ******************
+
+Underfull \hbox (badness 10000) has occurred while \output is active
+ 
+ []
+
+
+Underfull \hbox (badness 10000) has occurred while \output is active
+ 
+ []
+
+[2
+
+] (./jules-verne-dedication.tex)
+***************** Acknowledgements ******************
+[3
+
+
+] (./jules-verne-ack.tex
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 21.
+
+(/usr/local/texlive/2009/texmf-dist/tex/latex/base/omscmr.fd
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 21.
+) [4
+
+
+]
+(./jules-verne.toc)
+\tf@toc=\write3
+\openout3 = `jules-verne.toc'.
+
+ [5
+
+
+] (./jules-verne.lot)
+\tf@lot=\write4
+\openout4 = `jules-verne.lot'.
+
+ [6
+
+
+] (./jules-verne.lof)
+\tf@lof=\write5
+\openout5 = `jules-verne.lof'.
+
+ [7
+
+
+]
+***************** Summary ******************
+(./jules-verne-summary.tex) [8
+
+
+] (./jules-verne-chapter1.tex
+CHAPTER I.
+[1
+
+] [2] [3] <jules-verne-test.pdf, id=45, 148.555pt x 242.9075pt>
+File: jules-verne-test.pdf Graphic file (type pdf)
+
+<use jules-verne-test.pdf> [4 <./jules-verne-test.pdf>] [5]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <9> on input line 208.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <5> on input line 208.
+)
+(./jules-verne-chapter2.tex [6]
+CHAPTER II.
+[7
+
+]
+File: jules-verne-test.pdf Graphic file (type pdf)
+ <use jules-verne-test.pdf> [8] [9] [10]) (./jules-verne-chapter3.tex
+[11]
+CHAPTER III.
+File: jules-verne-test.pdf Graphic file (type pdf)
+<use jules-verne-test.pdf> [12
+
+] [13] [14]) [15] (./jules-verne-chapter4.tex
+APPENDIX A.
+[16
+
+
+] [17]
+Overfull \hbox (5.1989pt too wide) in paragraph at lines 123--126
+[]\OT1/cmr/m/n/10.95 ``But, Ned, you, a whaler by pro-fes-sion, fa-mil-iarised 
+with all the great ma-rine mammalia---
+ []
+
+[18] [19] [20]) (./jules-verne-chapter5.tex [21]
+APPENDIX B.
+[22
+
+]
+Overfull \hbox (3.81987pt too wide) in paragraph at lines 64--68
+[]\OT1/cmr/m/n/10.95 But the weather was good. The voy-age was be-ing ac-com-pl
+ished un-der the most favourable
+ []
+
+[23] [24] [25])
+***************** References ******************
+[26] (./jules-verne.bbl)
+***************** Vita ******************
+[27
+
+
+] (./jules-verne-vita.tex) [28
+
+
+] (./jules-verne.aux) ) 
+Here is how much of TeX's memory you used:
+ 1471 strings out of 493848
+ 19635 string characters out of 3149207
+ 74829 words of memory out of 3000000
+ 4733 multiletter control sequences out of 15000+200000
+ 9378 words of font info for 33 fonts, out of 3000000 for 9000
+ 714 hyphenation exceptions out of 8191
+ 27i,11n,25p,342b,449s stack positions out of 5000i,500n,10000p,200000b,50000s
+</usr/local/texlive/2009/texmf-dist/fonts/type1/public/a
+msfonts/cm/cmbx10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmbx12.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmbxti10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmcsc10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/am
+sfonts/cm/cmmi10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/ams
+fonts/cm/cmr10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfo
+nts/cm/cmr6.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts
+/cm/cmr8.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm
+/cmr9.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cm
+sy10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmt
+i10.pfb></usr/local/texlive/2009/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt
+10.pfb>
+Output written on jules-verne.pdf (36 pages, 234202 bytes).
+PDF statistics:
+ 168 PDF objects out of 1000 (max. 8388607)
+ 0 named destinations out of 1000 (max. 500000)
+ 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+

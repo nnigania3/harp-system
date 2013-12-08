@@ -1,0 +1,50 @@
+Files in this example:
+
+Documention:
+  MANIFEST  -- this file
+  00README
+
+Scripts to build the example (and clean up)
+  CLEAN.bat
+  DO_pdf.bat
+  DO_postscript.bat
+
+  CLEAN.sh
+  DO_pdf.sh
+  DO_postscript.sh
+
+The actual example files
+  jules-verne.tex -- the main root file.  latex this.
+  jules-verne.sty -- a document-specific style, used to set things up
+  textcompfix.sty _/ two different workarounds for a problem with
+  textcompsym.sty  \ the textcomp package and PostScript fonts.
+  
+  jules-verne-dedication.tex -- the main text files for the example
+  jules-verne-ack.tex
+  jules-verne-summary.tex
+  jules-verne-chapter1.tex
+  jules-verne-chapter2.tex
+  jules-verne-chapter3.tex
+  jules-verne-chapter4.tex
+  jules-verne-chapter5.tex
+  jules-verne-programs.tex   -- demonstrates the listings package
+  jules-verne-vita.tex
+  
+  hack-applabel.tex          -- stupid hacks to work around latex bugs
+  hack-chaplabel.tex
+  hack-part.tex
+  
+  jules-verne-bib.bib        -- bibliography database
+  jules-verne-gloss.bib      -- glossary database
+  jules-verne-losa.bib       -- list of symbols/abbreviations database
+
+  code/crc16.c               -- programs for the listings package
+  code/crc32-thehardway.java
+  code/crc32.c
+  code/crc32.cxx
+  code/crc32.java
+  code/crc8.m
+
+  fig/jules-verne-test.eps   -- example figure.  Note that you need 
+  fig/jules-verne-test.pdf   -- both .eps and .pdf; try the epstopdf prog.
+

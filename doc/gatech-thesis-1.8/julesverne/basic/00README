@@ -1,0 +1,30 @@
+This directory contains a basic "thesis" formatted using the
+gatech-thesis.cls.  The text is taken from the first five
+chapters of Jules Verne's ``20,000 Leagues Under the Sea,'' 
+from Project Gutenberg
+  http://promo.net/pg/
+  ftp://ibiblio.org/pub/docs/books/gutenberk/etext94/2000010.txt
+Project Gutenberg etexts may be freely redistributed in any form,
+as long as the original unmodified document accompanies the 
+modified excerpts.  To satisfy this requirement, please do not
+distribute this example without the 2000010.txt file which is in
+the parent directory.
+
+To run the example, you must first install all of the following
+files in the appropriate locations in your texmf (or localtexmf) tree.
+   <texmf>/tex/latex/gatech-thesis/gatech-thesis.cls
+   <texmf>/bibtex/bst/gatech-thesis/gatech-thesis.bst
+
+This example only requires two additional style files, which are 
+both part of the base latex distribution, so that shouldn't be
+a problem.  These packages are:
+
+   graphicx  -- this is a 'standard' package; you should already have it
+   color     -- ditto
+
+Then, make sure that latex & friends are in your path, and run the DO_*.sh
+scripts (or the DO_*.bat files).
+
+For a more complicated example of what is possible, and a demonstration
+of the new add-on style files for glossaries and indices, see the
+sibling `bellswhistles' example.

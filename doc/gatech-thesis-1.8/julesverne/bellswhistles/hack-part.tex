@@ -1,0 +1,17 @@
+% This stupid hack is here because IF
+% (1) the main document contains commands that write 
+%     infomation to the .aux files (such as \part{}, 
+%     \labelchaptersintableofcontents, etc), AND 
+% (2) it \includes the subsidiary files instead of
+%     \inputting them, THEN
+% The .aux file contains out-of-order information, 
+% which leads to a bad Table of Contents.  This can
+% only be a bug in latex; the \protected@write command
+% is being deferred.  Bad news.
+%
+% So, to work around that bug, we actually \include
+% the sectioning and \label.... commands --- that way,
+% all of the writes to the .aux files are all deferred
+% by the same amount, and remain in order.  But it
+% is an ugly, ugly hack...
+\part{}

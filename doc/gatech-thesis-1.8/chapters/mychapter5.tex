@@ -1,0 +1,16 @@
+\setcounter{equation}{0}
+
+\chapter{Future Work and Conclusion }
+\label{Future Work and Conclusion }
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Related Work}
+ 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Future Work}
+Since this work is part of a multiyear and multiperson project many extensions are planned for this work. As for changes in the core part of the design changes like adding support to handle multiple warps, branch divergence using mask registers will be one important feature which will make this design truly comparable to modern day GPGPUs. Also a feature like data forwarding can be added if we find that making the core more CPU like will be beneficial for certain kind of systems.
+The applications written right now were all in Harp assembly but to allow us to run of the shelf CUDA or OpenCL applications a software translator tool is being worked upon wich can generate Harp assembly from these binaries.\\
+The next major part of the future work is to explore future systems using new memory technologies like the HMC. Building these systems would require only isolated changes to the existing design. For example to use a FPGA board with HMC we would only have to generate a new Memory Interface IP for the HMC (as the controller is integrated in the logic layer of the HMC) and use this with the rest of the system.\\
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Conclusion}
+To conclude we showcased a tool chain and possible designs to allow quick prototyping of GPGPU designs on real hardware. Integrating the FPGA protyping flow with software simulation infrastructure will allow us to explore future architectures at different levels of granulatiry. By creating a parameterized design we can change many aspects of our design to affect performance. The flexibility offered by CHDL was also shown which allowed us to easily add more features to our system if needed like SIMD support. We were able to see benefits of the SIMD version of the core using a coalescing unit over the single lane version. This work also discussed few different systems which were emulated on hardware with only minor changes to the base design flow. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 

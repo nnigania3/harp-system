@@ -1,0 +1,77 @@
+\documentclass{gatech-thesis}
+% The default options:
+%   \documentclass[11pt,letterpaper,oneside,%
+%       doublespaced,normalmargins,final]{gatech-thesis}
+% will generate a document that conforms to the graduate studies office
+% guidelines.
+
+ \ifx\pdfoutput\undefined
+   \usepackage[dvips,final]{graphicx}  % using latex+dvips
+   \usepackage[dvips,usenames]{color}
+ \else
+   \usepackage[pdftex,final]{graphicx} % using pdflatex
+   \usepackage[pdftex,usenames]{color}
+ \fi
+
+%define stuff in preamble
+ \degree{Doctor of Philosophy}
+ \department{School of Electrical and Computer Engineering}
+ \title{20,000 Leagues Under the Sea \protect\\ by Jules Verne}
+ \author{Frodo Baggins}
+ \principaladvisor{Elrond Halfelven}
+ \committeechair{Gandalf Ol\'orin}
+ \firstreader{Samwise Gamgee}
+ \secondreader{Peregrin Took}[School of Industrial and Systems Engineering]
+ \thirdreader{Meriadoc Brandybuck}[Department of Combinatorics and Optimization][University of Waterloo]
+ \submitdate{August 2002}
+ \approveddate{21 August 2002}
+ \copyrightyear{2002} %add one if thesis submitted in Dec.
+
+% \thesisproposalfalse       % default
+% \titlepagetrue             % default
+% \signaturepagetrue         % default
+% \copyrightfalse            % default
+% \figurespagetrue           % default
+% \tablespagetrue            % default
+% \contentspagetrue          % default
+% \dedicationheadingfalse    % default
+% \bibpagetrue               % default
+% \strictmarginstrue         % default
+
+\bibfiles{jules-verne-bib}
+
+\begin{document}
+\bibliographystyle{gatech-thesis}
+\setchaptertocdepth{2}
+%
+\begin{preliminary}
+\begin{dedication}
+\input{jules-verne-dedication}
+\end{dedication}
+\begin{acknowledgements}
+\input{jules-verne-ack}
+\end{acknowledgements}
+%
+\contents
+%
+\begin{summary}
+\input{jules-verne-summary}
+\end{summary}
+\end{preliminary}
+%
+\input{jules-verne-chapter1}
+\input{jules-verne-chapter2}
+\input{jules-verne-chapter3}
+%
+\appendix
+%
+\input{jules-verne-chapter4}
+\input{jules-verne-chapter5}
+%
+\begin{postliminary}
+\references
+\begin{vita}
+\input{jules-verne-vita}
+\end{vita}
+\end{postliminary}
+\end{document}

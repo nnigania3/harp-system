@@ -1,0 +1,37 @@
+Files in this example:
+
+Documention:
+  MANIFEST  -- this file
+  00README
+
+Example output:
+  jules-verne.ps.gz
+  jules-verne.pdf
+
+Scripts to build the example (and clean up)
+  CLEAN.bat
+  DO_pdf.bat
+  DO_postscript.bat
+
+  CLEAN.sh
+  DO_pdf.sh
+  DO_postscript.sh
+
+The actual example files
+  jules-verne.tex -- the main root file.  latex this.
+  
+  jules-verne-dedication.tex -- the main text files for the example
+  jules-verne-ack.tex
+  jules-verne-summary.tex
+  jules-verne-chapter1.tex
+  jules-verne-chapter2.tex
+  jules-verne-chapter3.tex
+  jules-verne-chapter4.tex
+  jules-verne-chapter5.tex
+  jules-verne-vita.tex
+  
+  jules-verne-bib.bib    -- bibliography database
+
+  jules-verne-test.eps   -- example figure.  Note that you need 
+  jules-verne-test.pdf   -- both .eps and .pdf; try the epstopdf prog.
+

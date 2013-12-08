@@ -1,0 +1,86 @@
+% Package: textcompfix
+%
+% Since the PostScript version of Times (Palatino, etc)
+% do not contain all of the symbols used by \textcomp's
+% commands, we create new commands for each of the
+% `missing' symbols.  So, for instance, instead of using
+%   \textleftarrow
+% you use 
+%   \FIXtextleftarrow
+% This switches the current font to Computer Modern, 
+% calls \textleftarrow, and switches back.
+%
+% The Right Thing To Do, of course, is to create a 
+% virtual font that provides the \textcomp symbols 
+% for [Times, Palatino, etc]...this is just a workaround.
+% Of course, that's what the txfonts (and pxfonts) 
+% packages DO: create virtual fonts for the TS1 encoding.
+%
+% See the textcompsym style for a different workaround.
+%
+\ProvidesPackage{textcompfix}
+  [2002/08/09 textcomp with postscript fonts]
+\RequirePackage{textcomp}
+
+\newcommand*{\tcfixfont}[1]{%
+  {\fontfamily{cmr}\fontencoding{TS1}\selectfont#1}}
+\newcommand*{\textcompfixup}[1]{%
+  \expandafter\expandafter\expandafter\gdef\expandafter\csname FIX#1\endcsname{%
+    \tcfixfont{\csname #1\endcsname}}
+}
+\textcompfixup{textleftarrow}
+\textcompfixup{textrightarrow}
+\textcompfixup{textblank}
+\textcompfixup{textdblhyphen}
+\textcompfixup{textzerooldstyle}
+\textcompfixup{textoneoldstyle}
+\textcompfixup{texttwooldstyle}
+\textcompfixup{textthreeoldstyle}
+\textcompfixup{textfouroldstyle}
+\textcompfixup{textfiveoldstyle}
+\textcompfixup{textsixoldstyle}
+\textcompfixup{textsevenoldstyle}
+\textcompfixup{texteightoldstyle}
+\textcompfixup{textnineoldstyle}
+\textcompfixup{textlangle}
+\textcompfixup{textborn}
+\textcompfixup{textrangle}
+\textcompfixup{textmho}
+\textcompfixup{textbigcircle}
+\textcompfixup{textohm}
+\textcompfixup{textuparrow}
+\textcompfixup{textdownarrow}
+\textcompfixup{textdivorced}
+\textcompfixup{textdied}
+\textcompfixup{textleaf}
+\textcompfixup{textmarried}
+\textcompfixup{textmusicalnote}
+\textcompfixup{textdblhyphenchar}
+\textcompfixup{textcentoldstyle}
+\textcompfixup{textdollaroldstyle}
+\textcompfixup{textcolonmonetary}
+\textcompfixup{textwon}
+\textcompfixup{textnaira}
+\textcompfixup{textguarani}
+\textcompfixup{textpeso}
+\textcompfixup{textlira}
+\textcompfixup{textrecipe}
+\textcompfixup{textinterrobang}
+\textcompfixup{textinterrobangdown}
+\textcompfixup{textdong}
+\textcompfixup{textpilcrow}
+\textcompfixup{textbaht}
+\textcompfixup{textnumero}
+\textcompfixup{textdiscount}
+\textcompfixup{textestimated}
+\textcompfixup{textopenbullet}
+\textcompfixup{textservicemark}
+\textcompfixup{textlquill}
+\textcompfixup{textrquill}
+\textcompfixup{textpertenthousand}
+\textcompfixup{textcopyleft}
+\textcompfixup{textcircledP}
+\textcompfixup{textsurd}
+\textcompfixup{textreferencemark}
+\textcompfixup{texteuro}
+

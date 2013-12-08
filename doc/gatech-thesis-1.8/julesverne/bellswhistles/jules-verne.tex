@@ -1,0 +1,107 @@
+\setcounter{errorcontextlines}{5}
+%% Uncommment the documentclass, usepackage lines that are
+%% appropriate for your target.
+
+%% Official copies:
+%% The default options:
+%%   \documentclass[11pt,letterpaper,oneside,openright,%
+%%                  doublespaced,normalmargins,final]{gt-thesis}
+%% will generate a document that conforms to the graduate studies office
+%% guidelines (Unless you're using Times fonts, as we are, in which 
+%% case you need to specify 12 pt fonts).  Oh, and in case you were
+%% wondering: Times fonts, at oneandahalfspaced, do NOT meet the
+%% 5/16" baseline separation requirement of OGS.  You must use (the
+%% default) doublespaced setting.
+%\documentclass[12pt]{gatech-thesis}%
+%\usepackage[official]{jules-verne}
+
+%% Regular drafts (twoside,openany is the default in draft mode; override)
+%\documentclass[12pt,oneside,widemargins,hyperref]{gatech-thesis}%
+%\usepackage[printcode,unofficial]{jules-verne}
+
+%% Electronic Final copies:
+\documentclass[12pt,final,hyperref]{gatech-thesis}%
+\usepackage[unofficial]{jules-verne}
+
+%% Personal Final copies:
+%\documentclass[12pt,twoside,final]{gatech-thesis}%
+%\usepackage[unofficial]{jules-verne}
+
+%% read up on \includeonly
+%% important point: we \include the subcomponents, but
+%% the short ones (-vita, -ack, etc) contain the
+%% \begin{...}...\end{...} environments. This is unlike the
+%% simple example, where the environment commands were
+%% in this file, and the \inputted subcomponents contain only text.
+%%   --- WARNING: I've noticed that if the main file (e.g. this one)
+%%       uses sectioning commands (\part{}, \label[X]intableofcontents)
+%%       AND you \include{} your subcomponents (rather than \input{}),
+%%       then MikTeX 2.1 generates .aux files that are out of order --
+%%       leading to messed up TOCs.  The hackish workaround is to 
+%%       make external files containing those sectioning commands
+%%       (see hack-*.tex in this directory) and \include *them*, as well.
+%%       This problem may be fixed in MikTeX 2.2, and it may not
+%%       exist on unix/mac versions of TeX.
+%\includeonly{jules-verne-chapter2.tex}
+
+%%%%
+%%%% Use the gatech-thesis addons
+%%%% Doing this here, instead of in gatech-thesis.sty, so 
+%%%% that it stands out.  Ordinarily, this TOO would
+%%%% go into your custom johnthesis.sty file.  Note:
+%%%% use '\RequirePackage{}' from inside other packages,
+%%%% not '\usepackage'.  Oh, and use '\PassOptionsToPackage{}'
+%%%% inside packages, too: \RequirePackage[someoption]{a package}
+%%%% isn't legal
+\usepackage{gatech-thesis-losa}
+\losafiles{jules-verne-losa}
+\setlength{\losahang}{5cm}
+\usepackage{gatech-thesis-gloss}
+\glossfiles{jules-verne-gloss}
+%\setlength{\glosshang}{2cm}
+\usepackage{gatech-thesis-index}
+%%%%%
+
+%using WinEdt to edit your TeX code?
+%GATHER{jules-verne.bib}
+%GATHER{jules-verne.sty}
+
+\begin{document}
+\bibliographystyle{gatech-thesis}
+\setchaptertocdepth{2}
+%
+\begin{preliminary}
+\include{jules-verne-dedication}
+\include{jules-verne-ack}
+\contents
+\include{jules-verne-summary}
+\end{preliminary}
+%
+%% Stupid hack for MikTeX 2.1
+\include{hack-chaplabel}% instead of \labelchaptersintableofcontents
+%
+\include{jules-verne-chapter1}
+\include{jules-verne-chapter2}
+%
+%% Stupid hack for MikTeX 2.1
+\include{hack-part}% instead of \part{}
+%
+\include{jules-verne-chapter3}
+%
+%% Stupid hack for MikTeX 2.1
+\include{hack-applabel}% instead of \labelappendicesintableofcontents
+%
+\appendix
+%
+\include{jules-verne-chapter4}
+\include{jules-verne-chapter5}
+\include{jules-verne-programs}
+%
+\begin{postliminary}
+\references
+\gtindex
+% the vita must ALWAYS be the very last item, according to
+% the GT OGS.
+\include{jules-verne-vita}
+\end{postliminary}
+\end{document}

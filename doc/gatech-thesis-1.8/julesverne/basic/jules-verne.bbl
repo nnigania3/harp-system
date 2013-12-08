@@ -1,0 +1,52 @@
+\newcommand{\noopsort}[1]{} \newcommand{\printfirst}[2]{#1}
+  \newcommand{\singleletter}[1]{#1} \newcommand{\switchargs}[2]{#2#1}
+\begin{thebibliography}{1}
+
+\bibitem{article-full}
+{\sc Aamport, L.~A.}, ``The gnats and gnus document preparation system,'' {\em
+  \mbox{G-Animal's} Journal}, vol.~41, pp.~73+, July 1986.
+\newblock This is a full ARTICLE entry.
+
+\bibitem{inbook-full}
+{\sc Knuth, D.~E.}, {\em Fundamental Algorithms}, vol.~1 of {\em The Art of
+  Computer Programming}, section 1.2, pp.~10--119.
+\newblock Reading, Massachusetts: Addison-Wesley, second~ed., 10~Jan.
+  {\noopsort{1973b}}1973.
+\newblock This is a full INBOOK entry.
+
+\bibitem{book-full}
+{\sc Knuth, D.~E.}, {\em Seminumerical Algorithms}, vol.~2 of {\em The Art of
+  Computer Programming}.
+\newblock Reading, Massachusetts: Addison-Wesley, second~ed., 10~Jan.
+  {\noopsort{1973c}}1981.
+\newblock This is a full BOOK entry.
+
+\bibitem{incollection-full}
+{\sc Lincoll, D.~D.}, ``Semigroups of recurrences,'' in {\em High Speed
+  Computer and Algorithm Organization} ({\sc Lipcoll, D.~J.}, {\sc Lawrie,
+  D.~H.}, and {\sc Sameh, A.~H.}, eds.), no.~23 in Fast Computers, part~3,
+  pp.~179--183, New York: Academic Press, third~ed., Sept. 1977.
+\newblock This is a full INCOLLECTION entry.
+
+\bibitem{misc-full}
+{\sc Missilany, J.-B.}, ``Handing out random pamphlets in airports.'' Handed
+  out at O'Hare, Oct. 1984.
+\newblock This is a full MISC entry.
+
+\bibitem{inproceedings-full}
+{\sc Oaho, A.~V.}, {\sc Ullman, J.~D.}, and {\sc Yannakakis, M.}, ``On notions
+  of information transfer in {VLSI} circuits,'' in {\em Proc. Fifteenth Annual
+  ACM Symposium on the Theory of Computing} ({\sc Oz, W.~V.} and {\sc
+  Yannakakis, M.}, eds.), no.~17 in All ACM Conferences, (Boston),
+  pp.~133--139, The OX Association for Computing Machinery, Academic Press,
+  Mar. 1983.
+\newblock This is a full INPROCEDINGS entry.
+
+\bibitem{proceedings-full}
+{\sc Oz, W.~V.} and {\sc Yannakakis, M.}, eds., {\em Proc. Fifteenth Annual
+  Symposium on the Theory of Computing}, no.~17 in All ACM Conferences,
+  (Boston), The OX Association for Computing Machinery, Academic Press, Mar.
+  1983.
+\newblock This is a full PROCEEDINGS entry.
+
+\end{thebibliography}

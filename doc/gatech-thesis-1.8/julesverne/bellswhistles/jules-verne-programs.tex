@@ -1,0 +1,50 @@
+\chapter{Program Listings}
+
+This (obviously) isn't in the original Jules Verne story, either.  Instead, this
+appendix includes a few implementations of the Cyclic Redundancy Check (CRC) 
+algorithm, as \textsc{Matlab} code, C code, C++ code, and Java code, just to 
+demonstrate the \texttt{listings} package.
+
+\section{CRC in C}
+Some text describing this file.  Some other text that might take two or more 
+lines so I'll just keep typing and typing.  One day I'll actually hit a 
+linewrap, and then we will be sure to see the effect. In Listing~\ref{lst:crc16.c},
+you'll find a C implementation of the CRC-16 algorithm.
+
+\inputcfile[captionpos=b,caption={[crc16.c]{(crc16.c) The CRC-16 algorithm in C.}},%
+label={lst:crc16.c}]{code/crc16.c}
+
+\section{CRC in \textsc{Matlab}}
+Some text describing this file.  Some other text that might take two or more 
+lines so I'll just keep typing and typing.  One day I'll actually hit a 
+linewrap, and then we will be sure to see the effect. In Listing~\ref{lst:crc8.m},
+you'll find a \textsc{Matlab} implementation of the CRC-8 algorithm.
+
+\inputmatlabfile[captionpos=b,caption={[crc8.m]{(crc8.m) The CRC-8 algorithm in 
+\textsc{Matlab}}},label={lst:crc8.m}]{code/crc8.m}
+
+\section{CRC in C++}
+Some text describing this file.  Some other text that might take two or more 
+lines so I'll just keep typing and typing.  One day I'll actually hit a 
+linewrap, and then we will be sure to see the effect. In Listing~\ref{lst:crc32.cxx},
+you'll find a C++ implementation of the CRC-32 algorithm.
+
+\inputcxxfile[captionpos=b,caption={[crc32.cxx]{(crc32.cxx) The CRC-32 algorithm in 
+C++}},label={lst:crc32.cxx}]{code/crc32.cxx}
+
+\section{CRC in Java}
+Some text describing this file.  Some other text that might take two or more 
+lines so I'll just keep typing and typing.  One day I'll actually hit a 
+linewrap, and then we will be sure to see the effect. In Listing~\ref{lst:crc32.java},
+you'll find a Java implementation of the CRC-32 algorithm.
+
+% note that we're using the \inputcodefile macro (not a language specific one),
+% and we specify the language within the initial (optional) argument.
+% The second argument specifies that we use the ``full'' listings style 
+% (which is what the cfull, matlabfull, cxxfull styles are based on)
+\inputcodefile[language=java,captionpos=b,caption={[crc32.java]%
+{(crc32.java) The CRC-32 algorithm in Java (gee, that was easy: the CRC32 
+computation is built in to Java.)}},
+label={lst:crc32.java}]{full}{code/crc32.java}
+
+And that's the end of this demonstration.

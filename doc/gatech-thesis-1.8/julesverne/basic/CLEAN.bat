@@ -1,0 +1,10 @@
+del jules-verne.lot
+del jules-verne.lof
+del jules-verne.toc
+del jules-verne.out
+del jules-verne.bbl
+del jules-verne.blg
+del *.aux
+del *.log
+del *.bak
+del *~

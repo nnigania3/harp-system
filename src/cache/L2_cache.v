@@ -319,7 +319,9 @@ module L2_cache
 		 .stall_out_d(portA_op_en),
 		 .block_stall(block_stall)
 	);
-/*		
+
+   `ifdef DUMMY_MEM
+
 	Mem_dummy #(
 		.CACHE_SIZE(256*1024),				// in Bytes
 		.LINE_BITS(LINE_BITS),				// LOG(LINE_SIZE)
@@ -342,7 +344,8 @@ module L2_cache
 		.ready_out(mem_valid_i), 	// the memory request for which data is ready
 		.stall_out(mem_stall_i)  // the memory system cannot accept anymore requests, stall the pipeline
 	);
-*/
+
+   `else
 
 	mem_ctrl_wrapper #(
 		.BUFF_INDEX_BITS(2),			// LOG(Size of Buffer)
@@ -380,7 +383,7 @@ module L2_cache
                 .avl_be		(avl_be		),        
                 .avl_burstbegin	(avl_burstbegin	)		
 	);
-
+   `endif
 	
 	assign #0.25 mem_addr_o = mem_addr_en ? {tag_out_b,addr_b_cache[ADDR_WIDTH-TAG_BITS-1:0]} : addr_b;
 	assign #0.25 mem_data_o = rd_valid_b ? cache_out_b : {DATA_WIDTH{1'b0}};

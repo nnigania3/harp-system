@@ -1,0 +1,87 @@
+% Package: textcompsty
+%
+% Since the PostScript version of Times (Palatino, etc)
+% do not contain all of the symbols used by \textcomp's
+% commands, we fake a few of them, using symbols culled
+% from the Adobe Symbol and Zapf Dingbats fonts.
+%   This doesn't provide all of the missing symbols,
+% but it does give you a few.  
+
+% The Right Thing To Do, of course, is to create a 
+% virtual symbol font for [Times, Palatino, etc 
+% that provides all of the \textcomp symbols...this is 
+% just a workaround.  Of course, the txfonts and pxfonts
+% packages do just that -- create virtual fonts for the
+% TS1 encoding.
+%
+% See the textcompfix package for another workaround.
+%
+\ProvidesPackage{textcompsym}
+  [2002/08/09 textcomp with postscript fonts]
+% since the symbol and dingbats fonts don't have italic or bold 
+% variants, we force the selection to normal medium to avoid
+% warnings.  We could fix this by going the whold virtual fonts
+% route, but...
+\newcommand*{\myPifont}[1]{\fontfamily{#1}\fontencoding{U}%
+\fontseries{m}\fontshape{n}\selectfont}
+\newcommand*{\myPisymbol}[2]{{\myPifont{#1}\char#2}}
+\renewcommand*{\textleftarrow}{\myPisymbol{psy}{172}}
+\renewcommand*{\textrightarrow}{\myPisymbol{psy}{174}}
+\renewcommand*{\textuparrow}{\myPisymbol{psy}{173}}
+\renewcommand*{\textdownarrow}{\myPisymbol{psy}{175}}
+\renewcommand*{\textlangle}{\myPisymbol{psy}{225}}
+\renewcommand*{\textrangle}{\myPisymbol{psy}{241}}
+\renewcommand*{\textborn}{\myPisymbol{pzd}{72}}
+% This would require latexsym.  If you want it, define it yourself
+% and \usepackage{latexsym}
+% \renewcommand*{\textmho}{\ensuremath{\mho}}
+\renewcommand*{\textohm}{\myPisymbol{psy}{87}}
+\renewcommand*{\textdied}{\myPisymbol{pzd}{61}}
+\renewcommand*{\textopenbullet}{\myPisymbol{pzd}{109}}
+\renewcommand*{\textsurd}{\myPisymbol{psy}{214}}
+
+% Other missing symbols; some of these could be done
+% as composites...
+%textcircledP
+%textservicemark
+%textblank
+%textdblhyphen
+%textzerooldstyle
+%textoneoldstyle
+%texttwooldstyle
+%textthreeoldstyle
+%textfouroldstyle
+%textfiveoldstyle
+%textsixoldstyle
+%textsevenoldstyle
+%texteightoldstyle
+%textnineoldstyle
+%textbigcircle
+%textdivorced
+%textleaf
+%textmarried
+%textmusicalnote
+%textdblhyphenchar
+%textcentoldstyle
+%textdollaroldstyle
+%textcolonmonetary
+%textwon
+%textnaira
+%textguarani
+%textpeso
+%textlira
+%textrecipe
+%textinterrobang
+%textinterrobangdown
+%textdong
+%textpilcrow
+%textbaht
+%textnumero
+%textdiscount
+%textestimated
+%textlquill
+%textrquill
+%textpertenthousand
+%textcopyleft
+%textreferencemark
+%texteuro

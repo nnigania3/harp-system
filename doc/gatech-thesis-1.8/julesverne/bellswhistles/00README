@@ -1,0 +1,124 @@
+This directory contains a reworked version of the jules-verne
+example "thesis".  However, all of the bells and whistles 
+provided by the gatech-thesis.cls class and associated styles
+are exercised, along with some suggestions for thesis document 
+structuring.
+
+The text is taken from the first five chapters of Jules Verne's 
+``20,000 Leagues Under the Sea,'' from Project Gutenberg
+  http://promo.net/pg/
+  ftp://ibiblio.org/pub/docs/books/gutenberk/etext94/2000010.txt
+Project Gutenberg etexts may be freely redistributed in any form,
+as long as the original unmodified document accompanies the
+modified excerpts.  To satisfy this requirement, please do not
+distribute this example without the 2000010.txt file which is
+in the parent directory.
+
+Features:
+  1)  segregating preamble code into a document-specific style
+
+  2)  support for using either latex+dvips or pdflatex to
+      generate .ps and .pdf versions
+
+  3)  How to easily generate OGS format complant documents
+      and prettier, "personal" copies.
+
+  4)  Support for using hyperref (clickable links in the TOC,
+      when making a .pdf)
+
+  5)  Using postscript versions of fonts other than Computer Modern,
+      like Times, Courier, etc.  See extensive comments in
+      jules-verne.sty.
+
+  6)  Using additional symbol fonts (latexsym, textcomp + fixups)
+
+  7)  Using the listings package for including program code
+      in appendices
+
+  8)  Useful macros for referencing Figures, Equations, etc.
+
+  9)  Using the add-on style gatech-thesis-gloss.sty for 
+      generating a Glossary or List of Nomenclature
+
+  10) Using the add-on style gatech-thesis-losa.sty for 
+      generating a "List of Symbols or Abbreviations")
+
+  11) Using the add-on style gatech-thesis-index.sty for 
+      generating an index.  Typically a GT thesis doesn't
+      have one of these, but the style is provided just in case.
+
+  12) Demonstrate the multivolume support, for those theses that
+      are over 2.5" thick (according to OGS Guidelines).
+
+  13) Using \include instead of \input to incorporate subsidiary
+      files into the main document.  This lets you use \includeonly
+      to speed development of your document.  (But see the 
+      hack-part.tex file for an explanation of a LaTeX bug that
+      is exposed, and the workaround)
+
+To run the example, you must first install all of the following
+files in the appropriate locations in your texmf (or localtexmf) tree.
+   <texmf>/tex/latex/gatech-thesis/gatech-thesis.cls
+   <texmf>/tex/latex/gatech-thesis/gatech-thesis-patch.sty
+   <texmf>/tex/latex/gatech-thesis/gatech-thesis-gloss.sty
+   <texmf>/tex/latex/gatech-thesis/gatech-thesis-losa.sty
+   <texmf>/tex/latex/gatech-thesis/gatech-thesis-index.sty
+   <texmf>/bibtex/bst/gatech-thesis/gatech-thesis.bst
+   <texmf>/bibtex/bst/gatech-thesis/gatech-thesis-losa.bst
+   <texmf>/makeindex/gatech-thesis/gatech-thesis-index.ist
+
+Then, of course, you need all of the packages that this mega-example
+uses.  Use whatever tool is the normal mechanism for installing
+additional packages in your tex system -- on MikTeX, that's 'MikTeX 
+Options'.  The required packages are:
+
+   graphicx  -- this is a 'standard' package; you should already have it
+   color     -- ditto
+   fontenc   -- ditto
+   textcomp  -- ditto
+   latexsym  -- ditto
+   ifthen    -- ditto
+   url       -- ditto
+
+   txfonts   -- not a default package. You'll need to install this one.
+   hyperref
+   subfigure
+   caption2
+   amsmath
+   amsfonts
+   amssymb
+   listings  -- make sure to also install the lstpatch.sty file from 
+                2002-08-06 or newer, available here if your TeX dist
+                doesn't provide it: http://www.atscire.de/products/listings/
+   thumbpdf  -- this one is tricky to use on Windows (it contains a 
+                perl support script, and needs access to ghostscript)
+                Comment it out in jules-verne.sty and in the two
+                do_*.sh scripts.
+   longtable
+   colortbl
+   dcolumn
+
+Then, make sure that latex & friends are in your path, and run the DO_*.sh
+scripts (or the DO_*.bat files).  And be sure to actually READ the
+jules-verne.sty document-specific style; it is heavily commented with lots
+of useful information.
+
+Now, many of these features aren't used (and shouldn't be used) when
+generating your official, final paper copy for submission.  That's 
+all handled by the options passed to the jules-verne.sty style and
+to the gatech-thesis.cls from your main, root document.  See the
+first 20 or so lines in jules-verne.tex.  For official copies, 
+you'd do this:
+  \documentclass{gatech-thesis}
+  \usepackage[official]{jules-verne}
+
+Actually, you'd probably make a copy of jules-verne.sty (say,
+'johnthesis.sty') and modify it to suit.  But you knew that already.
+
+You might notice that there is no example .pdf, .ps, or .dvi file
+included in this 'bells and whistles' directory.  That's by 
+design: for the most part, these bells and whistles are intended for
+your personal copies and drafts, NOT for the "official" document.
+
+And there are already examples of how an official document should
+look, in the main directory and in the julesverne/basic directory.
