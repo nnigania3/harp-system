@@ -1,73 +1,86 @@
 \begin{thebibliography}{10}
 
-\bibitem{des:tex}
-{\sc D{\'e}sarm{\'e}nien, J.}, ``How to run {\TeX} in french,'' Tech. Rep.
-  SATN-CS-1013, Computer Science Department, Stanford University, Stanford,
-  California, Aug. 1984.
+\bibitem{ddr2}
+{\sc {Altera Corp.}}, ``Altera ddr and ddr2 sdram controller compiler user
+  guide.''
 
-\bibitem{fuchs:dvi0}
-{\sc Fuchs, D.}, ``The format of {\TeX}'s {DVI} files version 1,'' {\em
-  TUGboat}, vol.~2, pp.~12--16, July 1981.
+\bibitem{quartus}
+{\sc {Altera Corp.}}, ``Altera quartus ii design software.''
 
-\bibitem{fuchs:dvi}
-{\sc Fuchs, D.}, ``Device independent file format,'' {\em TUGboat}, vol.~3,
-  pp.~14--19, Oct. 1982.
+\bibitem{piranha}
+{\sc Barroso, L.~A.}, {\sc Gharachorloo, K.}, and {\sc Ravishankar, M.},
+  ``Managing complexity in the piranha server-class processor design,'' in {\em
+  In 2nd Workshop on Complexity-Effective Design held in conjunction with the
+  27th International Symposium on Computer Architecture}, 2001.
 
-\bibitem{furuta:pctex}
-{\sc Furuta, R.~K.} and {\sc MacKay, P.~A.}, ``Two {\TeX} implementations for
-  the {IBM PC},'' {\em Dr. Dobb's Journal}, vol.~10, pp.~80--91, Sept. 1985.
+\bibitem{hls_pipeline}
+{\sc Ben-Asher, Y.} and {\sc Rotem, N.}, ``Synthesis for variable pipelined
+  function units,'' in {\em System-on-Chip, 2008. SOC 2008. International
+  Symposium on}, pp.~1--4, 2008.
 
-\bibitem{knuth:web}
-{\sc Knuth, D.~E.}, ``The {WEB} system for structured documentation, version
-  2.3,'' Tech. Rep. STAN-CS-83-980, Computer Science Department, Stanford
-  University, Stanford, California, Sept. 1983.
+\bibitem{gtkwave}
+{\sc Bybell, A.}, ``Gtkwave 3.3 wave analyzer user's guide.''
 
-\bibitem{knuth:tex}
-{\sc Knuth, D.~E.}, {\em The {\TeX} Book}.
-\newblock Reading, Massachusetts: Addison-Wesley, 1984.
-\newblock Reprinted as Vol. A of {\it Computers \& Typesetting\/}, 1986.
+\bibitem{hls_overview}
+{\sc Cong, J.}, {\sc Liu, B.}, {\sc Neuendorffer, S.}, {\sc Noguera, J.}, {\sc
+  Vissers, K.}, and {\sc Zhang, Z.}, ``High-level synthesis for fpgas: From
+  prototyping to deployment,'' {\em Computer-Aided Design of Integrated
+  Circuits and Systems, IEEE Transactions on}, vol.~30, no.~4, pp.~473--491,
+  2011.
 
-\bibitem{knuth:lp}
-{\sc Knuth, D.~E.}, ``Literate programming,'' {\em The Computer Journal},
-  vol.~27, pp.~97--111, May 1984.
+\bibitem{hadi_dcim}
+{\sc Esmaeilzadeh, H.}, {\sc Moghimi, A.}, {\sc Ebrahimi, E.}, {\sc Lucas, C.},
+  {\sc Navabi, Z.}, and {\sc Fakhraie, S.~M.}, ``Dcim++: a c++ library for
+  object oriented hardware design and distributed simulation,'' in {\em
+  Circuits and Systems, 2006. ISCAS 2006. Proceedings. 2006 IEEE International
+  Symposium on}, pp.~4 pp.--1286, 2006.
 
-\bibitem{knuth:tor}
-{\sc Knuth, D.~E.}, ``A torture test for {\TeX}, version 1.3,'' Tech. Rep.
-  STAN-CS-84-1027, Computer Science Department, Stanford University, Stanford,
-  California, Nov. 1984.
+\bibitem{SAC}
+{\sc Grelck, C.}, ``Single assignment c (sac) high productivity meets high
+  performance: High productivity meets high performance,'' in {\em Proceedings
+  of the 4th Summer School Conference on Central European Functional
+  Programming School}, CEFP'11, (Berlin, Heidelberg), pp.~207--278,
+  Springer-Verlag, 2012.
 
-\bibitem{knuth:pgm}
-{\sc Knuth, D.~E.}, {\em {\TeX}: The Program}, vol.~B of {\em Computers \&
-  Typesetting}.
-\newblock Reading, Massachusetts: Addison-Wesley, 1986.
+\bibitem{hmc}
+{\sc {Hybrid Memory Cube Consortium}}, ``Hybrid memory cube specification
+  1.0.''
 
-\bibitem{lamport:latex}
-{\sc Lamport, L.}, {\em {\LaTeX}: A Document Preparation System. User's Guide
-  and Reference Manual}.
-\newblock Reading, Massachusetts: Addison-Wesley, 1986.
+\bibitem{macsim}
+{\sc Kim, H.}, {\sc Lee, J.}, {\sc Lakshminarayana, N.~B.}, {\sc Sim, J.}, {\sc
+  Lim, J.}, and {\sc Pho, T.}, ``Macsim: A cpu-gpu heterogeneous simulation
+  framework.''
 
-\bibitem{patashnik:bibtex}
-{\sc Patashnik, O.}, {\em Bib{\TeX}ing}.
-\newblock Computer Science Department, Stanford University, Stanford,
-  California, Jan. 1988.
-\newblock Available in the Bib{\TeX} release.
+\bibitem{reactivity}
+{\sc Liao, S.}, {\sc Tjiang, S.}, and {\sc Gupta, R.}, ``An efficient
+  implementation of reactivity for modeling hardware in the scenic design
+  environment,'' in {\em Proceedings of the 34th Annual Design Automation
+  Conference}, DAC '97, (New York, NY, USA), pp.~70--75, ACM, 1997.
 
-\bibitem{patashnik:bibhax}
-{\sc Patashnik, O.}, {\em Designing Bib{\TeX} Styles}.
-\newblock Computer Science Department, Stanford University, Jan. 1988.
+\bibitem{SST}
+{\sc Rodrigues, A.~F.}, {\sc Hemmert, K.~S.}, {\sc Barrett, B.~W.}, {\sc
+  Kersey, C.}, {\sc Oldfield, R.}, {\sc Weston, M.}, {\sc Risen, R.}, {\sc
+  Cook, J.}, {\sc Rosenfeld, P.}, {\sc CooperBalls, E.}, and {\sc Jacob, B.},
+  ``The structural simulation toolkit,'' {\em SIGMETRICS Perform. Eval. Rev.},
+  vol.~38, pp.~37--42, Mar. 2011.
 
-\bibitem{samuel:tex}
-{\sc Samuel, A.~L.}, ``First grade {\TeX}: A beginner's {\TeX} manual,'' Tech.
-  Rep. SATN-CS-83-985, Computer Science Department, Stanford University,
-  Stanford, California, Nov. 1983.
+\bibitem{de3_manual}
+{\sc Terasic}, ``De3 user manual.''
 
-\bibitem{schreier}
-{\sc Schreier, R.} and {\sc Temes, G.~C.}, {\em Understanding Delta-Sigma Data
-  Converters}.
-\newblock John Wiley and Sons Inc, 2005.
+\bibitem{trident}
+{\sc Tripp, J.}, {\sc Peterson, K.}, {\sc Ahrens, C.}, {\sc Poznanovic, J.},
+  and {\sc Gokhale, M.}, ``Trident: an fpga compiler framework for
+  floating-point algorithms,'' in {\em Field Programmable Logic and
+  Applications, 2005. International Conference on}, pp.~317--322, 2005.
 
-\bibitem{spivak:ams}
-{\sc Spivak, M.~D.}, {\em The Joy of {\TeX}}.
-\newblock American Mathematical Society, 1985.
+\bibitem{ROCC}
+{\sc Villarreal, J.}, {\sc Park, A.}, {\sc Najjar, W.}, and {\sc Halstead, R.},
+  ``Designing modular hardware accelerators in c with roccc 2.0,'' in {\em
+  Field-Programmable Custom Computing Machines (FCCM), 2010 18th IEEE Annual
+  International Symposium on}, pp.~127--134, 2010.
+
+\bibitem{iverilog}
+{\sc Williams, S.} and {\sc Baxter, M.}, ``Icarus verilog: Open-source verilog
+  more than a year later,'' {\em Linux J.}, vol.~2002, pp.~3--, July 2002.
 
 \end{thebibliography}

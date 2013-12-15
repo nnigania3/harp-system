@@ -12,7 +12,7 @@
                                %% fragile command that \MakeUpperCase
                                %% will break!
 \author{Nimit Nigania}
-\department{College Of Computing}
+\department{School Of Computer Science}
  
 %% Can have up to six readers, plus principaladvisor and
 %% committeechair. All have the form
@@ -24,7 +24,7 @@
 %% to the department defined above and Institution defaults to Georgia
 %% Institute of Technology.
 
-\principaladvisor{Professor Hyesoon Kim}[College Of Computing]
+\principaladvisor{Professor Hyesoon Kim}[The School Of Computer Science]
 \firstreader{Professor Sudhakar Yalamanchili}[The School of Electrical and Computer Engineering]
 \secondreader{Professor Saibal Mukhopadhyay}[The School of Electrical and Computer Engineering ]
 %\setcounter{secnumdepth}{2}
@@ -37,15 +37,15 @@
 
 %% \major{Algorithms, Combinatorics, and Optimization} 
 
-\copyrightyear{2014}
-\submitdate{January 2014} % Must be the month and year of graduation,
+\copyrightyear{2013}
+\submitdate{December 2013} % Must be the month and year of graduation,
                          % not thesis approval! As of 2010, this means
                          % this text must be May, August, or December
                          % followed by the year.
 
 %% The date the last committee member signs the thesis form. Printed
 %% on the approval page.
-\approveddate{January 2014}
+\approveddate{December 2013}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Bib / summary / Preface
@@ -69,7 +69,7 @@ and friends.\\\vspace{12pt}
 \end{dedication}
 
 \begin{preface}
-Prototyping new systems on hardware is a time consuming task with limited scope for architectural exploration. The aim of this work was to create a tool chain to prototype general purpose Graphics Processing Units (GPGPUs) on Field Programmable Gate Arrays (FPGAs). This hardware flow combined with the higher level simulation flow using the same source code allowed us to create a whole tool chain to study and build future architectures using new technologies quickly.
+Prototyping new systems on hardware is a time consuming task with limited scope for architectural exploration. The aim of this work was to do fast prototyping of general purpose Graphics Processing Units (GPGPUs) on Field Programmable Gate Arrays (FPGAs) using a novel tool chain. This hardware flow combined with the higher level simulation flow using the same source code allowed us to create a whole tool chain to study and build future architectures using new technologies. It also gave us enough flexibility at different granularities. We will also discuss some example systems which were built using this tool chain along with some results.
 \end{preface}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -98,6 +98,7 @@ Prototyping new systems on hardware is a time consuming task with limited scope 
 \begin{tabbing}
 xxxxxxxxxxx \= xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \kill
 \textbf{FPGA}   \> Field Programmable Gate Arrays \\
+\textbf{ASIC}   \> Application Specific Integrated Circuit \\
 \textbf{GPGPU}  \> General Purpose Graphics Processing Units\\
 \textbf{IP}  \> Itellectual Property\\
 \textbf{SIMD}  \> Single Instruction Multiple Data\\
@@ -137,10 +138,10 @@ xxxxxxxxxxx \= xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \kill
 
 \begin{postliminary}
 \references
-\postfacesection{Index}{%
+%\postfacesection{Index}{%
 %%             ... generate an index here
 %%         look into gatech-thesis-index.sty
-}
+%}
 %\begin{vita}
 %Perry H. Disdainful was born in an insignificant town
 %whose only claim to fame is that it produced such a fine
@@ -149,14 +150,14 @@ xxxxxxxxxxx \= xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \kill
 \end{postliminary}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\begin{abstract}
-  This is the abstract that must be turned in as hard copy to the
-  thesis office to meet the UMI requirements. It should \emph{not} be
-  included when submitting your ETD. Comment out the abstract
-  environment before submitting. It is recommended that you simply
-  copy and paste the text you put in the summary environment into this
-  environment. The title, your name, the page count, and your
-  advisor's name will all be generated automatically.
-\end{abstract}
+%\begin{abstract}
+%  This is the abstract that must be turned in as hard copy to the
+%  thesis office to meet the UMI requirements. It should \emph{not} be
+%  included when submitting your ETD. Comment out the abstract
+%  environment before submitting. It is recommended that you simply
+%  copy and paste the text you put in the summary environment into this
+%  environment. The title, your name, the page count, and your
+%  advisor's name will all be generated automatically.
+%\end{abstract}
 
 \end{document}

@@ -128,7 +128,7 @@ template <unsigned N, unsigned R, unsigned L, unsigned SIZE>
 		  
 		  coalescedMatch[i] = 
 		      (memaddr[0][range<OFFSET, L2WORDS-1>()] == memaddr[i][range<OFFSET, L2WORDS-1>()])
-			  && feAddrValid[i]; //NN fixed, memaddr is only L2WORDS wide but we were indexing it till N which caused segfault
+			  && feAddrValid[i]; //NN fixed, memaddr is only L2WORDS wide but we were indexing it till N which caused segfault //NN check, shouldnt we check with memaddr[L-1]
 		  /*coalescedMatch[i] = 
 		      (memaddr[0][range<OFFSET, N>()] == memaddr[i][range<OFFSET, N>()])
 			  && feAddrValid[i];*/
@@ -333,7 +333,8 @@ template <unsigned L2WORDS>
 			//ldqPending[i] = 0 when: sent to memory, insert & bypass, or memStall
 			// bypass occurs when ldqEmpty or no ldqPending
 			ldqPending[i] = Wreg( (ldqInsert[i] ) || (ldqReq[i] && sendldreq ), 
-					(ldqInsert[i] && !enableLSF && !ldqPendingFlag && memStall) );
+					(ldqInsert[i] && !enableLSF                      && memStall) );
+					//(ldqInsert[i] && !enableLSF && !ldqPendingFlag && memStall) );
 		}
 
 		node WARexists = Mux(tail, stqWaiting);
@@ -602,7 +603,7 @@ template <unsigned L2WORDS>
       bvec<CLOG2(N)> memshift(Lit<CLOG2(N)>(8) *
                                 Zext<CLOG2(N)>(addr[range<0, CLOG2(N/8)-1>()]));
 
-      bvec<N> sramout = Syncmem(memaddr[i], r0, valid && !op[0], "rom.hex");
+      //bvec<N> sramout = Syncmem(memaddr[i], r0, valid && !op[0], "rom.hex");
 
       ////o.out[i] = sramout >> Reg(memshift);
 

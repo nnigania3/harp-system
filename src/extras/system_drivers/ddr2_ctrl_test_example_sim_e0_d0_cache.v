@@ -173,12 +173,12 @@ assign data_display = data_display_temp[11:5];
                stop <= 1'b1;
       	    if(count < 10'b0100000000) begin
       	       rw_in   <= 1'b1;
-      	       addr_in <= {28'd0, count[7:0]} * 4;
+      	       addr_in <= {28'd0, count[7:0]} * 4 * 8;
       	       data_in <= {count[7:0]};
       	       id_in   <= id_in + 3'b001;
       	    end else begin
       	       rw_in   <= 1'b0;
-      	       addr_in <= {28'd0, count[7:0]} * 4;
+      	       addr_in <= {28'd0, count[7:0]} * 4 * 8;
       	     //data_in <= {0, count[3:0]} + 100;
       	       id_in   <= id_in + 3'b001;
       	    end

@@ -49,16 +49,16 @@ module ddr2_ctrl_test_example_sim_e0_d0 #(
 		output wire         pass,            //    status.pass
 		output wire         fail,            //          .fail
 		output wire         test_complete,   //          .test_complete
-		input  wire         avl_ready,       //       avl.waitrequest_n
-		output      [TG_AVL_ADDR_WIDTH-1:0]  avl_addr,        //          .address
-		output      [TG_AVL_SIZE_WIDTH-1:0]   avl_size,        //          .burstcount
+		input  wire         avl_ready,                       //       avl.waitrequest_n
+		output      [TG_AVL_ADDR_WIDTH-1:0]  avl_addr,       //          .address
+		output      [TG_AVL_SIZE_WIDTH-1:0]   avl_size,      //          .burstcount
 		output      [TG_AVL_DATA_WIDTH-1:0] avl_wdata,       //          .writedata
 		input       [TG_AVL_DATA_WIDTH-1:0] avl_rdata,       //          .readdata
-		output              avl_write_req,   //          .write
-		output              avl_read_req,    //          .read
-		input               avl_rdata_valid, //          .readdatavalid
-		output      [TG_AVL_BE_WIDTH-1:0]  avl_be,          //          .byteenable
-		output              avl_burstbegin   //          .beginbursttransfer
+		output              avl_write_req,   		     //          .write
+		output              avl_read_req,                    //          .read
+		input               avl_rdata_valid,                 //          .readdatavalid
+		output      [TG_AVL_BE_WIDTH-1:0]  avl_be,           //          .byteenable
+		output              avl_burstbegin                   //          .beginbursttransfer
 	);
 
 
@@ -74,25 +74,23 @@ module ddr2_ctrl_test_example_sim_e0_d0 #(
 	`endif
 	localparam LINE_WIDTH   = TG_AVL_DATA_WIDTH;//DATA_WIDTH*WORDS;
 
-	wire [6:0]data_display;
-
 	wire led1;
 
 	wire reset;	
 	wire [31:0] addr_in; 		// address in from the core
-	wire [DATA_WIDTH -1:0] data_in; 		// data from the core
-	wire rw_in; 								// read / write command
-	wire valid_in; 							//  valid reg on the addr, data buses
+	wire [DATA_WIDTH -1:0] data_in;	// data from the core
+	wire rw_in; 			// read / write command
+	wire valid_in; 			//  valid reg on the addr, data buses
 	wire [2:0] id_in; 		// ld/st Q id for request
 	
 	wire [DATA_WIDTH-1:0] data_out;	// data to be given to the core
-	wire [2:0] id_out;	// ld/st Q id for request being satisfied
-	wire ready_out; 						// the memory request for which data is ready
-	wire stall_out;							// the memory system cannot accept anymore requests
+	wire [2:0] id_out;		// ld/st Q id for request being satisfied
+	wire ready_out; 		// the memory request for which data is ready
+	wire stall_out;			// the memory system cannot accept anymore requests
 
         wire cache_reset_n;
 	wire [DATA_WIDTH-1:0] harp_data_out;	// data to be given to the core
-	wire harp_ready_out; 						// the memory request for which data is ready
+	wire harp_ready_out; 			// the memory request for which data is ready
         `ifdef SIMD
         wire [WORDS-1:0] valid_word_in;
         `endif
@@ -132,16 +130,16 @@ module ddr2_ctrl_test_example_sim_e0_d0 #(
 		cache_reset_n,
 		addr_in, 		// address in from the core
 		data_in, 		// data from the core
-		rw_in, 								// read / write command
-		valid_in, 							//  valid reg on the addr, data buses
-		id_in, 		// ld/st Q id for request
+		rw_in, 			// read / write command
+		valid_in, 		//  valid reg on the addr, data buses
+		id_in, 			// ld/st Q id for request
                 `ifdef SIMD
 		valid_word_in, 		// ld/st Q id for request
                 `endif
-		data_out,	// data to be given to the core
-		id_out,	// ld/st Q id for request being satisfied
-		ready_out, 				// the memory request for which data is ready
-		stall_out, 							// the memory system cannot accept anymore requests
+		data_out,		// data to be given to the core
+		id_out,			// ld/st Q id for request being satisfied
+		ready_out, 		// the memory request for which data is ready
+		stall_out, 		// the memory system cannot accept anymore requests
                 avl_ready,      
                 avl_addr,       
                 avl_size,       
@@ -159,10 +157,6 @@ reg [31:0] reset_time;	//check we will reset again
 reg stop;
 reg [31:0]data_sum;
 
-wire [31:0]data_display_temp;
-assign data_display_temp = data_sum;
-assign data_display = data_display_temp[11:5];
-
    initial begin
    	reset_time <= 0;
    end
@@ -174,29 +168,52 @@ assign data_display = data_display_temp[11:5];
 	 data_sum <= 0;
 	 stop <= 1'b0;	
       end else begin
-	 //if(harp_ready_out == 1'b1)	begin
+	 if(harp_ready_out == 1'b1)	begin
 	 //if (addr_in == 32'd512 && valid_in == 1'b1)	begin
-	 if (addr_in == 32'd256 && valid_in == 1'b1)	begin
-		//data_sum <= data_sum + harp_data_out[6:0];
-		data_sum <= data_sum + data_in[95:64];
+		data_sum <= data_sum + harp_data_out[6:0];
+		//data_sum <= data_sum + data_in[63:32];
 		stop <= 1'b1;
 	 end
       end
    end
 
-assign reset    = ~reset_n ;
-assign test_complete = stop;
-//assign pass = (data_sum == 135)? 1'b1 : 1'b0 ;
-//assign fail = (data_sum != 135)? 1'b1 : 1'b0 ;
-assign pass = (data_sum == 1143)? 1'b1 : 1'b0 ;
-assign fail = (data_sum != 1143)? 1'b1 : 1'b0 ;
-//assign reset    = (reset_time < 32'd30) ? 1'b0 : 1'b1 ;
-//Display module
-//de3_display   display(clk, harp_data_out, harp_ready_out, disp1, disp2, led1);
-wire temp_ready;
-assign temp_ready = (addr_in == 32'd256 && valid_in == 1'b1) ? 1'b1 : 1'b0 ;
-wire [6:0]temp_data;
-assign temp_data =  data_in[31:0];
-de3_display   display(clk, temp_data, temp_ready, disp1, disp2, led1);
+   assign reset    = ~reset_n ;
+   assign test_complete = stop;
+   //assign pass = (data_sum == 81)? 1'b1 : 1'b0 ; // for SUM 30*8=240 nos, both coal and uncoal
+   //assign fail = (data_sum != 81)? 1'b1 : 1'b0 ; //
+   //assign pass = (data_sum == 55)? 1'b1 : 1'b0 ; // usual uncoal sum of 10 nos.
+   //assign fail = (data_sum != 55)? 1'b1 : 1'b0 ; //
+   //assign pass = (data_sum == 106)? 1'b1 : 1'b0 ; // uncoal sum doing coal stores.
+   //assign fail = (data_sum != 106)? 1'b1 : 1'b0 ; //
+   assign pass = (data_sum == 12)? 1'b1 : 1'b0 ; // for 8x8 matmul
+   assign fail = (data_sum != 12)? 1'b1 : 1'b0 ; //
+   //wire temp_ready;
+   //assign temp_ready = (addr_in == 32'd256 && valid_in == 1'b1) ? 1'b1 : 1'b0 ;
+   //wire [6:0]temp_data;
+   //assign temp_data =  data_in[63:32];
+   //de3_display   display(clk, temp_data, temp_ready, disp1, disp2, led1);
+     //********Perf Measurement**********
+   reg[31:0] perf_counter;
+   reg all_init_done;
+   always@(posedge clk)
+   begin
+         if (reset == 1'b1) begin
+   	 perf_counter <= 0;	
+            all_init_done <= 1'b0;
+         end else begin
+            if (avl_ready == 1'b1)
+               all_init_done <= 1'b1;
+      
+   `ifdef DUMMY_MEM	//When doing RLT simulations no need to check DDR init or not, else we wait till DDR init
+            if((test_complete != 1'b1)) begin
+   `else
+            if((test_complete != 1'b1) && (all_init_done == 1'b1)) begin
+   `endif
+   	    perf_counter <= perf_counter + 1;	
+            end
+         end
+   end
+   de3_display_new  display(clk, perf_counter, pass, disp1, disp2, led1);
+   //********************************
 
 endmodule

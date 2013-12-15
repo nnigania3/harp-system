@@ -5,7 +5,7 @@ D Figure ~\ref{fig: DDR block}
 R: Figure~\ref{fig: Harp Core}
 R: Figure ~\ref{fig: DDR wave}
 R Figure~\ref{fig: Full system} shows the final system which was designed and tested on the FPGA board
-R Cache micro-arch
+D Cache micro-arch
 D The input and output signals to the cache can be seen in Figure ~\ref{fig: cache block}
 D The MMU can be divided into 4 major components as can be seen in ~\ref{fig: MMU}
 D As for the design, the main components are the core, the cache and the memory controller- as can be seen in the Figure~\ref{fig: System Overview}. 

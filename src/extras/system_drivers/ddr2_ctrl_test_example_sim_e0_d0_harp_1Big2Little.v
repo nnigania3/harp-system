@@ -49,25 +49,29 @@ module ddr2_ctrl_test_example_sim_e0_d0 #(
 		output wire         pass,            //    status.pass
 		output wire         fail,            //          .fail
 		output wire         test_complete,   //          .test_complete
-		input  wire         avl_ready,       //       avl.waitrequest_n
-		output      [TG_AVL_ADDR_WIDTH-1:0]  avl_addr,        //          .address
-		output      [TG_AVL_SIZE_WIDTH-1:0]   avl_size,        //          .burstcount
+		input  wire         avl_ready,                       //       avl.waitrequest_n
+		output      [TG_AVL_ADDR_WIDTH-1:0]  avl_addr,       //          .address
+		output      [TG_AVL_SIZE_WIDTH-1:0]   avl_size,      //          .burstcount
 		output      [TG_AVL_DATA_WIDTH-1:0] avl_wdata,       //          .writedata
 		input       [TG_AVL_DATA_WIDTH-1:0] avl_rdata,       //          .readdata
-		output              avl_write_req,   //          .write
-		output              avl_read_req,    //          .read
-		input               avl_rdata_valid, //          .readdatavalid
-		output      [TG_AVL_BE_WIDTH-1:0]  avl_be,          //          .byteenable
-		output              avl_burstbegin   //          .beginbursttransfer
+		output              avl_write_req,   		     //          .write
+		output              avl_read_req,                    //          .read
+		input               avl_rdata_valid,                 //          .readdatavalid
+		output      [TG_AVL_BE_WIDTH-1:0]  avl_be,           //          .byteenable
+		output              avl_burstbegin                   //          .beginbursttransfer
 	);
 
 
 
 	localparam LINE_BITS    = 5;
-        localparam DATA_WIDTH   = 32;
         localparam ADDR_WIDTH   = 32;
         localparam CREG_ID_BITS = 3;
         localparam WORDS        = 8;
+        `ifdef SIMD
+        localparam DATA_WIDTH   = 32 *WORDS;
+        `else
+        localparam DATA_WIDTH   = 32;
+	`endif
 	localparam LINE_WIDTH   = TG_AVL_DATA_WIDTH;//DATA_WIDTH*WORDS;
 
 	wire led1;
@@ -86,8 +90,26 @@ module ddr2_ctrl_test_example_sim_e0_d0 #(
 
         wire cache_reset_n;
 	wire [DATA_WIDTH-1:0] harp_data_out;	// data to be given to the core
-	wire harp_ready_out; 		// the memory request for which data is ready
+	wire harp_ready_out; 			// the memory request for which data is ready
+        `ifdef SIMD
+        wire [WORDS-1:0] valid_word_in;
+        `endif
 
+	wire [DATA_WIDTH-1:0] harp_data_out1;	// data to be given to the core
+	wire harp_ready_out1; 	// the memory request for which data is ready
+	harmonica1 harp1(
+	  .phi(clk),
+	  .char_out(harp_ready_out1),
+	  .char_out_val(harp_data_out1)
+       );
+
+	wire [DATA_WIDTH-1:0] harp_data_out2;	// data to be given to the core
+	wire harp_ready_out2; 	// the memory request for which data is ready
+	harmonica1 harp2(
+	  .phi(clk),
+	  .char_out(harp_ready_out2),
+	  .char_out_val(harp_data_out2)
+       );
 
 	harmonica harp_core
 		(
@@ -102,6 +124,9 @@ module ddr2_ctrl_test_example_sim_e0_d0 #(
 	           .cache_id_out(id_in),
 	           .cache_reset_n(cache_reset_n),
 	           .cache_rw_out(rw_in),
+                   `ifdef SIMD
+	           .cache_valid_word(valid_word_in),
+                   `endif
 	           .cache_valid_out(valid_in),
 	           .char_out(harp_ready_out),
 	           .char_out_val(harp_data_out)
@@ -118,15 +143,18 @@ module ddr2_ctrl_test_example_sim_e0_d0 #(
 		clk,
 		clkby2,
 		cache_reset_n,
-		addr_in, 	// address in from the core
-		data_in, 	// data from the core
-		rw_in, 		// read / write command
-		valid_in, 	//  valid reg on the addr, data buses
-		id_in, 		// ld/st Q id for request
-		data_out,	// data to be given to the core
-		id_out,		// ld/st Q id for request being satisfied
-		ready_out, 	// the memory request for which data is ready
-		stall_out, 	// the memory system cannot accept anymore requests
+		addr_in, 		// address in from the core
+		data_in, 		// data from the core
+		rw_in, 			// read / write command
+		valid_in, 		//  valid reg on the addr, data buses
+		id_in, 			// ld/st Q id for request
+                `ifdef SIMD
+		valid_word_in, 		// ld/st Q id for request
+                `endif
+		data_out,		// data to be given to the core
+		id_out,			// ld/st Q id for request being satisfied
+		ready_out, 		// the memory request for which data is ready
+		stall_out, 		// the memory system cannot accept anymore requests
                 avl_ready,      
                 avl_addr,       
                 avl_size,       
@@ -139,15 +167,16 @@ module ddr2_ctrl_test_example_sim_e0_d0 #(
                 avl_burstbegin  		
 	);
 
-   reg [9:0]count;
-   reg [31:0] reset_time;	//check we will reset again
-   reg stop;
-   reg [31:0]data_sum;
+reg [9:0]count;
+reg [31:0] reset_time;	//check we will reset again
+reg stop;
+reg [31:0]data_sum;
 
    initial begin
    	reset_time <= 0;
    end
 
+//************SIMD harp*******************
    always @ (posedge clk)
    begin
       reset_time <= reset_time + 1;
@@ -156,25 +185,64 @@ module ddr2_ctrl_test_example_sim_e0_d0 #(
 	 stop <= 1'b0;	
       end else begin
 	 if(harp_ready_out == 1'b1)	begin
-		data_sum <= data_sum + harp_data_out;
+		data_sum <= data_sum + harp_data_out[6:0];
 		stop <= 1'b1;
 	 end
       end
    end
+//************Little Harp 1*******************
+reg stop1;
+reg [31:0]data_sum1;
+
+   always @ (posedge clk)
+   begin
+      if (reset == 1'b1) begin
+	 stop1     <= 0;	
+	 data_sum1 <= 0;	
+      end else begin
+	 if(harp_ready_out1 == 1'b1) begin
+		data_sum1 <= data_sum1 + harp_data_out1;
+		stop1     <= 1'b1;
+         end	
+      end
+   end
+//************Little Harp 1*******************
+
+//************Little Harp 2*******************
+reg stop2;
+reg [31:0]data_sum2;
+
+   always @ (posedge clk)
+   begin
+      if (reset == 1'b1) begin
+	 stop2     <= 0;	
+	 data_sum2 <= 0;	
+      end else begin
+	 if(harp_ready_out2 == 1'b1) begin
+		data_sum2 <= data_sum2 + harp_data_out2;
+		stop2     <= 1'b1;
+         end	
+      end
+   end
+//************Little Harp 2*******************
 
    assign reset    = ~reset_n ;
-   assign test_complete = stop;
-   
-   //assign pass = (data_sum == 10608)? 1'b1 : 1'b0 ;//for 8x8 matrixmul
-   //assign fail = (data_sum != 10608)? 1'b1 : 1'b0 ;
-   //assign pass = (data_sum == 2799)? 1'b1 : 1'b0 ;//for 1-100 sieve
-   //assign fail = (data_sum != 2799)? 1'b1 : 1'b0 ;
-   //assign pass = (data_sum == 120)? 1'b1 : 1'b0 ;//for 240 number sum_mem
-   //assign fail = (data_sum != 120)? 1'b1 : 1'b0 ;
-   assign pass = (data_sum == 625)? 1'b1 : 1'b0 ;//for 10 bubble sort
-   assign fail = (data_sum != 625)? 1'b1 : 1'b0 ;
-   //Display module
-   //de3_display   display(clk, harp_data_out, harp_ready_out, disp1, disp2, led1);
+   assign test_complete = stop & stop1 & stop2;
+   wire   pass1, pass2, pass3, fail1, fail2, fail3; 
+   //assign pass = (data_sum == 81)? 1'b1 : 1'b0 ; // for SUM 30*8=240 nos, both coal and uncoal
+   //assign fail = (data_sum != 81)? 1'b1 : 1'b0 ; //
+   //assign pass = (data_sum == 55)? 1'b1 : 1'b0 ; // usual uncoal sum of 10 nos.
+   //assign fail = (data_sum != 55)? 1'b1 : 1'b0 ; //
+   //assign pass = (data_sum == 106)? 1'b1 : 1'b0 ; // uncoal sum doing coal stores.
+   //assign fail = (data_sum != 106)? 1'b1 : 1'b0 ; //
+   assign pass3 = (data_sum == 12)? 1'b1 : 1'b0 ; // for 8x8 matmul
+   assign fail3 = (data_sum != 12)? 1'b1 : 1'b0 ; //
+   assign pass1 = (data_sum1 == 625)? 1'b1 : 1'b0 ;//for 10 bubble sort
+   assign fail1 = (data_sum1 != 625)? 1'b1 : 1'b0 ;
+   assign pass2 = (data_sum2 == 625)? 1'b1 : 1'b0 ;//for 10 bubble sort
+   assign fail2 = (data_sum2 != 625)? 1'b1 : 1'b0 ;
+   assign pass  = pass1 && pass2 && pass3;
+   assign fail  = fail1 || fail2 || fail3;
    //********Perf Measurement**********
    reg[31:0] perf_counter;
    reg all_init_done;
@@ -198,5 +266,5 @@ module ddr2_ctrl_test_example_sim_e0_d0 #(
    end
    de3_display_new  display(clk, perf_counter, pass, disp1, disp2, led1);
    //********************************
-   
+
 endmodule

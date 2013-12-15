@@ -1,7 +1,8 @@
-\contentsline {table}{\numberline {1}{\ignorespaces Core Configuration.}}{24}
-\contentsline {table}{\numberline {2}{\ignorespaces Single Core 1-Lane Performance}}{25}
-\contentsline {table}{\numberline {3}{\ignorespaces Logic Utilization.}}{25}
-\contentsline {table}{\numberline {4}{\ignorespaces Dual Core 1-Lane Performance}}{25}
-\contentsline {table}{\numberline {5}{\ignorespaces Logic Utilization.}}{26}
-\contentsline {table}{\numberline {6}{\ignorespaces Single Core SIMD 8-Lane Performance}}{26}
-\contentsline {table}{\numberline {7}{\ignorespaces Logic Utilization.}}{26}
+\contentsline {table}{\numberline {1}{\ignorespaces Micro-Benchmarks Studied}}{11}
+\contentsline {table}{\numberline {2}{\ignorespaces Core Configuration.}}{27}
+\contentsline {table}{\numberline {3}{\ignorespaces Single Core 1-Lane Performance}}{28}
+\contentsline {table}{\numberline {4}{\ignorespaces Logic Utilization Of A Single 1-Lane Core}}{28}
+\contentsline {table}{\numberline {5}{\ignorespaces Dual Core 1-Lane Performance}}{28}
+\contentsline {table}{\numberline {6}{\ignorespaces Logic Utilization Of A Dual 1-Lane Core}}{28}
+\contentsline {table}{\numberline {7}{\ignorespaces 8-Lane SIMD Core Performance}}{29}
+\contentsline {table}{\numberline {8}{\ignorespaces Logic Utilization Of A Single 8-Lane SIMD Core}}{30}

@@ -79,30 +79,30 @@ module ddr2_ctrl_test_example_sim_e0_d0 #(
 	wire [6:0]data_display1;
 	wire [6:0]data_display2;
 	wire led1;
-	wire [31:0] addr_in1; 		// address in from the core
+	wire [31:0] addr_in1; 	// address in from the core
 	wire [DATA_WIDTH -1:0] data_in1; 		// data from the core
-	wire rw_in1; 								// read / write command
-	wire valid_in1; 							//  valid reg on the addr, data buses
-	wire [2:0] id_in1; 		// ld/st Q id for request
+	wire rw_in1; 		// read / write command
+	wire valid_in1; 	//  valid reg on the addr, data buses
+	wire [2:0] id_in1; 	// ld/st Q id for request
 	
 	wire [DATA_WIDTH-1:0] data_out1;	// data to be given to the core
 	wire [2:0] id_out1;	// ld/st Q id for request being satisfied
-	wire ready_out1; 						// the memory request for which data is ready
-	wire stall_out1;							// the memory system cannot accept anymore requests
-	wire [31:0] addr_in2; 		// address in from the core
+	wire ready_out1; 	// the memory request for which data is ready
+	wire stall_out1;	// the memory system cannot accept anymore requests
+	wire [31:0] addr_in2; 	// address in from the core
 	wire [DATA_WIDTH -1:0] data_in2; 		// data from the core
-	wire rw_in2; 								// read / write command
-	wire valid_in2; 							//  valid reg on the addr, data buses
-	wire [2:0] id_in2; 		// ld/st Q id for request
+	wire rw_in2; 		// read / write command
+	wire valid_in2; 	//  valid reg on the addr, data buses
+	wire [2:0] id_in2; 	// ld/st Q id for request
 	
 	wire [DATA_WIDTH-1:0] data_out2;	// data to be given to the core
 	wire [2:0] id_out2;	// ld/st Q id for request being satisfied
-	wire ready_out2; 						// the memory request for which data is ready
-	wire stall_out2;							// the memory system cannot accept anymore requests
+	wire ready_out2; 	// the memory request for which data is ready
+	wire stall_out2;	// the memory system cannot accept anymore requests
 
         wire cache1_reset_n;
 	wire [DATA_WIDTH-1:0] harp_data_out1;	// data to be given to the core
-	wire harp_ready_out1; 						// the memory request for which data is ready
+	wire harp_ready_out1; 	// the memory request for which data is ready
 
 	harmonica1 harp1(
 	  .phi(clk),
@@ -153,25 +153,25 @@ module ddr2_ctrl_test_example_sim_e0_d0 #(
                 clk,
                 clkby2,
                 cache1_reset_n,
-                addr_in1, 		// address in from the core
-                data_in1, 		// data from the core
-                rw_in1, 								// read / write command
-                valid_in1, 							//  valid reg on the addr, data buses
-                id_in1, 		// ld/st Q id for request
+                addr_in1, 	// address in from the core
+                data_in1, 	// data from the core
+                rw_in1, 	// read / write command
+                valid_in1, 	//  valid reg on the addr, data buses
+                id_in1, 	// ld/st Q id for request
                 data_out1,	// data to be given to the core
                 id_out1,	// ld/st Q id for request being satisfied
-                ready_out1, 				// the memory request for which data is ready
-                stall_out1, 							// the memory system cannot accept anymore requests
+                ready_out1, 	// the memory request for which data is ready
+                stall_out1, 	// the memory system cannot accept anymore requests
                 
-                addr_in2, 		// address in from the core
-                data_in2, 		// data from the core
-                rw_in2, 								// read / write command
-                valid_in2, 							//  valid reg on the addr, data buses
-                id_in2, 		// ld/st Q id for request
+                addr_in2, 	// address in from the core
+                data_in2, 	// data from the core
+                rw_in2, 	// read / write command
+                valid_in2, 	//  valid reg on the addr, data buses
+                id_in2, 	// ld/st Q id for request
                 data_out2,	// data to be given to the core
                 id_out2,	// ld/st Q id for request being satisfied
-                ready_out2, 				// the memory request for which data is ready
-                stall_out2, 							// the memory system cannot accept anymore requests
+                ready_out2, 	// the memory request for which data is ready
+                stall_out2, 	// the memory system cannot accept anymore requests
                 avl_ready,      
                 avl_addr,       
                 avl_size,       
@@ -199,9 +199,10 @@ assign data_display1 = data_display1_temp[11:5];
 	 stop1     <= 0;	
 	 data_sum1 <= 0;	
       end else begin
-	 if(harp_ready_out1 == 1'b1)	
+	 if(harp_ready_out1 == 1'b1) begin
 		data_sum1 <= data_sum1 + harp_data_out1;
-		stop1     <= 1'b1;	
+		stop1     <= 1'b1;
+         end	
       end
    end
 //************Cache1*******************
@@ -220,9 +221,10 @@ assign data_display2 = data_display2_temp[11:5];
 	 stop2     <= 0;	
 	 data_sum2 <= 0;	
       end else begin
-	 if(harp_ready_out2 == 1'b1)	
+	 if(harp_ready_out2 == 1'b1) begin
 		data_sum2 <= data_sum2 + harp_data_out2;
-		stop2     <= 1'b1;	
+		stop2     <= 1'b1;
+         end	
       end
    end
 //************Cache2*******************
@@ -230,15 +232,43 @@ assign data_display2 = data_display2_temp[11:5];
 assign reset    = ~reset_n ;
 assign test_complete = stop1 && stop2;
 wire   pass1, pass2, fail1, fail2; 
-assign pass1 = (data_sum1 == 2799)? 1'b1 : 1'b0 ;	//sieve
-assign fail1 = (data_sum1 != 2799)? 1'b1 : 1'b0 ;	//sieve
-assign pass2 = (data_sum2 == 95)? 1'b1 : 1'b0 ;		//array sum
-assign fail2 = (data_sum2 != 95)? 1'b1 : 1'b0 ;		//array sum
+assign pass2 = (data_sum2 == 10608)? 1'b1 : 1'b0 ;//for 8x8 matrixmul
+assign fail2 = (data_sum2 != 10608)? 1'b1 : 1'b0 ;
+//assign pass2 = (data_sum2 == 2799)? 1'b1 : 1'b0 ;	//sieve
+//assign fail2 = (data_sum2 != 2799)? 1'b1 : 1'b0 ;	//sieve
+//assign pass1 = (data_sum1 == 120)? 1'b1 : 1'b0 ;	//240 array sum
+//assign fail1 = (data_sum1 != 120)? 1'b1 : 1'b0 ;	//240 array sum
+assign pass1 = (data_sum1 == 10608)? 1'b1 : 1'b0 ;//for 8x8 matrixmul
+assign fail1 = (data_sum1 != 10608)? 1'b1 : 1'b0 ;
+//assign pass1 = (data_sum1 == 625)? 1'b1 : 1'b0 ;//for 10 bubble sort
+//assign fail1 = (data_sum1 != 625)? 1'b1 : 1'b0 ;
 assign pass  = pass1 && pass2 ;
 assign fail  = fail1 || fail2 ;
 
 //Display module
-de3_display   display1(clk, data_sum1, harp_ready_out1, disp1, disp2, led1);
-//nn_reset_source #(.INITIAL_RESET_CYCLES(100)) reset_source(clk, reset);
+//de3_display   display1(clk, data_sum1, harp_ready_out1, disp1, disp2, led1);
+   //********Perf Measurement**********
+   reg[31:0] perf_counter;
+   reg all_init_done;
+   always@(posedge clk)
+   begin
+         if (reset == 1'b1) begin
+   	 perf_counter <= 0;	
+            all_init_done <= 1'b0;
+         end else begin
+            if (avl_ready == 1'b1)
+               all_init_done <= 1'b1;
+      
+   `ifdef DUMMY_MEM	//When doing RLT simulations no need to check DDR init or not, else we wait till DDR init
+            if((test_complete != 1'b1)) begin
+   `else
+            if((test_complete != 1'b1) && (all_init_done == 1'b1)) begin
+   `endif
+   	    perf_counter <= perf_counter + 1;	
+            end
+         end
+   end
+   de3_display_new  display(clk, perf_counter, pass, disp1, disp2, led1);
+   //********************************
 
 endmodule

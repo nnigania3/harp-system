@@ -424,6 +424,18 @@ module L2_cache
 				id_prev <= mshr_get_cpu_id;
 				data_prev <= mshr_get_data;
 				victim_prev <= mshr_get_victim;
+			end else begin
+			        if (block_signal == 1'b1 && ~mshr_comp_true) begin
+			        	block_signal_same <= 1'b0;
+			        	block_signal_diff <= 1'b0;
+			        end
+			        if (block_signal_same == 1'b1 && ~mshr_comp_true) begin
+			        	addr_prev <= mshr_same_addr;
+			        	rw_prev <= mshr_same_rw;
+			        	id_prev <= mshr_same_id;
+			        	data_prev <= mshr_same_data;
+		//	        	victim_prev <= mshr_same_victim;
+			        end
 			end
 			if (mshr_rn_valid) begin
 				mem_id_o <= mem_id_temp;
@@ -443,7 +455,7 @@ module L2_cache
 					block_signal_diff <= 1'b1;
 						
 			end
-			if (block_signal == 1'b1 && ~mshr_comp_true) begin
+			/*if (block_signal == 1'b1 && ~mshr_comp_true) begin
 				block_signal_same <= 1'b0;
 				block_signal_diff <= 1'b0;
 			end
@@ -453,7 +465,7 @@ module L2_cache
 				id_prev <= mshr_same_id;
 				data_prev <= mshr_same_data;
 		//		victim_prev <= mshr_same_victim;
-			end
+			end*/
 			mshr_same_true_d <= mshr_same_true;
 		end
 	end
