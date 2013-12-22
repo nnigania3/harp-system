@@ -205,6 +205,7 @@ template <unsigned N, unsigned R, unsigned L>
   chdl::node isReady;
 };
 
+#ifdef USE_CACHE
 // Integrated SRAM load/store unit with no MMU, per-lane RAM
 template <unsigned N, unsigned R, unsigned L, unsigned SIZE>
   class SramLsu : public FuncUnit<N, R, L>
@@ -234,7 +235,6 @@ template <unsigned N, unsigned R, unsigned L, unsigned SIZE>
     bvec<6> op(in.op);
     bvec<N> imm(in.imm);
 
-//NN- signals begin
     bvec<L> mem_out_stall = Input<L>("cache_stall_in");
     bvec<1> test_valid; 
     bvec<N> test_out  ; 
@@ -243,20 +243,18 @@ template <unsigned N, unsigned R, unsigned L, unsigned SIZE>
     bvec<IDLEN> test_iid;
     bvec<CLOG2(R)> test_didx;
     bvec<N> fu_mem_data_out;
-//    bvec<1> clkby2 = Input<1>("clkby2");
-//NN- signals end
 
     for (unsigned i = 0; i < L; ++i) {	
       bvec<N> r0(in.r0[i]), r1(in.r1[i]), imm(in.imm),
               addr(imm + Mux(op[0], r1, r0));			//op[0]=0=r1 =>st
-      bvec<L2RAMWDS> ramaddr(Zext<L2RAMWDS>(addr[range<CLOG2(N/8), N-1>()]));
+      //bvec<L2RAMWDS> ramaddr(Zext<L2RAMWDS>(addr[range<CLOG2(N/8), N-1>()]));
       bvec<L2ROMWDS> romaddr(Zext<L2ROMWDS>(addr[range<CLOG2(N/8), N-1>()]));
       bvec<CLOG2(N)> memshift(Lit<CLOG2(N)>(8) *
                                 Zext<CLOG2(N)>(addr[range<0, CLOG2(N/8)-1>()]));
       node romsel(addr < Lit<N>(ROMSZ));
 
-      bvec<N> sramout = Syncmem(ramaddr, r0, valid && !op[0] && !romsel),
-              romout  = Reg(LLRom<L2ROMWDS, N>(romaddr, "rom.hex"));
+      //bvec<N> sramout = Syncmem(ramaddr, r0, valid && !op[0] && !romsel),
+      bvec<N>   romout  = Reg(LLRom<L2ROMWDS, N>(romaddr, "rom.hex"));
 
 // *****NN-Code Begin*****
     bvec<1> reset_in = Input<1>("reset_in");    
@@ -269,7 +267,6 @@ template <unsigned N, unsigned R, unsigned L, unsigned SIZE>
     node ram_issue;
     node issue;
     bvec<1> pending_read, temp;
-    //pending_read= Wreg(mem_out_ready[0] || (ram_issue && op[0]), ~pending_read);
     pending_read	= Wreg(mem_out_ready[0] || (ram_issue && op[0]), pending_read + Lit<1>(1));
     temp        	= Mux(Wreg(valid && temp[0], romsel || !op[0]), ~pending_read, bvec<1>(!in.stall));
     node test_isReady   = temp[0] && !mem_out_stall[i];
@@ -287,8 +284,6 @@ template <unsigned N, unsigned R, unsigned L, unsigned SIZE>
     OUTPUT(cache_valid_out);
     OUTPUT(cache_id_out);
 
-//    Module("cache_subsystem").inputs(clkby2)(bvec<1>(mem_reset))(addr)(r0)(bvec<1>(!op[0]))(bvec<1>(ram_issue))(in.iid).outputs(mem_sramout)(mem_out_iid)(mem_out_ready)(bvec<1>(mem_out_stall[i])); //all should be bitvec
- 
     node test_trig = Wreg(issue, romsel);
     bvec<CLOG2(N)> memshift_out = Wreg(issue, memshift);
     node rom_out_valid = Wreg(w, valid && op[0]);
@@ -299,12 +294,12 @@ template <unsigned N, unsigned R, unsigned L, unsigned SIZE>
     test_iid   = Wreg(issue, in.iid);
     test_didx  = Wreg(issue, in.didx);
 
-    #if 1
+    #if DEBUG
     node mem_rw_in = !op[0];
     bvec<IDLEN> mem_iid_in  = in.iid;
     node tap_stall_out = mem_out_stall[i];
     node fu_mem_rom_in = romsel;
-
+    
     DBGTAP(pending_read	);
     DBGTAP(mem_reset	);
     DBGTAP(addr		);
@@ -326,7 +321,6 @@ template <unsigned N, unsigned R, unsigned L, unsigned SIZE>
     #endif
 // *****NN-Code End*****
 
-      //o.out[i] = Mux(Reg(romsel), sramout, romout) >> Reg(memshift);
       o.out[i] = test_out ;
       // Simple character output from lane 0.
       if (i == 0) {
@@ -341,17 +335,12 @@ template <unsigned N, unsigned R, unsigned L, unsigned SIZE>
       }
     }
 
-    //o.valid = Wreg(w, valid && op[0]);
-    //o.iid   = Wreg(w, in.iid);
-    //o.didx  = Wreg(w, in.didx);
-    //o.pdest = Wreg(w, in.pdest);
-    //o.wb    = Wreg(w, in.wb);
     o.valid = test_valid[0] ;
     o.iid   = test_iid   ;
     o.didx  = test_didx  ;
     o.pdest = test_pdest[0] ;
     o.wb    = test_wb    ;
-    #if 1					//NN Debug
+    #if DEBUG
     node fu_mem_issue_in 	= valid;
     node fu_mem_stall_in	= in.stall;
     node fu_mem_rw_in 		= !op[0];
@@ -377,22 +366,97 @@ template <unsigned N, unsigned R, unsigned L, unsigned SIZE>
   chdl::node isReady;
 };
 
-//
-//	cache_subsystem cache
-//	(
-//		clk,
-//		reset,
-//		addr_in, 	// address in from the core
-//		data_in, 	// data from the core
-//		rw_in, 		// read / write command
-//		valid_in, 	//  valid reg on the addr, data buses
-//		id_in, 		// ld/st Q id for request
-//		data_out,	// data to be given to the core
-//		id_out,	// ld/st Q id for request being satisfied
-//		ready_out, 	// the memory request for which data is ready
-//		stall_out 	// the memory system cannot accept anymore requests
-//	);
-//
+#else
+
+// Integrated SRAM load/store unit with no MMU, per-lane RAM
+template <unsigned N, unsigned R, unsigned L, unsigned SIZE>
+  class SramLsu : public FuncUnit<N, R, L>
+{
+ public:
+  std::vector<unsigned> get_opcodes() {
+    std::vector<unsigned> ops;
+
+    ops.push_back(0x23);
+    ops.push_back(0x24);
+
+    return ops;
+  }
+
+  virtual fuOutput<N, R, L> generate(fuInput<N, R, L> in, chdl::node valid) {
+    const unsigned L2RAMWDS(CLOG2(SIZE/(N/8))), L2ROMWDS(CLOG2(ROMSZ/(N/8)));
+
+    using namespace std;
+    using namespace chdl;
+
+    hierarchy_enter("SramLsu");
+
+    fuOutput<N, R, L> o;
+
+    node w(!in.stall);
+
+    bvec<6> op(in.op);
+    bvec<N> imm(in.imm);
+
+    for (unsigned i = 0; i < L; ++i) {
+      bvec<N> r0(in.r0[i]), r1(in.r1[i]), imm(in.imm),
+              addr(imm + Mux(op[0], r1, r0));
+      bvec<L2RAMWDS> ramaddr(Zext<L2RAMWDS>(addr[range<CLOG2(N/8), N-1>()]));
+      bvec<L2ROMWDS> romaddr(Zext<L2ROMWDS>(addr[range<CLOG2(N/8), N-1>()]));
+      bvec<CLOG2(N)> memshift(Lit<CLOG2(N)>(8) *
+                                Zext<CLOG2(N)>(addr[range<0, CLOG2(N/8)-1>()]));
+      node romsel(addr < Lit<N>(ROMSZ));
+
+      bvec<N> sramout = Syncmem(ramaddr, r0, valid && !op[0] && !romsel),
+              romout  = Reg(LLRom<L2ROMWDS, N>(romaddr, "rom.hex"));
+
+      o.out[i] = Mux(Reg(romsel), sramout, romout) >> Reg(memshift);
+
+      // Simple character output from lane 0.
+      if (i == 0) {
+        node writeram(valid && !op[0] && !romsel), writeinst(valid && !op[0]),
+             readram(valid && op[0] && !romsel);
+        bvec<N> writeval(r0);
+        node io(addr[N-1]), io_wr(valid && !op[0]),
+             char_out(io_wr && addr[range<0, N-2>()] == Lit<N-1>(0));
+        bvec<7> char_out_val(r0[range<0, 6>()]);
+        OUTPUT(char_out);
+        OUTPUT(char_out_val);
+      }
+    DBGTAP(romsel);
+    DBGTAP(addr);
+    }
+
+    o.valid = Wreg(w, valid && op[0]);
+    o.iid = Wreg(w, in.iid);
+    o.didx = Wreg(w, in.didx);
+    o.pdest = Wreg(w, in.pdest);
+    o.wb = Wreg(w, in.wb);
+
+    #if 1
+    node fu_mem_issue_in 	= valid;
+    node fu_mem_stall_in	= in.stall;
+    node fu_mem_rw_in 		= !op[0];
+    node fu_mem_valid_out	= o.valid;
+    bvec<IDLEN> fu_mem_iid_out	= o.iid;
+    bvec<N> fu_mem_data_out 	= o.out[0];
+    bvec<N> fu_mem_addr_in(imm + Mux(op[0], in.r1[0], in.r0[0]));
+    
+    DBGTAP(fu_mem_issue_in 	);
+    DBGTAP(fu_mem_stall_in	);
+    DBGTAP(fu_mem_rw_in 	);
+    DBGTAP(fu_mem_valid_out	);
+    DBGTAP(fu_mem_iid_out	);
+    DBGTAP(fu_mem_data_out	);
+    DBGTAP(fu_mem_addr_in	);
+    #endif
+
+    hierarchy_exit();
+
+    return o;
+  }
+ private:
+};
+#endif
 
 template <unsigned N, bool D>
   chdl::bvec<N> Shiftreg(

@@ -19,26 +19,27 @@
 \contentsline {section}{\numberline {2.2} CHDL }{7}
 \contentsline {section}{\numberline {2.3}FPGA board and Development Tools}{8}
 \setcounter {tocdepth}{2}
-\contentsline {chapter}{\numberline {III}\MakeUppercase {System Design}}{10}
-\contentsline {section}{\numberline {3.1}System Components}{10}
-\contentsline {subsection}{\numberline {3.1.1}Harp ISA}{10}
-\contentsline {subsection}{\numberline {3.1.2}Core}{11}
-\contentsline {subsubsection}{\numberline {3.1.2.1}Core Pipeline}{11}
-\contentsline {subsubsection}{\numberline {3.1.2.2}SIMD support}{13}
-\contentsline {subsubsection}{\numberline {3.1.2.3}Memory management unit (MMU)}{14}
-\contentsline {subsection}{\numberline {3.1.3}Cache}{16}
-\contentsline {subsection}{\numberline {3.1.4}Memory Controller}{20}
-\contentsline {section}{\numberline {3.2}Putting it together: A Multicore and multilane GP-GPU system}{22}
+\contentsline {chapter}{\numberline {III}\MakeUppercase {System Design}}{11}
+\contentsline {section}{\numberline {3.1}System Components}{11}
+\contentsline {subsection}{\numberline {3.1.1}Harp ISA}{11}
+\contentsline {subsection}{\numberline {3.1.2}Core}{12}
+\contentsline {subsubsection}{\numberline {3.1.2.1}Core Pipeline}{12}
+\contentsline {subsubsection}{\numberline {3.1.2.2}SIMD support}{14}
+\contentsline {subsubsection}{\numberline {3.1.2.3}Memory management unit (MMU)}{15}
+\contentsline {subsection}{\numberline {3.1.3}Cache}{18}
+\contentsline {subsection}{\numberline {3.1.4}Memory Controller}{21}
+\contentsline {section}{\numberline {3.2}Putting it together: A Multicore and multilane GP-GPU system}{24}
 \setcounter {tocdepth}{2}
-\contentsline {chapter}{\numberline {IV}\MakeUppercase {Measurement Results and Analysis}}{26}
-\contentsline {section}{\numberline {4.1}Board and Test Environment}{26}
-\contentsline {section}{\numberline {4.2}Results}{27}
+\contentsline {chapter}{\numberline {IV}\MakeUppercase {Measurement Results and Analysis}}{27}
+\contentsline {section}{\numberline {4.1}Board and Test Environment}{27}
+\contentsline {section}{\numberline {4.2}Results}{28}
+\contentsline {section}{\numberline {4.3}Prototyping a big.LITTLE Heterogeneous Harp System}{31}
 \setcounter {tocdepth}{2}
-\contentsline {chapter}{\numberline {V}\MakeUppercase {Future Work and Conclusion }}{31}
-\contentsline {section}{\numberline {5.1}Related Work}{31}
-\contentsline {section}{\numberline {5.2}Future Work}{32}
-\contentsline {section}{\numberline {5.3}Conclusion}{32}
-\contentsline {chapter}{\MakeUppercase {References}}{34}
+\contentsline {chapter}{\numberline {V}\MakeUppercase {Future Work and Conclusion }}{33}
+\contentsline {section}{\numberline {5.1}Related Work}{33}
+\contentsline {section}{\numberline {5.2}Future Work}{34}
+\contentsline {section}{\numberline {5.3}Conclusion}{35}
+\contentsline {chapter}{\MakeUppercase {References}}{36}
 \setcounter {tocdepth}{2}
 \setcounter {tocdepth}{3}
 \setcounter {tocdepth}{2}

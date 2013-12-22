@@ -2,13 +2,14 @@
 #
 ../NN_code/testbench.v
 ../NN_code/ddr2_ctrl_test_example_sim_e0_d0.v
-../NN_code/integrated/harmonica1.v
-../NN_code/integrated/harmonica2.v
-../NN_code/integrated/harmonica.v
+#../NN_code/integrated/harmonica1.v
+#../NN_code/integrated/harmonica2.v
+#../NN_code/integrated/harmonica.v
+../Chad_code/harmonica/harmonica.v
 #
 #
 cache_subsystem.v
-#cache_shared.v
+cache_shared.v
 #test_shared.v
 Arbiter1.v
 slow_to_fast_clk_signal.v
@@ -41,5 +42,8 @@ blocking.v
 #
 ../NN_code/freq_div_nn.v
 ../NN_code/de3_display.v
+../NN_code/de3_display_new.v
+../NN_code/blinker.v
 ../NN_code/bcd_7seg_dec.v
 ../NN_code/nn_reset_source.v
+../NN_code/mem_ctrl_wrapper.v

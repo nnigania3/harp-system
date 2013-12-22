@@ -1,11 +1,20 @@
 \begin{thebibliography}{10}
 
+\bibitem{quartus}
+{\sc {Altera Corp.}}, ``{Altera Quartus II Design Software}.''
+  \url{http://www.altera.com/products/software/sfw-index.jsp}.
+\newblock [Online; accessed 1-Aug-2013].
+
 \bibitem{ddr2}
 {\sc {Altera Corp.}}, ``Altera ddr and ddr2 sdram controller compiler user
-  guide.''
+  guide.'' \url{http://www.altera.com/literature/ug/ug_ddr_sdram.pdf}, 2009.
+\newblock [Online; accessed 1-Nov-2013].
 
-\bibitem{quartus}
-{\sc {Altera Corp.}}, ``Altera quartus ii design software.''
+\bibitem{biglittle}
+{\sc {ARM Holdings}}, ``{big.LITTLE Processing with ARM Cortex-A15 and
+  Cortex-A7}.''
+  \url{http://www.arm.com/files/downloads/big_LITTLE_Final_Final.pdf}, 2011.
+\newblock [Online; accessed 1-Dec-2013].
 
 \bibitem{piranha}
 {\sc Barroso, L.~A.}, {\sc Gharachorloo, K.}, and {\sc Ravishankar, M.},
@@ -20,6 +29,8 @@
 
 \bibitem{gtkwave}
 {\sc Bybell, A.}, ``Gtkwave 3.3 wave analyzer user's guide.''
+  \url{http://gtkwave.sourceforge.net/gtkwave.pdf}, 2013.
+\newblock [Online; accessed 1-Dec-2013].
 
 \bibitem{hls_overview}
 {\sc Cong, J.}, {\sc Liu, B.}, {\sc Neuendorffer, S.}, {\sc Noguera, J.}, {\sc
@@ -45,6 +56,9 @@
 \bibitem{hmc}
 {\sc {Hybrid Memory Cube Consortium}}, ``Hybrid memory cube specification
   1.0.''
+  \url{http://hybridmemorycube.org/files/SiteDownloads/HMC_Specification%201_0.pdf},
+  2013.
+\newblock [Online; accessed 1-Dec-2013].
 
 \bibitem{macsim}
 {\sc Kim, H.}, {\sc Lee, J.}, {\sc Lakshminarayana, N.~B.}, {\sc Sim, J.}, {\sc
@@ -66,6 +80,8 @@
 
 \bibitem{de3_manual}
 {\sc Terasic}, ``De3 user manual.''
+  \url{http://www.terasic.com.tw/cgi-bin/page/archive.pl?Language=English&CategoryNo=39&No=260&PartNo=4}.
+\newblock [Online; accessed 1-Dec-2013].
 
 \bibitem{trident}
 {\sc Tripp, J.}, {\sc Peterson, K.}, {\sc Ahrens, C.}, {\sc Poznanovic, J.},
@@ -78,6 +94,12 @@
   ``Designing modular hardware accelerators in c with roccc 2.0,'' in {\em
   Field-Programmable Custom Computing Machines (FCCM), 2010 18th IEEE Annual
   International Symposium on}, pp.~127--134, 2010.
+
+\bibitem{codedensity}
+{\sc Wakabayashi, K.}, ``C-based behavioral synthesis and verification analysis
+  on industrial design examples,'' in {\em Proceedings of the 2004 Asia and
+  South Pacific Design Automation Conference}, ASP-DAC '04, (Piscataway, NJ,
+  USA), pp.~344--348, IEEE Press, 2004.
 
 \bibitem{iverilog}
 {\sc Williams, S.} and {\sc Baxter, M.}, ``Icarus verilog: Open-source verilog

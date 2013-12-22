@@ -1,12 +1,13 @@
 \contentsline {figure}{\numberline {1}{\ignorespaces Basic system components }}{6}
 \contentsline {figure}{\numberline {2}{\ignorespaces Simple Counter in CHDL and Verilog }}{8}
 \contentsline {figure}{\numberline {3}{\ignorespaces Basic ALU in CHDL }}{9}
-\contentsline {figure}{\numberline {4}{\ignorespaces Altera Stratix III Board \cite {de3_manual} }}{9}
-\contentsline {figure}{\numberline {5}{\ignorespaces Harp Core Pipeline }}{12}
-\contentsline {figure}{\numberline {6}{\ignorespaces MMU or Load\/Store Unit Interface }}{14}
-\contentsline {figure}{\numberline {7}{\ignorespaces MMU Components }}{15}
-\contentsline {figure}{\numberline {8}{\ignorespaces Cache Interface Signals for Core and Memory Sides }}{17}
-\contentsline {figure}{\numberline {9}{\ignorespaces Cache Design }}{18}
-\contentsline {figure}{\numberline {10}{\ignorespaces Test Setup for Memory Controller IP and Internal Block Diagram }}{20}
-\contentsline {figure}{\numberline {11}{\ignorespaces DDR cache side signals for read/write operation \cite {ddr2} }}{22}
-\contentsline {figure}{\numberline {12}{\ignorespaces Possible System Designs }}{23}
+\contentsline {figure}{\numberline {4}{\ignorespaces Altera Stratix III Board \cite {de3_manual} }}{10}
+\contentsline {figure}{\numberline {5}{\ignorespaces Harp Core Pipeline }}{13}
+\contentsline {figure}{\numberline {6}{\ignorespaces MMU or Load\/Store Unit Interface }}{15}
+\contentsline {figure}{\numberline {7}{\ignorespaces MMU Components }}{16}
+\contentsline {figure}{\numberline {8}{\ignorespaces Cache Interface Signals for Core and Memory Sides }}{18}
+\contentsline {figure}{\numberline {9}{\ignorespaces Cache Design }}{19}
+\contentsline {figure}{\numberline {10}{\ignorespaces Test Setup for Memory Controller IP and Internal Block Diagram }}{22}
+\contentsline {figure}{\numberline {11}{\ignorespaces DDR cache side signals for read/write operation \cite {ddr2} }}{23}
+\contentsline {figure}{\numberline {12}{\ignorespaces Possible System Designs }}{24}
+\contentsline {figure}{\numberline {13}{\ignorespaces Heterogeneous System with 1 Big and 6 Little Cores }}{26}

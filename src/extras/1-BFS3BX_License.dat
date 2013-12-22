@@ -1,0 +1,97 @@
+# Altera Corporation Software and/or Intellectual Property License File
+# Issued 24 August 2013
+# Perpetual-No License Expiration
+# Upgrade to these products will no longer be available after the Maintenance Expiration  
+# date unless licenses are renewed.  
+# Floating Server License
+# Primary Machine Name-sunnylotus
+# Primary Machine ID-NIC ID 8C89A5E74DDD
+# Redundant Server 2-NIC ID BC305BC297AE
+# Redundant Server 3-NIC ID BC305BC4CE1F
+# Product License Summary:
+# - Quartus II SE Float for University Program, 3 Seat(s)
+# Maintenance Expiration of 2023.05
+################################################################################ 
+SERVER sunnylotus.cc.gt.atl.ga.us 8C89A5E74DDD 1801
+SERVER damint.cc.gt.atl.ga.us BC305BC297AE 1802
+SERVER lamint.cc.gt.atl.ga.us BC305BC4CE1F 1803
+VENDOR alterad /home/nnigania/altera/13.0sp1_new/quartus/linux/alterad PORT=1804
+USE_SERVER
+################################################################################
+# FEATURE START 
+# The following is a license file for the Altera IP Base Suite (FIR, FFT, NCO, DDR/2/3  
+# SDRAM Controllers supporting ALTMEMPHY, QDRII, DDR/DDR2 Library, RLDRAM II, SerialLite  
+# II, FIR Compiler II, QDRII/II+ w/UniPHY, RLDRAM II w/UniPHY and DDR2 / 3 SDRAM Controllers  
+# supporting ALTMEMPHY and UniPHY)  
+# Number of seat licenses is 3 
+# No license expiration date 
+PACKAGE ip_base alterad COMPONENTS="6AF7_00A7 6AF7_00A8 6AF7_00A4 \
+	6AF7_00AD 6AF7_00AC 6AF7_00BE 6AF7_00BF 6AF7_00C2 6AF7_00C2 \
+	6AF7_00C2 6AF7_00D8 6AF7_00D8 6AF7_00D8 6AF7_00D8 6AF7_0012 \
+	6AF7_0014 6AF7_0034 6AF7_0055 6AF7_00A8" OPTIONS=SUITE \
+	SIGN="019A 7D47 FE3A 6A56 F60C E8F9 DE2C 6642 1A4B 05A1 06DD \
+	0C4B 6535 60E1 E621 0B11 B99B D42E D1B3 DA61 B215 119E AF97 \
+	2C7F 2540 8C93 1EF1 34C3 03C7 1867"
+INCREMENT ip_base alterad 2023.05 30-apr-2023 3 A9DA3E732762 \
+	VENDOR_STRING="iiiiiiiihdLkhIIIIIIIIUPDuiaaaaaaaa11X38DDDDDDDDpjz5cddddddddtmGzGJJJJJJJJbqIh0uuuuuuuugYYWiVVVVVVVVbp0FVHHHHHHHHBUEakffffffffD2FFRkkkkkkkkWL$84" \
+	DUP_GROUP=UHD SIGN="0589 8F48 E5C4 0F83 D2FB B074 AA0D 58EC \
+	8ADD 1D6B E100 4DA4 8E72 545B 8779 029F 7D89 BD22 8060 4330 \
+	9E70 4071 20DC A8E1 06F4 2074 5DC0 DB82 2F44 E78D"
+# FEATURE END 
+################################################################################
+# FEATURE START 
+# The following is a license file for Altera's MAX+PLUS II Software 
+# Number of seat licenses is 3 
+# No license expiration date 
+FEATURE maxplus2 alterad 2023.05 30-apr-2023 3 6417751960AF \
+	SIGN="0CA9 7662 8F41 FAD8 5E49 AA2A 517F 2F58 C32A A15A A2F4 \
+	27A2 C331 7DE3 6C8C 01DF CDD2 A94D D315 F9D8 52AE 33EF B5D5 \
+	6663 8BA1 ABF0 F645 37D7 CDA3 71CB"
+# FEATURE END 
+################################################################################
+# FEATURE START 
+# The following is a license file for Altera's MAX+PLUS II Verilog 
+# Number of seat licenses is 3 
+# No license expiration date 
+FEATURE maxplus2verilog alterad 2023.05 30-apr-2023 3 4A081F8AF87A \
+	SIGN="17EA 9C09 2D7F DD6A 0710 7424 DF6B AB7C C873 D4AF 6EEA \
+	2843 348F 9326 E0F6 072E B6A9 A498 D25C 25DD 0BFE E508 64B7 \
+	B2F5 3836 AD0E 3081 8129 7A30 DFEE"
+# FEATURE END 
+################################################################################
+# FEATURE START 
+# The following is a license file for Altera's MAX+PLUS II VHDL 
+# Number of seat licenses is 3 
+# No license expiration date 
+FEATURE maxplus2vhdl alterad 2023.05 30-apr-2023 3 B513EBC731D3 \
+	SIGN="1767 BD5E B450 FE07 53EA 6D8E B333 A156 9E22 D851 8982 \
+	F37D 7108 B393 0318 09A3 A25C 7F10 C750 16A5 569C 204A E42A \
+	0763 CE59 A887 C340 AB4D 3188 4F91"
+# FEATURE END 
+################################################################################
+# FEATURE START 
+# The following is a license file for Quartus II Subscription Edition University Floating  
+# Number of seat licenses is 3 
+# No license expiration date 
+FEATURE maxplus2 alterad 2023.05 30-apr-2023 3 6417751960AF \
+	SIGN="0CA9 7662 8F41 FAD8 5E49 AA2A 517F 2F58 C32A A15A A2F4 \
+	27A2 C331 7DE3 6C8C 01DF CDD2 A94D D315 F9D8 52AE 33EF B5D5 \
+	6663 8BA1 ABF0 F645 37D7 CDA3 71CB"
+FEATURE quartus alterad 2023.05 30-apr-2023 3 0E7037A03422 SIGN="0CF5 \
+	0A36 4DC2 56B0 BBC3 213C 40A8 F88C 4B5C 324D 7C72 3405 91C8 \
+	1834 EED6 02AB 2FFC 9170 1DB1 28CB 0855 007E 858A 628A 3CBC \
+	F474 7E99 AFE8 8606 00AA"
+# FEATURE END 
+################################################################################
+# FEATURE START 
+# The following is a license file for Terasic Power Controller IP
+# Number of seat licenses is 3 
+# No license expiration date 
+FEATURE 535C_000C alterad 9999.12 permanent uncounted 439B6E6D497B \
+	VENDOR_STRING="99999999h29ahVVVVVVVVUpSriqqqqqqqq1ow88ooooooooperGcrrrrrrrrtL9UG88888888bypL0ppppppppgqUvizzzzzzzzbtMQV88888888BSMRk88888888Dl0zRCCCCCCCCWslN4" \
+	HOSTID=ANY TS_OK SIGN="04F8 6CE9 CE5B 6699 7F13 51B1 F30D 1F8E \
+	CAA1 402E 8C65 A81C 315E 99F4 38D3 147A 0F02 EDD6 C017 B05F \
+	817F 8BDA 9F75 7220 5EC4 DEF6 5DB5 3813 E602 327A"
+# FEATURE END 
+################################################################################
+# End of Altera Corporation Software and/or Intellectual Property License File. Issued 08/24/2013

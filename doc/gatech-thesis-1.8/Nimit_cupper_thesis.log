@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2012.9.7)  13 DEC 2013 17:47
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2012.9.7)  20 DEC 2013 17:50
 entering extended mode
 **Nimit_cupper_thesis.tex
 
@@ -212,6 +212,10 @@ Package: subfigure 2002/07/30 v2.1.4 subfigure package
 \subfig@top=\skip65
 \subfig@bottom=\skip66
 )
+("C:\Program Files\MiKTeX 2.9\tex\latex\ltxmisc\url.sty"
+\Urlmuskip=\muskip11
+Package: url 2006/04/12  ver 3.3  Verb mode for urls, etc.
+)
 (C:\Users\nimit\Dropbox\Personal\Thesis\doc\gatech-thesis-1.8\Nimit_cupper_thes
 is.aux)
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 56.
@@ -241,6 +245,13 @@ LaTeX Font Info:    ... okay on input line 56.
 \makeMPintoPDFobject=\count119
 \everyMPtoPDFconversion=\toks23
 )
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 59.
+ ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
+File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
+)
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 59.
+
 Underfull \hbox (badness 10000) has occurred while \output is active
  
  []
@@ -327,7 +338,7 @@ CHAPTER I.
 (C:\Users\nimit\Dropbox\Personal\Thesis\doc\gatech-thesis-1.8\chapters/mychapte
 r2.tex [4]
 CHAPTER II.
-<myfigures/system_overview.pdf, id=47, 722.7pt x 542.025pt>
+<myfigures/system_overview.pdf, id=48, 722.7pt x 542.025pt>
 File: myfigures/system_overview.pdf Graphic file (type pdf)
 
 <use myfigures/system_overview.pdf>
@@ -336,121 +347,120 @@ Package pdftex.def Info: myfigures/system_overview.pdf used on input line 15.
  [5
 
 ] [6 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/myfigures/sy
-stem_overview.pdf>]
-LaTeX Font Info:    Try loading font information for OML+cmr on input line 25.
+stem_overview.pdf>] [7]
+LaTeX Font Info:    Try loading font information for OML+cmr on input line 27.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omlcmr.fd"
 File: omlcmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OML/cmr/m/n' in size <12> not available
-(Font)              Font shape `OML/cmm/m/it' tried instead on input line 25.
- [7]
-<myfigures/chdl_simple_example.pdf, id=146, 722.7pt x 542.025pt>
+(Font)              Font shape `OML/cmm/m/it' tried instead on input line 27.
+
+<myfigures/chdl_simple_example.pdf, id=147, 722.7pt x 542.025pt>
 File: myfigures/chdl_simple_example.pdf Graphic file (type pdf)
 
 <use myfigures/chdl_simple_example.pdf>
 Package pdftex.def Info: myfigures/chdl_simple_example.pdf used on input line 3
-1.
-(pdftex.def)             Requested size: 346.89621pt x 149.1637pt.
+3.
+(pdftex.def)             Requested size: 375.80377pt x 161.59679pt.
 
-<myfigures/chdl_alu_example.pdf, id=148, 722.7pt x 542.025pt>
+<myfigures/chdl_alu_example.pdf, id=149, 722.7pt x 542.025pt>
 File: myfigures/chdl_alu_example.pdf Graphic file (type pdf)
 
 <use myfigures/chdl_alu_example.pdf>
-Package pdftex.def Info: myfigures/chdl_alu_example.pdf used on input line 36.
-(pdftex.def)             Requested size: 346.89621pt x 228.94899pt.
-
-<myfigures/fpga_board.png, id=150, 429.85594pt x 324.46219pt>
+Package pdftex.def Info: myfigures/chdl_alu_example.pdf used on input line 38.
+(pdftex.def)             Requested size: 375.80377pt x 248.0323pt.
+ [8 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/myfigures/chd
+l_simple_example.pdf>]
+<myfigures/fpga_board.png, id=204, 429.85594pt x 324.46219pt>
 File: myfigures/fpga_board.png Graphic file (type png)
 
 <use myfigures/fpga_board.png>
-Package pdftex.def Info: myfigures/fpga_board.png used on input line 43.
-(pdftex.def)             Requested size: 216.81pt x 163.65158pt.
- [8 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/myfigures/chd
-l_simple_example.pdf>])
+Package pdftex.def Info: myfigures/fpga_board.png used on input line 46.
+(pdftex.def)             Requested size: 361.34999pt x 272.75925pt.
+)
 (C:\Users\nimit\Dropbox\Personal\Thesis\doc\gatech-thesis-1.8\chapters/mychapte
 r3.tex [9 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/myfigur
-es/chdl_alu_example.pdf> <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-the
-sis-1.8/myfigures/fpga_board.png>]
+es/chdl_alu_example.pdf>] [10 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatec
+h-thesis-1.8/myfigures/fpga_board.png>]
 CHAPTER III.
-[10
+[11
 
-]
-Missing character: There is no … in font cmr12!
- <myfigures/harmonica_chad.pdf, id=246, 636.3775pt x 329.23pt>
+] <myfigures/harmonica_chad.pdf, id=250, 636.3775pt x 329.23pt>
 File: myfigures/harmonica_chad.pdf Graphic file (type pdf)
 
 <use myfigures/harmonica_chad.pdf>
 Package pdftex.def Info: myfigures/harmonica_chad.pdf used on input line 60.
 (pdftex.def)             Requested size: 433.62pt x 224.33058pt.
- [11] [12 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/myfigur
+ [12] [13 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/myfigur
 es/harmonica_chad.pdf>]
-<myfigures/mmu.pdf, id=266, 722.7pt x 542.025pt>
+<myfigures/mmu.pdf, id=270, 722.7pt x 542.025pt>
 File: myfigures/mmu.pdf Graphic file (type pdf)
  <use myfigures/mmu.pdf>
-Package pdftex.def Info: myfigures/mmu.pdf used on input line 72.
+Package pdftex.def Info: myfigures/mmu.pdf used on input line 75.
 (pdftex.def)             Requested size: 361.34999pt x 180.67456pt.
 
-[13]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 79.
- ("C:\Program Files\MiKTeX 2.9\tex\latex\base\omscmr.fd"
-File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
-)
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <12> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 79.
- [14 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/myfigures/mm
-u.pdf>]
-<myfigures/mmu2.pdf, id=356, 722.7pt x 542.025pt>
+[14] [15 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/myfigure
+s/mmu.pdf>] <myfigures/mmu2.pdf, id=359, 722.7pt x 542.025pt>
 File: myfigures/mmu2.pdf Graphic file (type pdf)
- <use myfigures/mmu2.pdf>
-Package pdftex.def Info: myfigures/mmu2.pdf used on input line 89.
-(pdftex.def)             Requested size: 433.62pt x 216.81168pt.
 
-[15 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/myfigures/mmu
-2.pdf>] <myfigures/cache_block.pdf, id=430, 722.7pt x 542.025pt>
+<use myfigures/mmu2.pdf>
+Package pdftex.def Info: myfigures/mmu2.pdf used on input line 92.
+(pdftex.def)             Requested size: 433.62pt x 216.81168pt.
+ [16 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/myfigures/mm
+u2.pdf>]
+<myfigures/cache_block.pdf, id=434, 722.7pt x 542.025pt>
 File: myfigures/cache_block.pdf Graphic file (type pdf)
 
 <use myfigures/cache_block.pdf>
-Package pdftex.def Info: myfigures/cache_block.pdf used on input line 106.
+Package pdftex.def Info: myfigures/cache_block.pdf used on input line 109.
 (pdftex.def)             Requested size: 325.215pt x 162.606pt.
- [16]
-<myfigures/cache_microarch.pdf, id=436, 722.7pt x 542.025pt>
+ [17]
+<myfigures/cache_microarch.pdf, id=439, 722.7pt x 542.025pt>
 File: myfigures/cache_microarch.pdf Graphic file (type pdf)
 
 <use myfigures/cache_microarch.pdf>
-Package pdftex.def Info: myfigures/cache_microarch.pdf used on input line 110.
+Package pdftex.def Info: myfigures/cache_microarch.pdf used on input line 113.
 (pdftex.def)             Requested size: 397.48499pt x 282.21548pt.
- [17 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/myfigures/ca
-che_block.pdf>] [18 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1
-.8/myfigures/cache_microarch.pdf>] [19]
-<myfigures/ddr_block.pdf, id=599, 722.7pt x 542.025pt>
+ [18 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/myfigures/ca
+che_block.pdf>] [19 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1
+.8/myfigures/cache_microarch.pdf>] [20]
+<myfigures/ddr_block.pdf, id=602, 722.7pt x 542.025pt>
 File: myfigures/ddr_block.pdf Graphic file (type pdf)
 
 <use myfigures/ddr_block.pdf>
-Package pdftex.def Info: myfigures/ddr_block.pdf used on input line 132.
+Package pdftex.def Info: myfigures/ddr_block.pdf used on input line 135.
 (pdftex.def)             Requested size: 361.34999pt x 271.01183pt.
- [20 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/myfigures/dd
-r_block.pdf>]
-<myfigures/ddr_wave.pdf, id=725, 722.7pt x 542.025pt>
+ [21]
+<myfigures/ddr_wave.pdf, id=607, 722.7pt x 542.025pt>
 File: myfigures/ddr_wave.pdf Graphic file (type pdf)
 
 <use myfigures/ddr_wave.pdf>
-Package pdftex.def Info: myfigures/ddr_wave.pdf used on input line 137.
+Package pdftex.def Info: myfigures/ddr_wave.pdf used on input line 140.
 (pdftex.def)             Requested size: 433.62pt x 281.85518pt.
- [21]
-<myfigures/full_system.pdf, id=730, 722.7pt x 542.025pt>
+ [22 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/myfigures/dd
+r_block.pdf>]
+<myfigures/full_system.pdf, id=734, 722.7pt x 542.025pt>
 File: myfigures/full_system.pdf Graphic file (type pdf)
 
 <use myfigures/full_system.pdf>
-Package pdftex.def Info: myfigures/full_system.pdf used on input line 145.
-(pdftex.def)             Requested size: 404.71243pt x 295.43788pt.
- [22 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/myfigures/dd
-r_wave.pdf>] [23 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/
-myfigures/full_system.pdf>] [24])
+Package pdftex.def Info: myfigures/full_system.pdf used on input line 148.
+(pdftex.def)             Requested size: 368.57744pt x 265.37181pt.
+ [23 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/myfigures/dd
+r_wave.pdf>] [24 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/
+myfigures/full_system.pdf>] [25]
+<myfigures/biglittle.pdf, id=949, 722.7pt x 542.025pt>
+File: myfigures/biglittle.pdf Graphic file (type pdf)
+
+<use myfigures/biglittle.pdf>
+Package pdftex.def Info: myfigures/biglittle.pdf used on input line 157.
+(pdftex.def)             Requested size: 361.34999pt x 162.6071pt.
+)
 (C:\Users\nimit\Dropbox\Personal\Thesis\doc\gatech-thesis-1.8\chapters/mychapte
-r4.tex [25]
+r4.tex [26 <C:/Users/nimit/Dropbox/Personal/Thesis/doc/gatech-thesis-1.8/myfigu
+res/biglittle.pdf>]
 CHAPTER IV.
-[26
+[27
 
 ]
 Underfull \hbox (badness 10000) in paragraph at lines 40--41
@@ -458,54 +468,77 @@ Underfull \hbox (badness 10000) in paragraph at lines 40--41
  []
 
 
-Overfull \hbox (4.7483pt too wide) in paragraph at lines 46--56
+Overfull \hbox (4.7483pt too wide) in paragraph at lines 47--57
  [][] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 116--118
+Underfull \hbox (badness 10000) in paragraph at lines 117--119
 
  []
 
-[27] [28]
-Overfull \hbox (38.97989pt too wide) in paragraph at lines 126--135
+[28] [29]
+Overfull \hbox (38.97989pt too wide) in paragraph at lines 127--136
  [][] 
  []
 
-[29])
+[30] [31]
+Overfull \hbox (26.6856pt too wide) in paragraph at lines 170--184
+ [][] 
+ []
+
+
+Overfull \hbox (40.91869pt too wide) in paragraph at lines 191--204
+ [][] 
+ []
+
+)
 (C:\Users\nimit\Dropbox\Personal\Thesis\doc\gatech-thesis-1.8\chapters/mychapte
-r5.tex [30]
+r5.tex [32]
 CHAPTER V.
-[31
+[33
 
-]) [32]
+]) [34]
 ***************** References ******************
-[33]
+[35]
 (C:\Users\nimit\Dropbox\Personal\Thesis\doc\gatech-thesis-1.8\Nimit_cupper_thes
-is.bbl [34
+is.bbl
+Underfull \hbox (badness 4291) in paragraph at lines 57--62
+[]\OT1/cmr/m/sc/12 Hybrid Mem-ory Cube Con-sor-tium\OT1/cmr/m/n/12 , ``Hy-brid 
+mem-ory cube spec-
+ []
 
 
-]) [35]
+Underfull \hbox (badness 5893) in paragraph at lines 57--62
+\OT1/cmr/m/n/12 i-fi-ca-tion 1.0.'' $\OT1/cmtt/m/n/12 http : / / hybridmemorycu
+be . org / files / SiteDownloads / HMC _
+ []
+
+[36
+
+
+]) [37]
 (C:\Users\nimit\Dropbox\Personal\Thesis\doc\gatech-thesis-1.8\Nimit_cupper_thes
 is.aux) ) 
 Here is how much of TeX's memory you used:
- 2865 strings out of 494045
- 39479 string characters out of 3148388
- 98863 words of memory out of 3000000
- 6081 multiletter control sequences out of 15000+200000
- 10869 words of font info for 42 fonts, out of 3000000 for 9000
+ 2953 strings out of 494045
+ 40624 string characters out of 3148388
+ 99767 words of memory out of 3000000
+ 6163 multiletter control sequences out of 15000+200000
+ 11038 words of font info for 43 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 34i,9n,26p,1702b,318s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 34i,9n,26p,1615b,318s stack positions out of 5000i,500n,10000p,200000b,50000s
 <C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb
 ><C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbxti10.pfb><C:/P
 rogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/Program 
 Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi12.pfb><C:/Program Files/Mi
 KTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9/
 fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fonts/ty
-pe1/public/amsfonts/cm/cmti12.pfb>
-Output written on Nimit_cupper_thesis.pdf (44 pages, 2603984 bytes).
+pe1/public/amsfonts/cm/cmti12.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/publ
+ic/amsfonts/cm/cmtt12.pfb>
+Output written on Nimit_cupper_thesis.pdf (46 pages, 2791088 bytes).
 PDF statistics:
- 1007 PDF objects out of 1200 (max. 8388607)
+ 1164 PDF objects out of 1200 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 133 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 144 words of extra memory for PDF output out of 10000 (max. 10000000)
 
