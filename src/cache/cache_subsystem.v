@@ -38,32 +38,25 @@ module cache_subsystem #(
 	output ready_out, 				// the memory request for which data is ready
 	output stall_out, 				// the memory system cannot accept anymore requests
 	//DDR2 controller signals
-	input      		     avl_ready,       //          .ready
-	output [AVL_ADDR-1:0]        avl_addr,        //          .address
-	output [AVL_SIZE-1:0]        avl_size,        //          .burstcount
-	output [AVL_DATA_WIDTH-1:0]  avl_wdata,       //          .writedata
-	input  [AVL_DATA_WIDTH-1:0]  avl_rdata,       //          .readdata
-	output                       avl_write_req,   //          .write
-	output                       avl_read_req,    //          .read
-	input                        avl_rdata_valid, //          .readdatavalid
-	output [AVL_BE-1:0]          avl_be,          //          .byteenable
-	output                       avl_burstbegin   //          .beginbursttransfer
+	input      		     avl_ready,         // ready
+	output [AVL_ADDR-1:0]        avl_addr,          // address
+	output [AVL_SIZE-1:0]        avl_size,          // burstcount
+	output [AVL_DATA_WIDTH-1:0]  avl_wdata,         // writedata
+	input  [AVL_DATA_WIDTH-1:0]  avl_rdata,         // readdata
+	output                       avl_write_req,     // write
+	output                       avl_read_req,      // read
+	input                        avl_rdata_valid,   // readdatavalid
+	output [AVL_BE-1:0]          avl_be,            // byteenable
+	output                       avl_burstbegin     // beginbursttransfer
 );
-													// stall the pipeline when this line is high
 	localparam WORDS = 2**(LINE_BITS-2);
 	localparam MSHR_ID_BITS = 3;				// ID BITS for MSHR going to L2
 	
-	reg [ADDR_WIDTH-1:0] l2_addr_o;
-	reg [DATA_WIDTH*WORDS-1:0] l2_data_o;
-	reg l2_rw_o;
-	reg l2_valid_o;
-	reg [MSHR_ID_BITS-1:0] l2_id_o;
 	
 	wire [DATA_WIDTH*WORDS-1:0] l2_data_i;
 	reg l2_valid_i;
 	wire [MSHR_ID_BITS-1:0] l2_id_i;
 	wire l2_stall_i;
-	wire new_clk, new_clkby2;	
 	
 	wire l2_valid_big;
 	
@@ -73,18 +66,9 @@ module cache_subsystem #(
 	wire [DATA_WIDTH*WORDS-1:0] l2_data_small;
 	wire [MSHR_ID_BITS-1:0] l2_id_small;
 	
-	reg l2_valid_temp;
-	reg l2_rw_temp;
-	reg [ADDR_WIDTH-1:0] l2_addr_temp;
-	reg [DATA_WIDTH*WORDS-1:0] l2_data_temp;
-	reg [MSHR_ID_BITS-1:0] l2_id_temp;
-	
-	Frequency_Divider #(.Divisor(2), .Bits(1)) f1 (clk,reset,new_clk);
-	assign new_clkby2 = clk;
-//NN_code
 	wire L1_stall_out;
 	assign stall_out = L1_stall_out || (~reset) ;
-//End NN_code	
+
 	L1_cache #(
 		.CACHE_SIZE(L1_CACHE_SIZE),	// in Bytes
 		.LINE_BITS(LINE_BITS),		// LOG(LINE_SIZE)
@@ -127,6 +111,74 @@ module cache_subsystem #(
 		.l2_stall_i(l2_stall_i)
 	);
 	
+	
+	L2_cache #(
+		.CACHE_SIZE(L2_CACHE_SIZE),		// in Bytes
+		.LINE_BITS(LINE_BITS),			// LOG(LINE_SIZE)
+		.ASSOC_BITS(ASSOC_BITS),
+		.INDEX_BITS(L2_INDEX_BITS),		// LOG(NO_OF_SETS)
+		.DATA_WIDTH(DATA_WIDTH*WORDS),		//
+		.ADDR_WIDTH(ADDR_WIDTH),
+		.CREG_ID_BITS(CREG_ID_BITS),		// ID BITS of the ld/St Q from core
+		.MSHR_ID_BITS(MSHR_ID_BITS),		// ID BITS for MSHR going to L2
+		.AVL_ADDR(AVL_ADDR),
+		.AVL_SIZE(AVL_SIZE),
+		.AVL_BE(AVL_BE)
+	)
+	l2 ( 
+		//.clk(new_clk),
+		//.clkby2(new_clkby2),
+		.clk(clk),
+		.clkby2(clkby2),
+		.reset(reset),
+		//.addr_in(l2_addr_o), 		// address to L2
+		//.data_in(l2_data_o), 		// data to L2
+		//.rw_in(l2_rw_o), 		// read / write command
+		//.valid_in(l2_valid_o), 	//  valid input on the addr, data buses
+		//.id_in(l2_id_o), 		// MSHR id for l2 request
+		.addr_in(l2_addr_small), 	// address to L2
+		.data_in(l2_data_small), 	// data to L2
+		.rw_in(l2_rw_small), 		// read / write command
+		.valid_in(l2_valid_small), 	//  valid input on the addr, data buses
+		.id_in(l2_id_small), 		// MSHR id for l2 request
+		.data_out(l2_data_i),  		// data from the l2
+		.id_out(l2_id_i),		// MSHR id for request being satisfied
+		.ready_out(l2_valid_big), 	// the memory request for which data is ready
+		.stall_out(l2_stall_i),  	// the memory system cannot accept anymore requests, stall the pipeline
+		//DDR2 controller signals!
+                .avl_ready	(avl_ready	),      
+                .avl_addr	(avl_addr	),       
+                .avl_size	(avl_size	),       
+                .avl_wdata	(avl_wdata	),     
+                .avl_rdata	(avl_rdata	),     
+                .avl_write_req	(avl_write_req	), 
+                .avl_read_req	(avl_read_req	),  
+                .avl_rdata_valid(avl_rdata_valid),
+                .avl_be		(avl_be		),        
+                .avl_burstbegin	(avl_burstbegin	)		
+
+	);
+
+endmodule
+
+//Old Code. This was used when we were running L2 at half freq as L1. Now both are run at same speed!
+/*	
+	reg [ADDR_WIDTH-1:0] l2_addr_o;
+	reg [DATA_WIDTH*WORDS-1:0] l2_data_o;
+	reg l2_rw_o;
+	reg l2_valid_o;
+	reg [MSHR_ID_BITS-1:0] l2_id_o;
+
+	reg l2_valid_temp;
+	reg l2_rw_temp;
+	reg [ADDR_WIDTH-1:0] l2_addr_temp;
+	reg [DATA_WIDTH*WORDS-1:0] l2_data_temp;
+	reg [MSHR_ID_BITS-1:0] l2_id_temp;
+
+	wire new_clk, new_clkby2;	
+	Frequency_Divider #(.Divisor(2), .Bits(1)) f1 (clk,reset,new_clk);
+	assign new_clkby2 = clk;
+
 	always @(posedge clk or negedge reset)
 	begin
 		if (!reset)
@@ -181,53 +233,5 @@ module cache_subsystem #(
 			l2_big_flag <= 1'b0;
 		end			
 	end
-	
-	L2_cache #(
-		.CACHE_SIZE(L2_CACHE_SIZE),		// in Bytes
-		.LINE_BITS(LINE_BITS),			// LOG(LINE_SIZE)
-		.ASSOC_BITS(ASSOC_BITS),
-		.INDEX_BITS(L2_INDEX_BITS),		// LOG(NO_OF_SETS)
-		.DATA_WIDTH(DATA_WIDTH*WORDS),		//
-		.ADDR_WIDTH(ADDR_WIDTH),
-		.CREG_ID_BITS(CREG_ID_BITS),		// ID BITS of the ld/St Q from core
-		.MSHR_ID_BITS(MSHR_ID_BITS),		// ID BITS for MSHR going to L2
-		.AVL_ADDR(AVL_ADDR),
-		.AVL_SIZE(AVL_SIZE),
-		.AVL_BE(AVL_BE)
-	)
-	l2 ( 
-		//.clk(new_clk),
-		//.clkby2(new_clkby2),
-		.clk(clk),
-		.clkby2(clkby2),
-		.reset(reset),
-		//.addr_in(l2_addr_o), 		// address to L2
-		//.data_in(l2_data_o), 		// data to L2
-		//.rw_in(l2_rw_o), 		// read / write command
-		//.valid_in(l2_valid_o), 	//  valid input on the addr, data buses
-		//.id_in(l2_id_o), 		// MSHR id for l2 request
-		.addr_in(l2_addr_small), 	// address to L2
-		.data_in(l2_data_small), 	// data to L2
-		.rw_in(l2_rw_small), 		// read / write command
-		.valid_in(l2_valid_small), 	//  valid input on the addr, data buses
-		.id_in(l2_id_small), 		// MSHR id for l2 request
-		.data_out(l2_data_i),  		// data from the l2
-		.id_out(l2_id_i),		// MSHR id for request being satisfied
-		.ready_out(l2_valid_big), 	// the memory request for which data is ready
-		.stall_out(l2_stall_i),  	// the memory system cannot accept anymore requests, stall the pipeline
-		//DDR2 controller signals!
-                .avl_ready	(avl_ready	),      
-                .avl_addr	(avl_addr	),       
-                .avl_size	(avl_size	),       
-                .avl_wdata	(avl_wdata	),     
-                .avl_rdata	(avl_rdata	),     
-                .avl_write_req	(avl_write_req	), 
-                .avl_read_req	(avl_read_req	),  
-                .avl_rdata_valid(avl_rdata_valid),
-                .avl_be		(avl_be		),        
-                .avl_burstbegin	(avl_burstbegin	)		
 
-	);
-
-endmodule
-	
+*/

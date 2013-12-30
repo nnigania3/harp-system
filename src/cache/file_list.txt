@@ -1,11 +1,12 @@
 #../Chad_code/harmonica/testbench.v
 #
 ../NN_code/testbench.v
+#test_L2_nn.v
 ../NN_code/ddr2_ctrl_test_example_sim_e0_d0.v
 #../NN_code/integrated/harmonica1.v
 #../NN_code/integrated/harmonica2.v
-#../NN_code/integrated/harmonica.v
-../Chad_code/harmonica/harmonica.v
+../NN_code/integrated/harmonica.v
+#../Chad_code/harmonica/harmonica.v
 #
 #
 cache_subsystem.v

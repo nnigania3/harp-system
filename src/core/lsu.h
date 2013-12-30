@@ -333,7 +333,7 @@ template <unsigned L2WORDS>
 			//ldqPending[i] = 0 when: sent to memory, insert & bypass, or memStall
 			// bypass occurs when ldqEmpty or no ldqPending
 			ldqPending[i] = Wreg( (ldqInsert[i] ) || (ldqReq[i] && sendldreq ), 
-					(ldqInsert[i] && !enableLSF                      && memStall) );
+					(ldqInsert[i] && !enableLSF                      && (memStall || ldqPendingFlag)));
 					//(ldqInsert[i] && !enableLSF && !ldqPendingFlag && memStall) );
 		}
 

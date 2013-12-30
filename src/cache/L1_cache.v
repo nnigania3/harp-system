@@ -159,12 +159,19 @@ module L1_cache #(
 	
 	assign fullZeros = {DATA_WIDTH*WORDS{1'b0}};
 	assign lessZeros = fullZeros[DATA_WIDTH*(WORDS-1)-1:0];
-	 
-        assign #0.5 hit = ( valid_real & valid_out) ? (tag_in == tag_out) : 1'b0;
+	
+ 	reg [INDEX_BITS-1:0]index_a_last;
+        always@(posedge clkby2) begin
+		index_a_last <= index_a;
+	end
+
+        //assign #0.5 hit = ( valid_real & valid_out) ? (tag_in == tag_out) : 1'b0;//NN check
+        assign #0.5 hit = ( valid_real & valid_out) ? ((tag_in == tag_out) && (index_a_last ==index_a)) : 1'b0;
 //	assign miss = ~hit & valid_in;
 	
 	assign #0.5 index_a = portA_op_en ? index_prev : index_in;
-	assign #0.5 tag_a = portA_op_en ? tag_prev : tag_in;
+	//assign #0.5 tag_a = portA_op_en ? tag_prev : tag_in;//NN check
+	assign #0.5 tag_a = portA_op_en ? tag_prev : (hit? tag_in:tag_out);
 	assign #0.5 word_a = portA_op_en ? word_prev : word_in;
 	assign #0.5 data_a = portA_op_en ? data_prev : data_bef_reg;
         `ifdef SIMD
@@ -172,8 +179,10 @@ module L1_cache #(
         `endif
 	
 	assign #0.5 data_a_we = portA_op_en ? rw_prev : rw_in & hit;
-	assign #0.5 tag_a_we = portA_op_en ? rw_prev : rw_in & hit;
-	assign tag_a_valid_in = tag_a_we;
+	//assign #0.5 tag_a_we = portA_op_en ? rw_prev : rw_in & hit; //NN check
+	assign #0.5 tag_a_we = portA_op_en ? rw_prev : ((rw_in & hit)|((~hit) & valid_real & valid_out & (index_a_last ==index_a)));
+	//assign tag_a_valid_in = tag_a_we; //NN check
+	assign tag_a_valid_in = (portA_op_en|(rw_in & hit)) ? tag_a_we : 1'b0;
 	assign tag_a_dirty_in = tag_a_we;
 	
 	//// Outputs for now
@@ -205,7 +214,7 @@ module L1_cache #(
 			stall_out <= 1'b0;
 	end
 */
-	assign stall_out = mshr_full | portA_op_en | block_stall | block_signal;
+	assign stall_out = mshr_full | portA_op_en | block_stall | block_signal | stall_out_fsm;
 	assign valid_real = valid_in & ~stall_out;
 	assign #0.5 miss_bef_reg = ~hit & valid_real;
 
@@ -293,12 +302,14 @@ module L1_cache #(
 
 	/////////////// L2 side of things ///////////	
 	assign tag_b_we = data_b_we;
-	assign tag_b_valid_in = data_b_we;
+	//assign tag_b_valid_in = data_b_we; //NN check
+	assign tag_b_valid_in = data_b_we && (!l2_valid_o);
 	assign tag_b_dirty_in = 1'b0;	
 			
-	assign #0.5 l2_addr_o = l2_addr_en ? {tag_out_b,index_b,{LINE_BITS{1'b0}}} : addr_b;	//NN Fix this for Line bits instead of 5
+	assign #0.5 l2_addr_o = l2_addr_en ? {tag_out_b,index_b,{LINE_BITS{1'b0}}} : addr_b;
 	assign #0.5 l2_data_o = rd_valid_b ? cache_out2 : fullZeros;
-	assign #0.5 addr_b_cache = mshr_rn_valid ? addr_b_temp: stall_out_fsm ? mshr_get_addr : addr_b;
+	//assign #0.5 addr_b_cache = mshr_rn_valid ? addr_b_temp: stall_out_fsm ? mshr_get_addr : addr_b;
+	assign #0.5 addr_b_cache = stall_out_fsm ? mshr_get_addr : (mshr_rn_valid ? addr_b_temp:addr_b);
 	assign #0.5 index_b = addr_b_cache[INDEX_BITS+LINE_BITS-1:LINE_BITS];
 	assign #0.5 tag_b = addr_b_cache[ADDR_WIDTH-1:INDEX_BITS+LINE_BITS];
 	
@@ -451,7 +462,7 @@ module L1_cache #(
 		 .reset(reset),
 		 .clock(clk),
 		 
-		 .dirty(mshr_rn_dirty | dirty_out_b),
+		 .dirty( (mshr_rn_dirty&&mshr_rn_valid) | dirty_out_b),
 		 .rw_prev(mshr_get_rw),
 		 .stall_l2(l2_stall_i),
 		 .done_l2(l2_valid_i),

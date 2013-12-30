@@ -62,6 +62,11 @@ module assoc_cache
 	
 	assign q_a = cache_a_final;
 	assign q_b = cache_b_final;
+
+ 	reg [INDEX_WIDTH-1:0]index_a_last;
+        always@(posedge clkby2) begin
+		index_a_last <= index_a;
+	end
 	
 	assign index_a = addr_a[INDEX_WIDTH+LINE_BITS-1:LINE_BITS];
 	assign index_b = addr_b[INDEX_WIDTH+LINE_BITS-1:LINE_BITS];
@@ -71,7 +76,7 @@ module assoc_cache
 	
 	generate 
 		for (j=0; j<ASSOCIATIVITY; j=j+1) begin: Gen1
-			assign #0.5 hit_a[j] = ( valid_in & valid_a_o[j]) ? (tag_a_dec[j] == tag_out_a_dec[j]) : 1'b0;
+			assign #0.5 hit_a[j] = ( valid_in & valid_a_o[j]) ? ((tag_a_dec[j] == tag_out_a_dec[j])&&(index_a_last == index_a)) : 1'b0;
 			assign #0.5 hit_b[j] = ( valid_b_i[j] & valid_b_o[j]) ? (tag_b_dec[j] == tag_out_b_dec[j]) : 1'b0;
 		end
 	endgenerate

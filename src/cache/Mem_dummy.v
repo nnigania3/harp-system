@@ -23,8 +23,8 @@ module Mem_dummy
 													// stall the pipeline when this line is high
 ); 
 
-	localparam MEM_CYCLE = 8;
-	localparam MEM_CYCLE_BITS = 3; 	// LOG(MEM_CYCLE)
+	localparam MEM_CYCLE = 64;
+	localparam MEM_CYCLE_BITS = 6; 	// LOG(MEM_CYCLE)
 	
 	reg [LINE_WIDTH-1:0] data_delay [0:MEM_CYCLE-2];
 	reg [CREG_ID_BITS-1:0] id_delay [0:MEM_CYCLE-2];

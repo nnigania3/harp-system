@@ -175,7 +175,8 @@ module L2_cache
 		end
 	end
 	
-	assign stall_out = mshr_full | portA_op_en | block_stall | block_signal;
+	//assign stall_out = mshr_full | portA_op_en | block_stall | block_signal; //NN check
+	assign stall_out = mshr_full | portA_op_en | block_stall | block_signal | stall_out_fsm;
 	assign valid_real = valid_in & ~stall_out;
 		
 	always @(negedge clk or negedge reset) begin
@@ -254,7 +255,8 @@ module L2_cache
 	assign valid_a_i = we_a;
 	assign dirty_a_i = we_a;
 		
-	assign valid_b_i = we_b;
+//	assign valid_b_i = we_b; //NN check
+	assign valid_b_i = we_b & {ASSOCIATIVITY{!mem_valid_o}};
 	assign dirty_b_i = 1'b0;
 //	assign addr_b = addr_prev; 
 	
@@ -296,7 +298,8 @@ module L2_cache
 		 .reset(reset),
 		 .clock(clk),
 		 
-		 .dirty(mshr_rn_dirty | dirty_b_o[mshr_rn_victim]),
+		 .dirty((mshr_rn_dirty&&mshr_rn_valid) | dirty_b_o[mshr_rn_victim]),
+		 //.dirty(mshr_rn_dirty | dirty_b_o[mshr_rn_victim]), //NN check
 		 .rw_prev(mshr_get_rw),
 		 .stall_l2(mem_stall_i),
 		 .done_l2(mem_valid_i),
@@ -323,9 +326,9 @@ module L2_cache
    `ifdef DUMMY_MEM
 
 	Mem_dummy #(
-		.CACHE_SIZE(256*1024),				// in Bytes
+		.CACHE_SIZE(8*256*1024),				// in Bytes
 		.LINE_BITS(LINE_BITS),				// LOG(LINE_SIZE)
-		.INDEX_BITS(13),						// LOG(NO_OF_SETS)
+		.INDEX_BITS(16),						// LOG(NO_OF_SETS)
 		.LINE_WIDTH(DATA_WIDTH),			//
 		.ADDR_WIDTH(ADDR_WIDTH),
 		.CREG_ID_BITS(CREG_ID_BITS),		// ID BITS of the ld/St Q from core
@@ -387,8 +390,10 @@ module L2_cache
 	
 	assign #0.25 mem_addr_o = mem_addr_en ? {tag_out_b,addr_b_cache[ADDR_WIDTH-TAG_BITS-1:0]} : addr_b;
 	assign #0.25 mem_data_o = rd_valid_b ? cache_out_b : {DATA_WIDTH{1'b0}};
-	assign #0.25 addr_b_cache = mshr_rn_valid ? addr_b_temp: stall_out_fsm ? mshr_get_addr : addr_b;  /// Not correct ///
-	assign #0.25 victim_b = mshr_rn_valid ? mshr_rn_victim: stall_out_fsm ? mshr_get_victim : mshr_rn_victim_d;
+	//assign #0.25 addr_b_cache = mshr_rn_valid ? addr_b_temp: stall_out_fsm ? mshr_get_addr : addr_b;  /// Not correct /// //NN check
+        assign #0.25 addr_b_cache = stall_out_fsm ? mshr_get_addr : (mshr_rn_valid ? addr_b_temp:addr_b);
+	//assign #0.25 victim_b = mshr_rn_valid ? mshr_rn_victim: stall_out_fsm ? mshr_get_victim : mshr_rn_victim_d; //NN check
+	assign #0.25 victim_b = stall_out_fsm ? mshr_get_victim : (mshr_rn_valid? mshr_rn_victim:mshr_rn_victim_d);
 	
 	
 	//////// Values that needs to be saved in MSHR and used on return ///////

@@ -24,42 +24,42 @@ module cache_shared #(
 	input reset,
 	
 	input [ADDR_WIDTH-1:0] addr_in1, 		// address in from the core
-	input [DATA_WIDTH*SIMD_WIDTH-1:0] data_in1, 		// data from the core
+	input [DATA_WIDTH*SIMD_WIDTH-1:0] data_in1, 	// data from the core
 	input rw_in1, 					// read / write command
 	input valid_in1, 				//  valid input on the addr, data buses
 	input [CREG_ID_BITS-1:0] id_in1, 		// ld/st Q id for request
         `ifdef SIMD
 	input  [SIMD_WIDTH - 1:0] valid_word_in1,	// SIMD valid/mask word bits 
         `endif
-	output [DATA_WIDTH*SIMD_WIDTH-1:0] data_out1,		// data to be given to the core
+	output [DATA_WIDTH*SIMD_WIDTH-1:0] data_out1,	// data to be given to the core
 	output [CREG_ID_BITS-1:0] id_out1,		// ld/st Q id for request being satisfied
 	output ready_out1, 				// the memory request for which data is ready
 	output stall_out1, 				// the memory system cannot accept anymore requests
 							// stall the pipeline when this line is high
 	
 	input [ADDR_WIDTH-1:0] addr_in2, 		// address in from the core
-	input [DATA_WIDTH*SIMD_WIDTH-1:0] data_in2, 		// data from the core
+	input [DATA_WIDTH*SIMD_WIDTH-1:0] data_in2, 	// data from the core
 	input rw_in2, 					// read / write command
 	input valid_in2, 				//  valid input on the addr, data buses
 	input [CREG_ID_BITS-1:0] id_in2, 		// ld/st Q id for request
         `ifdef SIMD
 	input  [SIMD_WIDTH - 1:0] valid_word_in2,	// SIMD valid/mask word bits 
         `endif
-	output [DATA_WIDTH*SIMD_WIDTH-1:0] data_out2,		// data to be given to the core
+	output [DATA_WIDTH*SIMD_WIDTH-1:0] data_out2,	// data to be given to the core
 	output [CREG_ID_BITS-1:0] id_out2,		// ld/st Q id for request being satisfied
 	output ready_out2, 				// the memory request for which data is ready
 	output stall_out2, 				// the memory system cannot accept anymore requests
 	//DDR2 controller signals
-	input      		     avl_ready,       //          .ready
-	output [AVL_ADDR-1:0]        avl_addr,        //          .address
-	output [AVL_SIZE-1:0]        avl_size,        //          .burstcount
-	output [AVL_DATA_WIDTH-1:0]  avl_wdata,       //          .writedata
-	input  [AVL_DATA_WIDTH-1:0]  avl_rdata,       //          .readdata
-	output                       avl_write_req,   //          .write
-	output                       avl_read_req,    //          .read
-	input                        avl_rdata_valid, //          .readdatavalid
-	output [AVL_BE-1:0]          avl_be,          //          .byteenable
-	output                       avl_burstbegin   //          .beginbursttransfer
+	input      		     avl_ready,         // ready
+	output [AVL_ADDR-1:0]        avl_addr,          // address
+	output [AVL_SIZE-1:0]        avl_size,          // burstcount
+	output [AVL_DATA_WIDTH-1:0]  avl_wdata,         // writedata
+	input  [AVL_DATA_WIDTH-1:0]  avl_rdata,         // readdata
+	output                       avl_write_req,     // write
+	output                       avl_read_req,      // read
+	input                        avl_rdata_valid,   // readdatavalid
+	output [AVL_BE-1:0]          avl_be,            // byteenable
+	output                       avl_burstbegin     // beginbursttransfer
 													// stall the pipeline when this line is high
 );
 
@@ -143,14 +143,14 @@ module cache_shared #(
 		for (j=0; j<NUM_L1; j=j+1) begin: Gen4
 			L1_cache #(
 				.CACHE_SIZE(L1_CACHE_SIZE),		// in Bytes
-				.LINE_BITS(LINE_BITS),				// LOG(LINE_SIZE)
-				.INDEX_BITS(L1_INDEX_BITS),			// LOG(NO_OF_SETS)
-				.DATA_WIDTH(DATA_WIDTH),			//
+				.LINE_BITS(LINE_BITS),			// LOG(LINE_SIZE)
+				.INDEX_BITS(L1_INDEX_BITS),		// LOG(NO_OF_SETS)
+				.DATA_WIDTH(DATA_WIDTH),		//
 				.WORDS(2**(LINE_BITS-2)),
 				.ADDR_WIDTH(ADDR_WIDTH),
 				.CREG_ID_BITS(CREG_ID_BITS),		// ID BITS of the ld/St Q from core
 				.MSHR_ID_BITS(MSHR_ID_BITS),		// ID BITS for MSHR going to L2
-				.SIMD_WIDTH(SIMD_WIDTH)		// ID BITS for MSHR going to L2
+				.SIMD_WIDTH(SIMD_WIDTH)			// ID BITS for MSHR going to L2
 			)
 			L1_instance1 (
 				.clk(clk),
@@ -158,19 +158,18 @@ module cache_shared #(
 				.reset(reset),
 				
 				.addr_in(addr_L1[(j+1)*ADDR_WIDTH-1:j*ADDR_WIDTH]), 					// address in from the core
-				.data_in(data_L1[(j+1)*DATA_WIDTH*SIMD_WIDTH-1:j*DATA_WIDTH*SIMD_WIDTH]), 					// data from the core
-				.rw_in(rw_L1[(j+1)-1:j]), 														// read / write command
-				.valid_in(valid_L1[(j+1)-1:j]), 				//  valid input on the addr, data buses
+				.data_in(data_L1[(j+1)*DATA_WIDTH*SIMD_WIDTH-1:j*DATA_WIDTH*SIMD_WIDTH]), 		// data from the core
+				.rw_in(rw_L1[(j+1)-1:j]), 								// read / write command
+				.valid_in(valid_L1[(j+1)-1:j]), 							//  valid input on the addr, data buses
         		`ifdef SIMD
-				.valid_word_in(valid_word_L1[(j+1)*SIMD_WIDTH-1:j*SIMD_WIDTH]), 				//  valid/mask data word
+				.valid_word_in(valid_word_L1[(j+1)*SIMD_WIDTH-1:j*SIMD_WIDTH]), 			//  valid/mask data word
         		`endif
 				.id_in(id_L1[(j+1)*CREG_ID_BITS-1:j*CREG_ID_BITS]), 					// ld/st Q id for request
 				
-				.data_out(data_out_L1[(j+1)*DATA_WIDTH*SIMD_WIDTH-1:j*DATA_WIDTH*SIMD_WIDTH]),				// data to be given to the core
+				.data_out(data_out_L1[(j+1)*DATA_WIDTH*SIMD_WIDTH-1:j*DATA_WIDTH*SIMD_WIDTH]),		// data to be given to the core
 				.id_out(id_out_L1[(j+1)*CREG_ID_BITS-1:j*CREG_ID_BITS]),				// ld/st Q id for request being satisfied
-				.ready_out(ready_out_L1[(j+1)-1:j]), 										// the memory request for which data is ready
-				.stall_out(stall_out_L1[(j+1)-1:j]), 										// the memory system cannot accept anymore requests
-																										// stall the pipeline when this line is high
+				.ready_out(ready_out_L1[(j+1)-1:j]), 							// the memory request for which data is ready
+				.stall_out(stall_out_L1[(j+1)-1:j]), 							// the memory system cannot accept anymore requests
 
 				.l2_addr_o(l2_addr_L1[(j+1)*ADDR_WIDTH-1:j*ADDR_WIDTH]),
 				.l2_data_o(l2_data_L1[(j+1)*DATA_WIDTH*WORDS-1:j*DATA_WIDTH*WORDS]),
@@ -207,8 +206,8 @@ module cache_shared #(
 			);
 			
 		L2_cache #(
-			.CACHE_SIZE(L2_CACHE_SIZE),		// in Bytes
-			.LINE_BITS(LINE_BITS),			// LOG(LINE_SIZE)
+			.CACHE_SIZE(L2_CACHE_SIZE),			// in Bytes
+			.LINE_BITS(LINE_BITS),				// LOG(LINE_SIZE)
 			.ASSOC_BITS(ASSOC_BITS),
 			.INDEX_BITS(L2_INDEX_BITS),			// LOG(NO_OF_SETS)
 			.DATA_WIDTH(DATA_WIDTH*WORDS),			//
@@ -225,14 +224,14 @@ module cache_shared #(
 			.reset(reset),
 			
 			.addr_in(l2_addr_o), 	// address to L2
-			.data_in(l2_data_o), 		// data to L2
-			.rw_in(l2_rw_o), 			// read / write command
+			.data_in(l2_data_o), 	// data to L2
+			.rw_in(l2_rw_o), 	// read / write command
 			.valid_in(l2_valid_o), 	//  valid input on the addr, data buses
-			.id_in({L1_no,l2_id_o}), 			// MSHR id for l2 request
+			.id_in({L1_no,l2_id_o}),// MSHR id for l2 request
 			
 			.data_out(l2_data_i),	// data from the l2
-			.id_out(l2_id_temp),			// MSHR id for request being satisfied
-			.ready_out(l2_valid_i), 	// the memory request for which data is ready
+			.id_out(l2_id_temp),	// MSHR id for request being satisfied
+			.ready_out(l2_valid_i),	// the memory request for which data is ready
 			.stall_out(l2_stall_i),  // the memory system cannot accept anymore requests, stall the pipeline
                 	.avl_ready	(avl_ready	),      
                 	.avl_addr	(avl_addr	),       

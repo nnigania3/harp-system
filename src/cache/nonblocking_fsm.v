@@ -49,8 +49,9 @@ module nonblocking_fsm_L1
     reg count_start;
     reg flag, reg_flag;
     reg same_pending, reg_same_pending; //NN check, all same_pending signal!
+    reg wb_pending, reg_wb_pending;
     wire valid_l2_nack;
-    assign valid_l2_nack = stall_l2 & valid_l2 ;//|!(done_l2 | flag)
+    assign valid_l2_nack = stall_l2 & valid_l2 & (!rw_l2);//|!(done_l2 | flag)
 
     initial
     begin
@@ -65,6 +66,7 @@ module nonblocking_fsm_L1
         reg_mshr_read_next <= 1'b0;
         reg_mshr_get <= 1'b0; 
         reg_mshr_del <= 1'b0;
+        reg_wb_pending <= 1'b0;
     end
 	 
     always @(posedge clock or negedge reset)
@@ -84,6 +86,7 @@ module nonblocking_fsm_L1
             mshr_read_next <= 1'b0;
             mshr_get <= 1'b0; 
             mshr_del <= 1'b0;
+            wb_pending <= 1'b0;
         end
         else begin
             flag <= reg_flag;
@@ -101,6 +104,7 @@ module nonblocking_fsm_L1
             mshr_get <= reg_mshr_get; 
             mshr_del <= reg_mshr_del; 
             same_pending <= reg_same_pending; 
+            wb_pending <= reg_wb_pending;
         end
     end
 	 
@@ -188,11 +192,20 @@ module nonblocking_fsm_L1
 				end
 
 				READ_NEXT: begin
-					if (done_l2) begin
-						reg_flag <= 1'b1;
+					if (done_l2 | flag) begin
+				/*		reg_flag <= 1'b1;*/
+						reg_fstate <= L2_COMPLETE;
+						reg_prev_state <= READ_NEXT;
+						reg_stall_proc <= 1'b1;
+						reg_we_b <= 1'b1;
+						reg_valid_l2 <= 1'b0;
+						reg_mshr_get <= 1'b1;
+				
 					end 
-					reg_mshr_read_next <= 1'b0;
-					reg_fstate <= READ_WAIT;
+                                        else begin
+						reg_mshr_read_next <= 1'b0;
+						reg_fstate <= READ_WAIT;
+					end 
 				end
 				READ_WAIT: begin
 					if (done_l2 | flag) begin
@@ -206,16 +219,19 @@ module nonblocking_fsm_L1
 				*/	end 
 					if (dirty) begin
 						reg_fstate <= WB_L2_WAIT;
+						reg_prev_state <= READ_WAIT;
 						reg_rd_valid_b <= 1'b1;
 						reg_we_b <= 1'b0;
 						reg_valid_l2 <= 1'b1;
 						reg_l2_addr_en <= 1'b1;
 						reg_rw_l2 <= 1'b1;
 						count_start <= 1'b1;
+						reg_wb_pending <= 1'b0;
 					end
 					else begin
 						reg_fstate <= IDLE;
-						reg_we_b <= 1'b0;
+						//reg_we_b <= 1'b0; //NN check
+						reg_we_b <= 1'b1;
 						reg_valid_l2 <= 1'b1;
 						reg_l2_addr_en <= 1'b0;
 						reg_rw_l2 <= 1'b0;
@@ -251,33 +267,25 @@ module nonblocking_fsm_L1
 					end 
 					else begin	
 						reg_fstate <= IDLE;
-						reg_we_b <= 1'b0;
+						//reg_we_b <= 1'b0; //NN check
+						reg_we_b <= 1'b1;
 						reg_valid_l2 <= 1'b1;
 						reg_l2_addr_en <= 1'b0;
 						reg_rw_l2 <= 1'b0;
 					end
 				end
 
-				WB_L2: begin						//NN check, this state is not used anywhere!, remove it?
-					if (done_l2 | flag) begin
-						reg_flag <= 1'b1;
-				/*		reg_fstate <= L2_COMPLETE;
-						reg_prev_state <= WB_L2;
-						reg_stall_proc <= 1'b1;
-						reg_we_b <= 1'b1;
-						reg_valid_l2 <= 1'b0;
-						reg_mshr_get <= 1'b1;
-				*/	end 
-						reg_fstate <= WB_L2_WAIT;
-						reg_rd_valid_b <= 1'b1;
-						reg_we_b <= 1'b0;
-						reg_valid_l2 <= 1'b1;
-						reg_l2_addr_en <= 1'b1;
-						reg_rw_l2 <= 1'b1;
-						count_start <= 1'b1;
+				WB_L2: begin//NN check, remove it?not used!
 				end
 
 				WB_L2_WAIT: begin
+					if (prev_state==READ_WAIT) begin
+						if (stall_l2 & valid_l2)
+						   reg_wb_pending <= 1'b1;
+						else
+						   reg_wb_pending <= 1'b0;
+					end
+
 					if (done_l2 | flag) begin
 						reg_flag <= 1'b0;
 						reg_fstate <= L2_COMPLETE;
@@ -286,6 +294,9 @@ module nonblocking_fsm_L1
 						reg_we_b <= 1'b1;
 						reg_valid_l2 <= 1'b0;
 						reg_mshr_get <= 1'b1;
+					end
+					else if (reg_wb_pending|wb_pending) begin
+						reg_fstate <= READ_WAIT;
 					end
 					else if (count == 1) begin
 						count_start <= 1'b0;
@@ -313,6 +324,7 @@ module nonblocking_fsm_L1
 					reg_mshr_get <= 1'bx; 
 					reg_mshr_del <= 1'bx;
 		                	reg_same_pending <= 1'b0;
+                                        reg_wb_pending   <= 1'b0;
 					$display ("Reach undefined state at time %t", $time);
 				end
         endcase
