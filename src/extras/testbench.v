@@ -13,8 +13,8 @@ module top();
   //harmonica   h(clk1, phi, reset_in, valid, charsel);	//reset_in for memory, its reset low (0=> reset)
 //  nn_de3_cache_test     cache(phi, valid, charsel, clkby2);
  // de3_display   display(phi, charsel, valid, disp1, disp2, led1);
-  ddr2_ctrl_test_example_sim_e0_d0   cache(.clk(clk1), .clkby2(~phi), .reset_n(reset));	//reset_in for memory, its reset low (0=> reset)
-nn_reset_source reset_source(clk1, reset);
+  ddr2_ctrl_test_example_sim_e0_d0   mem_driver(.clk(clk1), .clkby2(phi), .reset_n(reset), .avl_ready(avl_ready), .avl_read_req(avl_read_req) , .avl_rdata(avl_rdata), .avl_rdata_valid(avl_rdata_valid));	//reset_in for memory, its reset low (0=> reset)
+nn_reset_source #(.INITIAL_RESET_CYCLES (30)) reset_source(clk1, reset);
    
   initial
     begin
