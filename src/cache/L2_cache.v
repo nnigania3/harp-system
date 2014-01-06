@@ -256,7 +256,7 @@ module L2_cache
 	assign dirty_a_i = we_a;
 		
 //	assign valid_b_i = we_b; //NN check
-	assign valid_b_i = we_b & {ASSOCIATIVITY{!mem_valid_o}};
+	assign valid_b_i = stall_out_fsm ? we_b : (we_b & {ASSOCIATIVITY{!mem_valid_o}});
 	assign dirty_b_i = 1'b0;
 //	assign addr_b = addr_prev; 
 	
@@ -298,7 +298,7 @@ module L2_cache
 		 .reset(reset),
 		 .clock(clk),
 		 
-		 .dirty((mshr_rn_dirty&&mshr_rn_valid) | dirty_b_o[mshr_rn_victim]),
+		 .dirty((mshr_rn_dirty&&mshr_rn_valid) | dirty_b_o[victim_b]),
 		 //.dirty(mshr_rn_dirty | dirty_b_o[mshr_rn_victim]), //NN check
 		 .rw_prev(mshr_get_rw),
 		 .stall_l2(mem_stall_i),
@@ -326,9 +326,9 @@ module L2_cache
    `ifdef DUMMY_MEM
 
 	Mem_dummy #(
-		.CACHE_SIZE(8*256*1024),				// in Bytes
+		.CACHE_SIZE(256*1024),				// in Bytes
 		.LINE_BITS(LINE_BITS),				// LOG(LINE_SIZE)
-		.INDEX_BITS(16),						// LOG(NO_OF_SETS)
+		.INDEX_BITS(13),						// LOG(NO_OF_SETS)
 		.LINE_WIDTH(DATA_WIDTH),			//
 		.ADDR_WIDTH(ADDR_WIDTH),
 		.CREG_ID_BITS(CREG_ID_BITS),		// ID BITS of the ld/St Q from core
@@ -421,6 +421,7 @@ module L2_cache
 			mshr_same_dirty <= 1'b0;
 			block_signal_same <= 1'b0;
 			block_signal_diff <= 1'b0;
+			mshr_same_victim <= 0;
 		end
 		else begin
 			if (mshr_get_valid) begin
@@ -478,7 +479,7 @@ module L2_cache
 	
 	assign #0.25 mshr_comp_addr = miss_bef_reg ? addr_bef_reg : mshr_same_addr;
 	
-	assign mshr_add = (block_signal_diff & ~mshr_comp_true) ? 1'b1 : (miss_bef_reg & ~mshr_comp_true);
+	assign mshr_add = (block_signal_diff & ~mshr_comp_true) ? (1'b1&~mshr_get_valid) : (miss_bef_reg & ~mshr_comp_true);
 	assign mshr_add_addr = (block_signal_diff & ~mshr_comp_true) ? mshr_same_addr : addr_bef_reg;
 	assign mshr_add_data = (block_signal_diff & ~mshr_comp_true) ? mshr_same_data : data_bef_reg;
 	assign mshr_add_rw = (block_signal_diff & ~mshr_comp_true) ? mshr_same_rw : rw_bef_reg;

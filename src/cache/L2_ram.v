@@ -77,7 +77,7 @@ module assoc_cache
 	generate 
 		for (j=0; j<ASSOCIATIVITY; j=j+1) begin: Gen1
 			assign #0.5 hit_a[j] = ( valid_in & valid_a_o[j]) ? ((tag_a_dec[j] == tag_out_a_dec[j])&&(index_a_last == index_a)) : 1'b0;
-			assign #0.5 hit_b[j] = ( valid_b_i[j] & valid_b_o[j]) ? (tag_b_dec[j] == tag_out_b_dec[j]) : 1'b0;
+			assign #0.5 hit_b[j] = ( valid_b_i[j] & valid_b_o[j]) ? (tag_b_dec[j] == tag_out_b_dec[j]) : 1'b0; //TODO check this logic!
 		end
 	endgenerate
 	

@@ -49,6 +49,7 @@ module nonblocking_fsm_L1
     reg count_start;
     reg flag, reg_flag;
     reg same_pending, reg_same_pending; //NN check, all same_pending signal!
+    reg diff_line_done, reg_diff_line_done; //NN check, all same_pending signal!
     reg wb_pending, reg_wb_pending;
     wire valid_l2_nack;
     assign valid_l2_nack = stall_l2 & valid_l2 & (!rw_l2);//|!(done_l2 | flag)
@@ -87,6 +88,8 @@ module nonblocking_fsm_L1
             mshr_get <= 1'b0; 
             mshr_del <= 1'b0;
             wb_pending <= 1'b0;
+            same_pending <= 1'b0;
+            diff_line_done <= 1'b0;
         end
         else begin
             flag <= reg_flag;
@@ -104,6 +107,7 @@ module nonblocking_fsm_L1
             mshr_get <= reg_mshr_get; 
             mshr_del <= reg_mshr_del; 
             same_pending <= reg_same_pending; 
+            diff_line_done <= reg_diff_line_done; 
             wb_pending <= reg_wb_pending;
         end
     end
@@ -138,6 +142,9 @@ module nonblocking_fsm_L1
         reg_prev_state <= IDLE;
         reg_flag <= 1'b0;
         reg_same_pending <= 1'b0;
+        reg_diff_line_done <= 1'b0;
+        reg_fstate <= IDLE;
+        reg_wb_pending   <= 1'b0;
 
         case (fstate)
 				IDLE: begin
@@ -180,13 +187,14 @@ module nonblocking_fsm_L1
 						reg_fstate <= L2_COMPLETE;
 						reg_prev_state <= BLOCK_STATE;
 		                                reg_same_pending <= (same_line) ? 1'b1 : 1'b0;
+		                                reg_diff_line_done <= (diff_line_done) ? 1'b1 : 1'b0;
 						reg_stall_proc <= 1'b1;
 						reg_we_b <= 1'b1;
 						reg_valid_l2 <= 1'b0;
 						reg_mshr_get <= 1'b1;
 					end
 					else begin
-						reg_fstate <= BLOCK_STATE;
+						reg_fstate <= diff_line_done? IDLE : BLOCK_STATE;
 						reg_block_stall <= 1'b1;
 					end
 				end
@@ -242,6 +250,9 @@ module nonblocking_fsm_L1
 					if (prev_state==BLOCK_STATE) begin
 						reg_block_stall <= 1'b1;
 		                                reg_same_pending <= (same_line | same_pending) ? 1'b1 : 1'b0;
+						reg_diff_line_done<= (~block|diff_line_done) ? 1'b1:1'b0;
+					end else if ((prev_state==WB_L2_WAIT)&(wb_pending))begin
+						reg_wb_pending <= 1'b1;
 					end
 					reg_fstate <= prev_state; 
 					reg_mshr_del <= 1'b1;
@@ -284,6 +295,8 @@ module nonblocking_fsm_L1
 						   reg_wb_pending <= 1'b1;
 						else
 						   reg_wb_pending <= 1'b0;
+					end else if(wb_pending) begin
+						   reg_wb_pending <= 1'b1;
 					end
 
 					if (done_l2 | flag) begin
@@ -295,7 +308,7 @@ module nonblocking_fsm_L1
 						reg_valid_l2 <= 1'b0;
 						reg_mshr_get <= 1'b1;
 					end
-					else if (reg_wb_pending|wb_pending) begin
+					else if (((prev_state==READ_WAIT)&stall_l2&valid_l2) |wb_pending) begin
 						reg_fstate <= READ_WAIT;
 					end
 					else if (count == 1) begin
@@ -324,7 +337,9 @@ module nonblocking_fsm_L1
 					reg_mshr_get <= 1'bx; 
 					reg_mshr_del <= 1'bx;
 		                	reg_same_pending <= 1'b0;
+		                	reg_diff_line_done <= 1'b0;
                                         reg_wb_pending   <= 1'b0;
+        				reg_fstate <= IDLE;
 					$display ("Reach undefined state at time %t", $time);
 				end
         endcase

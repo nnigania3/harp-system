@@ -303,7 +303,7 @@ module L1_cache #(
 	/////////////// L2 side of things ///////////	
 	assign tag_b_we = data_b_we;
 	//assign tag_b_valid_in = data_b_we; //NN check
-	assign tag_b_valid_in = data_b_we && (!l2_valid_o);
+	assign tag_b_valid_in = stall_out_fsm ? data_b_we : (data_b_we && (!l2_valid_o));
 	assign tag_b_dirty_in = 1'b0;	
 			
 	assign #0.5 l2_addr_o = l2_addr_en ? {tag_out_b,index_b,{LINE_BITS{1'b0}}} : addr_b;
@@ -425,7 +425,7 @@ module L1_cache #(
 	
 	assign #0.5 mshr_comp_addr = miss_bef_reg ? addr_in : mshr_same_addr;
 	
-	assign mshr_add = (block_signal_diff & ~mshr_comp_true) ? 1'b1 : (miss_bef_reg & ~mshr_comp_true);
+	assign mshr_add = (block_signal_diff & ~mshr_comp_true) ? (1'b1&~mshr_get_valid) : (miss_bef_reg & ~mshr_comp_true);
 	assign mshr_add_addr = (block_signal_diff & ~mshr_comp_true) ? mshr_same_addr : addr_bef_reg;
 	assign mshr_add_data = (block_signal_diff & ~mshr_comp_true) ? mshr_same_data : data_bef_reg;
 	assign mshr_add_rw = (block_signal_diff & ~mshr_comp_true) ? mshr_same_rw : rw_bef_reg;

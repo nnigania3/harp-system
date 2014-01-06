@@ -1,15 +1,15 @@
 `timescale 1ns/100ps
 
 module cache_subsystem #(
-	parameter L1_CACHE_SIZE = 16*1024,		// in Bytes
-	parameter L2_CACHE_SIZE = 128*1024,		// in Bytes
+	parameter L1_CACHE_SIZE = 4*1024,		// in Bytes
+	parameter L2_CACHE_SIZE = 16*1024,		// in Bytes
 	parameter LINE_BITS 	= 5,			// LOG(LINE_SIZE)
 	parameter ASSOC_BITS = 2,
 	parameter DATA_WIDTH = 32,			//
 	parameter ADDR_WIDTH = 32,
 	parameter CREG_ID_BITS = 3,	 		// ID BITS of the ld/St Q from core
-	parameter L1_INDEX_BITS = 9,			// LOG(L1_CACHE_SIZE) - LINE_BITS
-	parameter L2_INDEX_BITS = 10,			// LOG(L2_CACHE_SIZE) - ASSOC_BITS - LINE_BITS
+	parameter L1_INDEX_BITS = 7,			// LOG(L1_CACHE_SIZE) - LINE_BITS
+	parameter L2_INDEX_BITS = 7,			// LOG(L2_CACHE_SIZE) - ASSOC_BITS - LINE_BITS
         `ifdef SIMD
 	parameter SIMD_WIDTH = (2**(LINE_BITS-2)),      // SIMD width = no. of cache line words
         `else
