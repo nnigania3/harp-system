@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2012.9.7)  16 DEC 2013 12:36
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2012.9.7)  2 JAN 2014 11:37
 entering extended mode
 **example-thesis.tex
 
@@ -212,184 +212,31 @@ Package: subfigure 2002/07/30 v2.1.4 subfigure package
 \subfig@top=\skip65
 \subfig@bottom=\skip66
 )
-(C:\Users\nimit\Dropbox\Personal\Thesis\doc\gatech-thesis-1.8\example-thesis.au
-x)
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 70.
-LaTeX Font Info:    ... okay on input line 70.
- (C:\Users\nimit\AppData\Roaming\MiKTeX\2.9\tex\context\base\supp-pdf.mkii
-[Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count114
-\scratchdimen=\dimen120
-\scratchbox=\box30
-\nofMPsegments=\count115
-\nofMParguments=\count116
-\everyMPshowfont=\toks22
-\MPscratchCnt=\count117
-\MPscratchDim=\dimen121
-\MPnumerator=\count118
-\makeMPintoPDFobject=\count119
-\everyMPtoPDFconversion=\toks23
-)
-Underfull \hbox (badness 10000) has occurred while \output is active
+(C:\Users\nimit\Dropbox\Personal\Thesis\doc\gatech-thesis-1.8\gatech-thesis-glo
+ss.sty
+Package: gatech-thesis-gloss 2002/08/08 Glossary support for gatech-thesis.cls
+
+
+! LaTeX Error: File `gloss.sty' not found.
+
+Type X to quit or <RETURN> to proceed,
+or enter new name. (Default extension: sty)
+
+Enter file name: 
+! Emergency stop.
+<read *> 
+         
+l.34 
+      
+End of file on the terminal!
+
  
- []
-
-
-Underfull \hbox (badness 10000) has occurred while \output is active
- 
- []
-
-[1
-
-{C:/Users/nimit/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}]
-SIGNATURES: 7
-\c@halfsig=\count120
-LEFTCNT: 3 HALF: 4
-LaTeX Font Info:    Try loading font information for U+msa on input line 73.
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
-File: umsa.fd 2009/06/22 v3.00 AMS symbols A
-)
-LaTeX Font Info:    Try loading font information for U+msb on input line 73.
-
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
-File: umsb.fd 2009/06/22 v3.00 AMS symbols B
-)
-LaTeX Font Info:    Try loading font information for U+lasy on input line 73.
-
-("C:\Program Files\MiKTeX 2.9\tex\latex\base\ulasy.fd"
-File: ulasy.fd 1998/08/17 v2.2e LaTeX symbol font definitions
-)
-***************** Dedication ******************
-
-Underfull \hbox (badness 10000) has occurred while \output is active
- 
- []
-
-
-Underfull \hbox (badness 10000) has occurred while \output is active
- 
- []
-
-[2
-
-]
-***************** Preface ******************
-[3
-
-
-]
-***************** Acknowledgements ******************
-[4
-
-
-] [5
-
-
-]
-(C:\Users\nimit\Dropbox\Personal\Thesis\doc\gatech-thesis-1.8\example-thesis.to
-c)
-\tf@toc=\write3
- [6
-
-
-]
-(C:\Users\nimit\Dropbox\Personal\Thesis\doc\gatech-thesis-1.8\example-thesis.lo
-t)
-\tf@lot=\write4
- [7
-
-
-]
-(C:\Users\nimit\Dropbox\Personal\Thesis\doc\gatech-thesis-1.8\example-thesis.lo
-f)
-\tf@lof=\write5
- [8
-
-
-]
-***************** Summary ******************
-[9
-
-
-]
-CHAPTER I.
-[1
-
-]
-CHAPTER II.
-[2
-
-] [3]
-CHAPTER III.
-[4
-
-]
-APPENDIX A.
-***************** References ******************
-[5
-
-
-]
-(C:\Users\nimit\Dropbox\Personal\Thesis\doc\gatech-thesis-1.8\example-thesis.bb
-l [6
-
-
-]) [7]
-***************** Vita ******************
-[8
-
-
-]
-***************** Abstract ******************
-[9
-
-
-]
-Underfull \hbox (badness 10000) has occurred while \output is active
- 
- []
-
-
-Underfull \hbox (badness 10000) has occurred while \output is active
- 
- []
-
-[9
-
-]
-(C:\Users\nimit\Dropbox\Personal\Thesis\doc\gatech-thesis-1.8\example-thesis.au
-x)
-
-LaTeX Warning: Label(s) may have changed. Rerun to get cross-references right.
-
- ) 
 Here is how much of TeX's memory you used:
- 2730 strings out of 494045
- 35673 string characters out of 3148388
- 91777 words of memory out of 3000000
- 5984 multiletter control sequences out of 15000+200000
- 11221 words of font info for 43 fonts, out of 3000000 for 9000
+ 2328 strings out of 494045
+ 29617 string characters out of 3148388
+ 84458 words of memory out of 3000000
+ 5631 multiletter control sequences out of 15000+200000
+ 3938 words of font info for 15 fonts, out of 3000000 for 9000
  715 hyphenation exceptions out of 8191
- 34i,11n,25p,241b,454s stack positions out of 5000i,500n,10000p,200000b,50000s
-<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbx12.pfb><C:/Pr
-ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmbxti10.pfb><C:/Program 
-Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmcsc10.pfb><C:/Program Files/M
-iKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Program Files/MiKTeX 2.9
-/fonts/type1/public/amsfonts/cm/cmti12.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
-ype1/public/amsfonts/cm/cmti8.pfb>
-Output written on example-thesis.pdf (19 pages, 104658 bytes).
-PDF statistics:
- 88 PDF objects out of 1000 (max. 8388607)
- 0 named destinations out of 1000 (max. 500000)
- 1 words of extra memory for PDF output out of 10000 (max. 10000000)
-
+ 34i,0n,24p,273b,36s stack positions out of 5000i,500n,10000p,200000b,50000s
+!  ==> Fatal error occurred, no output PDF file produced!

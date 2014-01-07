@@ -1,7 +1,7 @@
-Quartus II Archive log --	C:/altera/13.0sp1/nn-projects/Archived_projects/DE3_harp_cache_ddr2_test.qarlog
+Quartus II Archive log --	C:/altera/13.0sp1/nn-projects/archived_projects/DE3_harp_cache_ddr2_test.qarlog
 
-Archive:	C:/altera/13.0sp1/nn-projects/Archived_projects/DE3_harp_cache_ddr2_test.qar
-Date:		Sat Oct 26 14:25:44 2013
+Archive:	C:/altera/13.0sp1/nn-projects/archived_projects/DE3_harp_cache_ddr2_test.qar
+Date:		Mon Jan 06 18:41:47 2014
 Quartus II 64-Bit		13.0.1 Build 232 06/12/2013 SP 1 SJ Full Version
 
 	=========== Files Selected: ===========
@@ -17,32 +17,19 @@ C:/Users/hparch/Dropbox/Personal/Thesis/Project/Cache_Minhaj_final/L2_ram.v
 C:/Users/hparch/Dropbox/Personal/Thesis/Project/Cache_Minhaj_final/MSHR_2.v
 C:/Users/hparch/Dropbox/Personal/Thesis/Project/Cache_Minhaj_final/Mem_dummy.v
 C:/Users/hparch/Dropbox/Personal/Thesis/Project/Cache_Minhaj_final/array.v
-C:/Users/hparch/Dropbox/Personal/Thesis/Project/Cache_Minhaj_final/blocking_fsm_L1.v
 C:/Users/hparch/Dropbox/Personal/Thesis/Project/Cache_Minhaj_final/cache_shared.v
 C:/Users/hparch/Dropbox/Personal/Thesis/Project/Cache_Minhaj_final/cache_subsystem.v
 C:/Users/hparch/Dropbox/Personal/Thesis/Project/Cache_Minhaj_final/data_ram.v
-C:/Users/hparch/Dropbox/Personal/Thesis/Project/Cache_Minhaj_final/fast_to_slow_clk_signal.v
+C:/Users/hparch/Dropbox/Personal/Thesis/Project/Cache_Minhaj_final/data_ram_simd.v
 C:/Users/hparch/Dropbox/Personal/Thesis/Project/Cache_Minhaj_final/fill_list_shift_register.v
 C:/Users/hparch/Dropbox/Personal/Thesis/Project/Cache_Minhaj_final/free_list_FIFO.v
-C:/Users/hparch/Dropbox/Personal/Thesis/Project/Cache_Minhaj_final/freq_div.v
-C:/Users/hparch/Dropbox/Personal/Thesis/Project/Cache_Minhaj_final/mshr_dummy.v
 C:/Users/hparch/Dropbox/Personal/Thesis/Project/Cache_Minhaj_final/nonblocking_fsm.v
-C:/Users/hparch/Dropbox/Personal/Thesis/Project/Cache_Minhaj_final/slow_to_fast_clk_signal.v
 C:/Users/hparch/Dropbox/Personal/Thesis/Project/Cache_Minhaj_final/tag_array.v
 C:/Users/hparch/Dropbox/Personal/Thesis/Project/NN_code/bcd_7seg_dec.v
 C:/Users/hparch/Dropbox/Personal/Thesis/Project/NN_code/blinker.v
 C:/Users/hparch/Dropbox/Personal/Thesis/Project/NN_code/ddr2_ctrl_test_example_sim_e0_d0.v
 C:/Users/hparch/Dropbox/Personal/Thesis/Project/NN_code/de3_display.v
-C:/Users/hparch/Dropbox/Personal/Thesis/Project/NN_code/integrated/altera_avalon_st_jtag_interface.sdc
-C:/Users/hparch/Dropbox/Personal/Thesis/Project/NN_code/integrated/altera_reset_controller.sdc
-C:/Users/hparch/Dropbox/Personal/Thesis/Project/NN_code/integrated/ddr2_ctrl_test_p0.sdc
-C:/Users/hparch/Dropbox/Personal/Thesis/Project/NN_code/integrated/ddr2_ctrl_test_p0_parameters.tcl
-C:/Users/hparch/Dropbox/Personal/Thesis/Project/NN_code/integrated/ddr2_ctrl_test_p0_pin_assignments.tcl
-C:/Users/hparch/Dropbox/Personal/Thesis/Project/NN_code/integrated/ddr2_ctrl_test_p0_pin_map.tcl
-C:/Users/hparch/Dropbox/Personal/Thesis/Project/NN_code/integrated/ddr2_ctrl_test_p0_report_timing.tcl
-C:/Users/hparch/Dropbox/Personal/Thesis/Project/NN_code/integrated/ddr2_ctrl_test_p0_report_timing_core.tcl
-C:/Users/hparch/Dropbox/Personal/Thesis/Project/NN_code/integrated/ddr2_ctrl_test_p0_timing.tcl
-C:/Users/hparch/Dropbox/Personal/Thesis/Project/NN_code/integrated/ddr2_ctrl_test_s0_make_qsys_seq.tcl
+C:/Users/hparch/Dropbox/Personal/Thesis/Project/NN_code/de3_display_new.v
 C:/Users/hparch/Dropbox/Personal/Thesis/Project/NN_code/integrated/harmonica.v
 C:/Users/hparch/Dropbox/Personal/Thesis/Project/NN_code/mem_ctrl_wrapper.v
 C:/Users/hparch/Dropbox/Personal/Thesis/Project/NN_code/msim_setup.tcl
@@ -220,17 +207,18 @@ C:/altera/13.0sp1/nn-projects/system-builder-projects/DE3_ddr_trial/ddr2_ctrl_te
 C:/altera/13.0sp1/nn-projects/system-builder-projects/DE3_ddr_trial/ddr2_ctrl_test/sequencer_scc_sv_phase_decode.v
 C:/altera/13.0sp1/nn-projects/system-builder-projects/DE3_ddr_trial/ddr2_ctrl_test/sequencer_scc_sv_wrapper.sv
 C:/altera/13.0sp1/nn-projects/system-builder-projects/DE3_ddr_trial/ddr2_ctrl_test_example.v
-C:/altera/13.0sp1/nn-projects/system-builder-projects/DE3_ddr_trial/ddr2_ctrl_test_example_design/simulation/verilog/submodules/alt_mem_if_common_ddr_mem_model_mem_if_dm_pins_en_mem_if_dqsn_en.sv
-C:/altera/13.0sp1/nn-projects/system-builder-projects/DE3_ddr_trial/ddr2_ctrl_test_example_design/simulation/verilog/submodules/alt_mem_if_ddr2_mem_model_top_mem_if_dm_pins_en_mem_if_dqsn_en.sv
-C:/altera/13.0sp1/nn-projects/system-builder-projects/DE3_ddr_trial/ddr2_ctrl_test_example_design/simulation/verilog/submodules/alt_mem_if_nextgen_ddr2_controller_core.sv
-C:/altera/13.0sp1/nn-projects/system-builder-projects/DE3_ddr_trial/ddr2_ctrl_test_example_design/simulation/verilog/submodules/altera_reset_controller.sdc
-C:/altera/13.0sp1/nn-projects/system-builder-projects/DE3_ddr_trial/ddr2_ctrl_test_example_design/simulation/verilog/submodules/ddr2_ctrl_test_example_sim_e0_if0_s0_make_qsys_seq.tcl
 C:/altera/13.0sp1/nn-projects/system-builder-projects/DE3_ddr_trial/incremental_db/compiled_partitions/DE3_ddr_trial.db_info
 C:/altera/13.0sp1/nn-projects/system-builder-projects/DE3_ddr_trial/nn_mem_ctrl_pll_cache_clkby2.ppf
 C:/altera/13.0sp1/nn-projects/system-builder-projects/DE3_ddr_trial/nn_mem_ctrl_pll_cache_clkby2.qip
 C:/altera/13.0sp1/nn-projects/system-builder-projects/DE3_ddr_trial/nn_mem_ctrl_pll_cache_clkby2.v
 C:/altera/13.0sp1/nn-projects/system-builder-projects/DE3_ddr_trial/simulation/modelsim/wave.do
-	======= Total: 225 files to archive =======
+	======= Total: 207 files to archive =======
 
 	================ Status: ===============
 All files archived successfully.
+
+
+******* Archived project restoration attempt on Mon Jan 06 18:42:06 2014
+Source archive file:	C:/altera/13.0sp1/nn-projects/archived_projects/DE3_harp_cache_ddr2_test.qar
+Archive was extracted into	C:/altera/13.0sp1/nn-projects/archived_projects/DE3_harp_cache_ddr2_test_restored/
+		 - successfully.

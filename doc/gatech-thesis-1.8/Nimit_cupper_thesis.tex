@@ -1,5 +1,6 @@
 \documentclass[12pt]{gatech-thesis}
-\usepackage{amsmath,amssymb,latexsym,float,epsfig,subfigure,url}
+\usepackage{amsmath,amssymb,latexsym,float,epsfig,subfigure,url}%,caption}
+%\captionsetup{belowskip=3pt,aboveskip=5pt}
 %%
 %% This example is adapted from ucthesis.tex, a part of the
 %% UCTHESIS class package...
@@ -37,15 +38,15 @@
 
 %% \major{Algorithms, Combinatorics, and Optimization} 
 \copyrighttrue
-\copyrightyear{2013}
-\submitdate{December 2013} % Must be the month and year of graduation,
+\copyrightyear{2014}
+\submitdate{May 2014} % Must be the month and year of graduation,
                          % not thesis approval! As of 2010, this means
                          % this text must be May, August, or December
                          % followed by the year.
 
 %% The date the last committee member signs the thesis form. Printed
 %% on the approval page.
-\approveddate{December 2013}
+\approveddate{Jan 2014}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %Bib / summary / Preface
@@ -61,7 +62,7 @@
 \null\vfil
 {\large
 \begin{center}
-To my family,\\\vspace{12pt}
+To my family\\\vspace{12pt}
 and friends.\\\vspace{12pt}
 
 \end{center}}
@@ -69,7 +70,7 @@ and friends.\\\vspace{12pt}
 \end{dedication}
 
 \begin{preface}
-Prototyping new systems on hardware is a time consuming task with limited scope for architectural exploration. The aim of this work was to do fast prototyping of general purpose Graphics Processing Units (GPGPUs) on Field Programmable Gate Arrays (FPGAs) using a novel tool chain. This hardware flow combined with the higher level simulation flow using the same source code allowed us to create a whole tool chain to study and build future architectures using new technologies. It also gave us enough flexibility at different granularities. We will also discuss some example systems which were built using this tool chain along with some results.
+Prototyping new systems on hardware is a time-consuming task with limited scope for architectural exploration. The aim of this work was to perform fast prototyping of general-purpose graphics processing units (GPGPUs) on field programmable gate arrays (FPGAs) using a novel tool chain. This hardware flow combined with the higher level simulation flow using the same source code allowed us to create a whole tool chain to study and build future architectures using new technologies. It also gave us enough flexibility at different granularities to make architectural decisions. We will also discuss some example systems that were built using this tool chain along with some results.
 \end{preface}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -93,22 +94,22 @@ Prototyping new systems on hardware is a time consuming task with limited scope 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Abbreviations
 %\abbreviations
-\pagebreak
-\noindent
-\begin{tabbing}
-xxxxxxxxxxx \= xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \kill
-\textbf{FPGA}   \> Field Programmable Gate Arrays \\
-\textbf{ASIC}   \> Application Specific Integrated Circuit \\
-\textbf{GPGPU}  \> General Purpose Graphics Processing Units\\
-\textbf{IP}  \> Itellectual Property\\
-\textbf{SIMD}  \> Single Instruction Multiple Data\\
-\textbf{MMU}  \> Memory Management Unit\\
-\textbf{PLL}  \> Phase Locked Loop\\
-\textbf{RAM}  \> Random Access Memory\\
-\textbf{ROM}  \> Read Only Memory\\
-\textbf{MSHR}  \> Miss Status Handling Register\\
-\end{tabbing}
-\pagebreak
+%\pagebreak
+%\noindent
+%\begin{tabbing}
+%xxxxxxxxxxx \= xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx \kill
+%\textbf{FPGA}   \> Field Programmable Gate Arrays \\
+%\textbf{ASIC}   \> Application Specific Integrated Circuit \\
+%\textbf{GPGPU}  \> General Purpose Graphics Processing Units\\
+%\textbf{IP}  \> Itellectual Property\\
+%\textbf{SIMD}  \> Single Instruction Multiple Data\\
+%\textbf{MMU}  \> Memory Management Unit\\
+%\textbf{PLL}  \> Phase Locked Loop\\
+%\textbf{RAM}  \> Random Access Memory\\
+%\textbf{ROM}  \> Read Only Memory\\
+%\textbf{MSHR}  \> Miss Status Handling Register\\
+%\end{tabbing}
+%\pagebreak
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand{\figput}[5][1.0\linewidth]{
 \begin{figure}[!hbtp]

@@ -1398,7 +1398,7 @@ openright,doublespaced,normalmargins,final}
       \vspace*{50\p@}%
     \fi
     \begin{center}%
-        {\large\bfseries\MakeUppercase{\expandafter{\@title}}}\\%%%% TITLE FONT SIZE!!!!
+        {\large \bfseries\MakeUppercase{\expandafter{\@title}}}\\%%%% TITLE FONT SIZE!!!!
     \end{center}%
   \else%
     \begin{center}

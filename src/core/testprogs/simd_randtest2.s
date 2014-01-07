@@ -1,4 +1,4 @@
-/* Harp example program 1: Sum 1-100, first writing the numbers to RAM */
+/* Harp MMU and cache stress test example program: Write and read lot of lines to same index in the cache.*/
 .def SIZE 8
 
 .perm rwx
@@ -20,7 +20,7 @@ sloop:  add %r4, %r6, %r1
         ldi  %r3, #0
 
         ldi %r4, #1
-        shli %r4, %r4, #16	/*address offset to clash with same index 2^15*/
+        shli %r4, %r4, #15	/*address offset to clash with same index 2^15*/
 lloop:  ld %r2, %r0, array
         subi %r1, %r1, #1
         add %r3, %r3, %r2

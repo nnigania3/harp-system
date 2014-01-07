@@ -6,15 +6,16 @@
 \section{Board and Test Environment}
 
 %\TODO{this part is a repeat}.
-The FPGA board used for the studies and experiment is a Terasic DE3 board. It uses an Altera FPGA for prototyping. The FPGA used is a Stratix III 3SL150 FPGA with the following properties: 142,000 logic elements (LEs), 5,499K total memory Kbits, 384 18x18-bit multipliers blocks and 736 user I/Os. The DE3 board also has support for DDR2 RAM, USB, leds, 7-segement display and connectors to stack multiple boards. Figure~\ref{fig:fpga_board} shows a picture of the FPGA board used for this work. We use a 1GB DDR2 DIMM. The benchmarks as mentioned earlier in Table~\ref{table:apps} were all written in Harp assembly.
+The FPGA board used for the studies and experiment is a Terasic DE3 board. It uses an Altera FPGA for prototyping. The FPGA used is a Stratix III 3SL150 FPGA with the following properties: 142,000 logic elements (LEs), 5,499K total memory Kbits, 384 18x18-bit multipliers blocks and 736 user I/Os. The DE3 board also has support for DDR2 RAM, USB, leds, seven-segement display, and connectors to stack multiple boards. Figure~\ref{fig:board2} shows a picture of the FPGA board used for this work. We use a 1GB DDR2 DIMM. The benchmarksn as mentioned earlier in Table~\ref{table:apps} were all written in HARP assembly.
 
-To measure the performance we calculated IPC(Instructions Per Cycle). The number of instructions was calculated using the Harptool emulator. Number of cycles can be easily measured on the simulator but to measure the actualy number of cycles on the FPGA board we created hardware counters in our design. We start counting when all components are initialized and stop when we reach the end of our benchmark. To indicate correctness we display three signals on the board to indicate test complete, pass and fail for the core. The checksum logic for the pass signal is defined for each benchmark in our test module, say for example we check the final sum of `array sum' application with the known answer. We also have two more signals to show DDR2 controller initilization pass/fail. The number of cycles information from the hardware counter is displayed on the 7-segment display on the board.
+To measure the performance, we calculated IPC (Instructions Per Cycle). The number of instructions was calculated using the Harptool emulator. The number of cycles can be easily measured on the simulator but, to measure the actual number of cycles on the FPGA board we created hardware counters in our design. We start counting when all components are initialized and stop when we reach the end of our benchmark. To indicate correctness we display three signals on the board to indicate test complete, pass, and fail for the core. The checksum logic for the pass signal is defined for each benchmark in our test module, say, for example we check the final sum of `array sum' application with the known answer. We also have two more signals to show DDR2 controller initilization pass/fail. The number of cycles information from the hardware counter is displayed on the seven-segment display on the board.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Results}
 
-The basic parameters for the core and cache are set as shown in Table~\ref{table:core_config}
+The basic parameters for the core and cache are set as shown in Table~\ref{table:core_config}.
 \begin{table}[!htbp]
   \centering
+  \caption{Core configuration.}
   \begin{tabular}{|l|c|}
     \hline
     \multicolumn{2}{|c|}{Core Configuration} \\
@@ -32,18 +33,18 @@ Instruction ROM:			& 1024KB\\
 %Vector Registers: 			&  (16 for SIMD)\\
     \hline
   \end{tabular}
-  \caption{Core Configuration.}
   \label{table:core_config}
 \end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-After creating the basic building blocks of our system, we tried to run performance and functional tests on a few example designs. Below we discuss three versions of the Harp Core and its performance for simple micro-benchmarks.\\
+After creating the basic building blocks of our system, we tried to run performance and functional tests on a few example designs. Below we discuss three versions of the HARP Core and their performance for simple micro-benchmarks.
 
-\noindent\textbf{Single 1-Lane Harp Core:}\\
-First we ran the benchmarks on a simple 1-lane Harp Core. For the benchmarks ran, we did not see much benefit of using a complex load store queue as the applications had a dependent instruction following a load instruction which would stall the pipeline until the dependent load is serviced. Hence to make the design simple we removed the complex load/store queue so the core now sends blocking requests to the memory subsystem, though independent instructions can still keep flowing in the pipeline. Table~\ref{table:perf1} shows the performance and Table~\ref{table:fpga_util1} shows the logic utilization of this system. The low IPC is because almost all applications have a chain of dependent instructions.  
+\noindent\textbf{Single One-Lane HARP Core:}\\
+First we ran the benchmarks on a simple one-lane HARP core. For the benchmarks run, we did not see much benefit of using a complex load store queue, as the applications had a dependent instruction following a load instruction, which would stall the pipeline until the dependent load is serviced. Hence, to make the design simple we removed the complex load/store queue so the core now sends blocking requests to the memory subsystem, though independent instructions can still keep flowing in the pipeline. Table~\ref{table:perf1} shows the performance and Table~\ref{table:fpga_util1} shows the logic utilization of this system. The low IPC is because almost all applications have a chain of dependent instructions.  
 
 \begin{table}[!htbp]
   \centering
+  \caption{Single core one-lane performance.}
   \begin{tabular}{|l|c|c|c|c|}
     \hline
 Benchmark		&Instructions 	&Cycles		&IPC		&Description\\
@@ -54,12 +55,12 @@ Bubble sort:		&799		&2593		&0.3081 	&Sort 0-9\\
 Matrix multiplication:	&6082		&19855		&0.3063 	&Multiply 8x8 matrices\\
     \hline
   \end{tabular}
-  \caption{Single Core 1-Lane Performance}
   \label{table:perf1}
 \end{table}
 
 \begin{table}[!htbp]
   \centering
+  \caption{Logic utilization of a single one-lane core.}
   \begin{tabular}{|l|c|}
     \hline
     \multicolumn{2}{|c|}{Logic Utilization} \\
@@ -72,16 +73,16 @@ Total block memory bits:	& 27\%  (1,505,792 / 5,630,976 )\\
 Total pins:			& 25\% 	(189 / 744)\\
     \hline
   \end{tabular}
-  \caption{Logic Utilization Of A Single 1-Lane Core}
   \label{table:fpga_util1}
 \end{table}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\noindent\textbf{Dual 1-Lane Harp Core}\\
-Next we instantiate two of the 1-lane Harp cores above to form a multi-core system. Table~\ref{table:perf2} shows the performance and Table~\ref{table:fpga_util2} shows the logic utilization of this system.
+\noindent\textbf{Dual One-Lane HARP Core:}\\
+Next we instantiate two of the one-lane HARP cores above to form a multi-core system. Table~\ref{table:perf2} shows the performance and Table~\ref{table:fpga_util2} shows the logic utilization.
 
 \begin{table}[!htbp]
   \centering
+  \caption{Dual core one-lane performance.}
   \begin{tabular}{|l|l|c|c|c|}
     \hline
 Core-1 Benchmark	&Core-2 Benchmark	&Instructions 	&Cycles		&IPC	\\
@@ -92,12 +93,12 @@ Array Sum		&Matrix multiplication		&8994		&19857		&0.4529	\\
 Matrix multiplication&Matrix multiplication	&12164		&19857		&0.6125 \\
     \hline
   \end{tabular}
-  \caption{Dual Core 1-Lane Performance}
   \label{table:perf2}
 \end{table}
 
 \begin{table}[!htbp]
   \centering
+  \caption{Logic utilization of a dual one-lane core.}
   \begin{tabular}{|l|c|}
     \hline
     \multicolumn{2}{|c|}{Logic Utilization} \\
@@ -110,20 +111,20 @@ Total block memory bits:	& 29\%  (1,647,104 / 5,630,976 )\\
 Total pins:			& 25\% 	(189 / 744)\\
     \hline
   \end{tabular}
-  \caption{Logic Utilization Of A Dual 1-Lane Core}
   \label{table:fpga_util2}
 \end{table}
 
-We can clearly see in Table~\ref{table:perf2} the benefits of using multiple cores on performance. Also we can see how by using a simple design of the core and having slightly more complex cache design helps us to keep the logic utilization to the minimum (scalable design). Given the above logic utilization we can easily instantiate more than 8 cores on the FPGA device.
-Since there is no sharing and the applications are not memory internsive the performance scales linearly with number of cores for the above applications when we replicate the application across multiple cores as we can see in the results for matrix multiplication. \\
+We can clearly see in Table~\ref{table:perf2} the benefits on performance of using multiple cores. Also, we can see that by using a simple design of the core and having a slightly more complex cache design helps us to keep the logic utilization to the minimum (scalable design). Given the above logic utilization we can easily instantiate more than eight cores on the FPGA device.
+Since there is no sharing and the applications are not memory internsive, the performance scales linearly with the number of cores for the above applications when we replicate the application across multiple cores, as we can see in the results for matrix multiplication.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\noindent\textbf{Single SIMD 8-Lane Harp Core}\\
-We also design and run an 8 Lane SIMD Core on the FPGA board. We used simple applications initially to test the complex coalescing unit. Once that was done we tried to run a compute internsive matrix multiplication code on the board. Comparing the performance numbers we can clearly see the advantage of using SIMD. The effective IPC would be about 8x of this reported value as the same instruction is executed across all the eight lanes. This comes at the cost of much higher logic utilization due to the coalescing unit and the duplication of ALU blocks and register files for the SIMD core. Table~\ref{table:perf3} shows the performance and Table~\ref{table:fpga_util3} shows the logic utilization of this system.
+\noindent\textbf{Single SIMD eight-Lane HARP Core:}\\
+We also designed and ran an eight lane SIMD core on the FPGA board. We used simple applications initially to test the complex coalescing unit. Once that was done we tried to run a compute-internsive matrix multiplication code on the board. Comparing the performance numbers we can clearly see the advantage of using SIMD. The effective IPC would be about 8x this reported value, as the same instruction is executed across all the lanes. This comes at the cost of much higher logic utilization due to the coalescing unit and the duplication of ALU blocks and register files for the SIMD core. Table~\ref{table:perf3} shows the performance and Table~\ref{table:fpga_util3} shows the logic utilization of this system.
 
 %Benchmarks Results:
 \begin{table}[!htbp]
   \centering
+  \caption{Eight-lane SIMD core performance.}
   \begin{tabular}{|l|c|c|c|c|}
     \hline
 Benchmark		&Instructions 	&Cycles		&IPC		&Description\\
@@ -133,13 +134,13 @@ Coalesced Vector Sum:	&399		&1068		&0.3735 	&Sum 240 numbers\\
 Un-Coalesced Vector Sum:&399		&1300		&0.3069 	&Sum 240 numbers\\
     \hline
   \end{tabular}
-  \caption{8-Lane SIMD Core Performance}
   \label{table:perf3}
 \end{table}
 
 %Logic Consumption:
 \begin{table}[!htbp]
   \centering
+  \caption{Logic utilization of a single eight-lane SIMD core.}
   \begin{tabular}{|l|c|}
     \hline
     \multicolumn{2}{|c|}{Logic Utilization} \\
@@ -152,21 +153,21 @@ Total block memory bits:	& 27\%  (1,505,792 / 5,630,976)\\
 Total pins:			& 25\% 	(189 / 744)\\
     \hline
   \end{tabular}
-  \caption{Logic Utilization Of A Single 8-Lane SIMD Core}
   \label{table:fpga_util3}
 \end{table}
 
-Using SIMD does give us performance benefits as can be seen in  Table~\ref{table:perf3}. We also dont see a big difference in the performance of coalesced and uncoalesced array sum applications due to the fact that we have a non-blocking cache and a load store queue. For the above tests a maximum of 4 requests are being served simultaneously but can be easily increased by changing the parameter for MSHR entries and the FIFO size for cache-DDR interface.
+Using SIMD does give us performance benefits, as can be seen in  Table~\ref{table:perf3}. We also don't see a big difference in the performance of coalesced and uncoalesced array sum applications because we have a non-blocking cache and a load store queue. For the above tests, a maximum of four requests are being served simultaneously but can be easily increased by changing the parameter for MSHR entries and the FIFO size for the cache-DDR interface.
 
-The aim of all the above experiments was not only to show obvious benefits due to SIMD or multiple cores. We can always choose to build a system and select an  application to show really good performance benefit. But rather the aim of this chapter was to estabilish credibility and show the felxibility offered by the whole design. Depending on the resource constraints and performance goals we can create a heterogeneous system where we have the choice to select the type of core (simple/complex/SIMD) and the number of cores.
+The aim of all the above experiments was not only to show obvious benefits resulting from SIMD or multiple cores; we can always choose to build a system and select an  application to show really good performance benefit. Rather, the aim of this chapter was to estabilish credibility and show the felxibility offered by the whole design. Depending on the resource constraints and performance goals, we can create a heterogeneous system where we have the choice to select the type of core (simple/complex/SIMD) and the number of cores.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% 
 
-\section{Prototyping a big.LITTLE Heterogeneous Harp System}
-The above section demonstrates some of the conventional systems that can be designed using our tool set. In order to highlight the flexibility offered in quickly prototyping new systems we tested a heterogeneous system consisting of a big SIMD core along with many small cores. This system has similarities to the big.LITTLE systems proposed by ARM\cite{biglittle}. This system also fits the description of a possible future system consisting of an HMC. An HMC has layers of memory stacked on top of a logic layer which can be an ideal place to implement tiny processors for computing close to the memory. The vault in an HMC is one vertical division with its own logic and memory stack. Hence a vault can be one such tiny core. In our system the smaller cores simulate a vault. They all have their own memory close to them alleviating the need for a cache. All the small cores work independently with a big SIMD core which is running a compute intensive application like matrix multiplication. Since there can be many such cores we look at the examples of a 1 big core along with two, six and eight little cores. Table~\ref{table:perf4} shows the performance of various heterogeneous systems tested and Table~\ref{table:fpga_util4} shows the logic utilization of these systems.
+\section{Prototyping a big.LITTLE Heterogeneous HARP System}
+The above section demonstrates some of the conventional systems that can be designed using our tool set. In order to highlight the flexibility offered in quickly prototyping new systems, we tested a heterogeneous system consisting of a big SIMD core along with many small cores. This system has similarities to the big.LITTLE systems proposed by ARM \cite{biglittle}. This system also fits the description of a possible future system consisting of an HMC. An HMC has layers of memory stacked on top of a logic layer, which can be an ideal place to implement tiny processors for computing close to the memory. The vault in an HMC is one vertical division with its own logic and memory stack. Hence, a vault can be one such tiny core. In our system, the smaller cores simulate a vault. They all have their own memory close to them, alleviating the need for a cache. All the small cores work independently with a big SIMD core, which is running a compute-intensive application like matrix multiplication. Since there can be many such cores, we look at the example of one big core along with two, six, and eight little cores. Table~\ref{table:perf4} shows the performance of various heterogeneous systems tested and Table~\ref{table:fpga_util4} shows the logic utilization of these systems.
 
 %Benchmarks Results:
 \begin{table}[!htbp]
   \centering
+  \caption{Heterogeneous HARP system performance.}
   \begin{tabular}{|l|c|c|c|l|}
     \hline
 Core Configuration		&Total Instructions 	&Cycles		&IPC		&Description\\
@@ -181,13 +182,13 @@ Core Configuration		&Total Instructions 	&Cycles		&IPC		&Description\\
 								&			&			&			&Little cores: bubble sort 0-9\\
     \hline
   \end{tabular}
-  \caption{Heterogeneous Harp System Performance}
   \label{table:perf4}
 \end{table}
 
 %Logic Consumption:
 \begin{table}[!htbp]
   \centering
+  \caption{Logic utilization of big.LITTLE HARP systems.}
   \begin{tabular}{|l|c|c|c|}
     \hline
 %    \multicolumn{4}{|c|}{Logic Utilization} \\
@@ -201,7 +202,6 @@ FPGA Logic Utilization:		& 62\% 				& 80\% 				& 88\% \\
 Total block memory bits:	& 27\%				& 28\%				& 28\% (1,590,474/5,630,976)\\
     \hline
   \end{tabular}
-  \caption{Logic Utilization Of big.LITTLE Harp Systems}
   \label{table:fpga_util4}
 \end{table}
 

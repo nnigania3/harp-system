@@ -1,10 +1,10 @@
-\contentsline {table}{\numberline {1}{\ignorespaces Micro-Benchmarks Studied}}{12}
-\contentsline {table}{\numberline {2}{\ignorespaces Core Configuration.}}{28}
-\contentsline {table}{\numberline {3}{\ignorespaces Single Core 1-Lane Performance}}{29}
-\contentsline {table}{\numberline {4}{\ignorespaces Logic Utilization Of A Single 1-Lane Core}}{29}
-\contentsline {table}{\numberline {5}{\ignorespaces Dual Core 1-Lane Performance}}{29}
-\contentsline {table}{\numberline {6}{\ignorespaces Logic Utilization Of A Dual 1-Lane Core}}{29}
-\contentsline {table}{\numberline {7}{\ignorespaces 8-Lane SIMD Core Performance}}{30}
-\contentsline {table}{\numberline {8}{\ignorespaces Logic Utilization Of A Single 8-Lane SIMD Core}}{31}
-\contentsline {table}{\numberline {9}{\ignorespaces Heterogeneous Harp System Performance}}{32}
-\contentsline {table}{\numberline {10}{\ignorespaces Logic Utilization Of big.LITTLE Harp Systems}}{32}
+\contentsline {table}{\numberline {1}{\ignorespaces Micro-Benchmarks studied.}}{11}
+\contentsline {table}{\numberline {2}{\ignorespaces Core configuration.}}{27}
+\contentsline {table}{\numberline {3}{\ignorespaces Single core one-lane performance.}}{28}
+\contentsline {table}{\numberline {4}{\ignorespaces Logic utilization of a single one-lane core.}}{28}
+\contentsline {table}{\numberline {5}{\ignorespaces Dual core one-lane performance.}}{28}
+\contentsline {table}{\numberline {6}{\ignorespaces Logic utilization of a dual one-lane core.}}{28}
+\contentsline {table}{\numberline {7}{\ignorespaces Eight-lane SIMD core performance.}}{29}
+\contentsline {table}{\numberline {8}{\ignorespaces Logic utilization of a single eight-lane SIMD core.}}{30}
+\contentsline {table}{\numberline {9}{\ignorespaces Heterogeneous HARP system performance.}}{31}
+\contentsline {table}{\numberline {10}{\ignorespaces Logic utilization of big.LITTLE HARP systems.}}{31}
