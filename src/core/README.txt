@@ -1,5 +1,7 @@
 Harp Core Main files:
-=======================Files===============================
+=======================
+Files
+=======================
 You can get all HARP tools from the harmonica and harptool git repository. I have made only minor changes to the files and I have only included those file in my git repo. You should merge these changes with the file from original harmoncia repo.
 
 - harmonica.cpp: This is the main file which has all pipeline stages and instantiates all the blocks. I have made only 1-2changes (using ifdef statements)
@@ -26,7 +28,9 @@ You can get all HARP tools from the harmonica and harptool git repository. I hav
              sum_sim8coal.s: Do a coalesced sum of a an array of numbers
              simd_randtest*.s: random tests to stress the cache and load/store unit.
    
-=======================Building harmonica.v===============================
+=======================
+Building harmonica.v
+=======================
 harmonica.v: This is the verilog file generated once you 'make' harmonica. This is the verilog file for the core used for our projects. It has signals for I/O (char_out*) and cache.
 
 Building harmonica: Just do 'make' and set the appropriate flags in Makefile and change the config.h according to what type of core is need.

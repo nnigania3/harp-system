@@ -1,6 +1,11 @@
-=======================Cache (L1+L2)===============================
+=======================
+Cache (L1+L2)
+=======================
 For overview of the cache read the thesis write up and also the '/doc/Final_Report_Format_Kani_Hassan.pdf'
-=======================Files===============================
+
+=======================
+Files
+=======================
 Main Files:
 cache_subsystem.v : This is the L1+L2 cache top level file. It instantiates 1 L1 and 1 L2
 cache_shared.v:  This is the 2x L1+L2 cache top level file. It instantiates 2 L1's and 1 L2, along with an arbiter.
@@ -58,7 +63,9 @@ test_blocking.v
 test_nonblocking.v
 test_shared.v
 
-=========================DDR2 / Cache-Memory Interface=============================
+=============================
+DDR2 / Cache-Memory Interface
+=============================
 Memory / DDR2 Code:
 
 We have the option to choose either a dummy memory created using block RAM or we can use an actual DDR2. This is controlled by a flag called 'DUMMY_MEM' which is used in the L2 cache code to either use a dummy memory or use an interface for the DDR2 and drive the DDR2 signals.
