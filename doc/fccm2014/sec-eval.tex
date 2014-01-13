@@ -1,0 +1,10 @@
+The Structural Simulation Toolkit \cite{sst} is central to our evaluation methodology.
+SST provides a distributed simulation framework with a versatile, configurable memory system model, including VaultSim, a model of 3D stacked DRAM.
+To SST we couple MacSim \cite{macsim}, a trace-driven processor and GPU simulator, and CHDL, a \texttt{C++} hardware design and simulation library.
+
+\begin{figure*}[h!]
+  \centering
+  \includegraphics[width=6in]{fig/toolchain}
+  \caption{The authors' software infrastructure consists of an RTL CPU design with an enabling hardware design library, a high-level simulation flow, and a low-level implementation flow capable of targeting FPGAs.}
+  \label{fig:toolchain}
+\end{figure*}

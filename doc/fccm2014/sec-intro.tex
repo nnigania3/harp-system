@@ -1,0 +1,37 @@
+% - Row-buffers are big and allow unrestricted access to memory
+% - DDR bandwidths are getting faster at the cost of power
+% - Data movement is expensive, period
+% - Locating computing closer to memory provides equivalent or better bandwidth
+%    - With less energy overhead
+%    - With less transfer latency
+% - Earlier research into processor-in-memory was hindered by unsuitability of
+%   DRAM processes for logic.
+% - 3D stacking and novel packaging has renewed interest in PNM.
+% - Multithreaded data parallel processors (like GPGPUs) make sense near RAM
+%   because of their applications' ability to saturate DRAM bandwidth and re-
+%   configurable logic (like FPGAs) makes sense near RAM because of their
+%   applications' " " " " bandwidth.
+%     - ``But wait!'' you say. Bandwidth is fine. Latency is the name of the
+%       game for near-memory.
+%       - It's all about the joules.
+% - We need simulators to evaluate these processors.
+
+Data movement is responsible for a large portion of the power budget of modern supercomputers.
+Techniques for mitigating this cost have focused on reducing the amount, frequency, and cost of long-distance communication, but this still does not address the basic problem of access to data in DRAM.
+For memory-intense applications with certain access patterns, the DRAM bandwidth is readily saturated.
+
+A historical approach to solving this problem was PIM, processor-in-memory; placing compute logic on the same die as DRAM.
+This provides unhindered access to the entire row buffer, enabling unprecedented bandwidth between the on-memory processing elements and the RAM.
+This technique ultimately proved unfeasible in cost-oriented commodity DRAM processes.
+They were simply unable to provide fast enough MOSFETs to justify moving any amount of processing into the DRAM.
+This frustrating state of affairs received a perturbation when manufacturers began demonstrating successful 3D stacked memory products.
+These allow processors to be implemented in suitable processes and stacked under DRAM layers, either directly with through-silicon vias or in the same package.
+
+When a disruptive technology such as 3D-stacked RAM appears, computer architects race to incorporate it into new architectures and characterize them.
+The near-memory processing enabled by these stacked RAMs is no different.
+This paper describes the set of architectures our group is exploring and the set of tools we are using to evaluate them.
+
+This document is structured as follows:
+First we will describe the sets of architectures employing near-memory processing that we are exploring, the programming models exported by these machines, and the benchmark applications we intend to evaluate on them.
+In the second section, we will describe the evaluation and prototyping environment we are using to explore these architectures.
+We will conclude a quick look at planned future work.

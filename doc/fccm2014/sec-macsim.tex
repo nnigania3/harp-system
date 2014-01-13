@@ -1,0 +1,14 @@
+MacSim \cite{macsim} is a trace-driven and cycle-level heterogeneous architecture simulator.
+It models architectural behaviors such as detailed pipeline stages, multi-threading, and memory systems. 
+
+Micron's Hybrid Memory Cube (HMC) \cite{hmc} is one of the most promising emerging technologies supporting the implementation of near memory architectures.
+
+We can easily explore many points in our architectural design space including ones that exploit HMC as a near memory dram cache alongside an off-chip memory by varying MacSim and VaultSim configurations and assembling different memory hierarchies in the SST configuration.
+
+We can configure MacSim and VaultSim on top of the SST framework so that it models architectures that are of interest.
+For example we can form a variety of topologies of VaultSims to get an idea of how different characteristics of HMC as opposed to current DDR-based memory can affect overall system performance when they are employed in different formation.
+Specifically we can organize more than one VaultSims so that one of them directly talks to MacSim (Host CPUs or GPUs) while others talk to each other.
+
+Besides, we can vary the number of GPUs, the number of VaultSims, typical DRAM parameters, TSV width, link bandwidth, transaction size, etc to evaluate the sensitivity to parameters in different configurations so that we can get an idea how each and every parameter influences on performance as well as which is the optimal configuration and topology pair before diving into deep exploration.
+
+%We select 29 benchmarks from spec2006 benchmark suite to cover a wide range of application domains. For each benchmark, we use the default input included in its corresponding benchmark suite.

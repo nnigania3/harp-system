@@ -1,0 +1,18 @@
+%..
+
+PIM systems have been researched intermittently for a long time now. Most of the work involved major modifications to the DRAM architecture and they used simulators to shows the benefit. Many designs also used SRAM for the near memory \cite{diva}. Among the initial works, one version developed by \cite{terasys} built PIM as a SIMD array of ALUs next to an SRAM.
+%[uiuc] uses execution driven simulators to design a co-processor system with the co-processor having scratch pad memory.
+\cite{diva} was a popular PIM based architecture where they simulated using RSIM and also created a first prototype. The fabricated prototype ASIC showed encouraging results but again it is time consuming to redesign prototypes for new architecture. It also requires a significant change to DRAM architecture.
+We did not find much literature which talked about providing enough flexibility to explore different architectures of not just the PIM node but of the overall system. They were either more focused on creating prototypes based on a fixed architecture \cite{diva}\cite{flexram}\cite{iram} or its advantage for certain types of applications at a high level using simulations \cite{multimedia_fpga}\cite{sram_based_simulation}\cite{blast}.
+
+%the downside being it required its own highly programming language with no room for flexibility and given availability of FPGAs we already have this kind of implementation.
+
+%[DIVA] M. Hall, P. Kogge, J. Koller, P. Diniz, J. Chame, J. Draper, J. LaCoss, J. Granacki, A. Srivastava, W. Athas, J. Brockman, V. Freeh, J. Park, and J. Shin. Mapping Irregular Applications to DIVA, A PIM-based Data-intensive Architecture. In Proceedings of the Supercomputing 1999, 1999
+%[FlexRam] Y. Kang, M. Huang, S. Yoo, Z. Ge, D. Keen, V. Lam, P. Pattnaik, and J. Torrellas. FlexRAM: Toward an Advanced Intelligent Memory System. In International Conference on Computer Design (ICCD), 1999.
+%[IRAM] D. Patterson, T. Anderson, N. Cardwell, R. Fromm, K. Keeton, C. Kozyrakis, R. Thomas, and K. Yelick. A Case for Intelligent RAM. IEEE Micro, 17(2):3444, 1997
+%[Blast]An Efficient PIM (Processor-In-Memory) Architecture for BLAST Jung-Yup Kang, Sandeep Gupta,Jean-Luc Gaudiot
+%[uiuc] MingliangWei, Marc Snir, Josep Torrellas and R. Brett Tremaine. A Near-Memory Processor for Vector, Streaming and Bit Manipulation Workloads 
+%[terasys_1995]Gokhale, M. et al., "Processing in memory: the Terasys massively parallel PIM array"
+%[ActivePages] M. Oskin et al., Active Pages: A computation model for intelligent memory, IEEE, 1999.
+%[multimedia_fpga] Marco Lanuzzaet al., "Cost-Effective Low-Power Processor-In-Memory-based Reconfigurable Datapath for Multimedia Applications"
+%[sram_based_simulation] N.Venkateswaran et al., "Memory In Processor: A Novel Design Paradigm for Supercomputing Architectures"

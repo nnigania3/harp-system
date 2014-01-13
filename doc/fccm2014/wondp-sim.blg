@@ -1,0 +1,57 @@
+This is BibTeX, Version 0.99c (TeX Live 2009/Debian)
+The top-level auxiliary file: wondp-sim.aux
+The style file: IEEEtranS.bst
+Reallocated wiz_functions (elt_size=4) to 6000 items from 3000.
+Database file #1: references.bib
+-- IEEEtranS.bst version 1.13 (2008/09/30) by Michael Shell.
+-- http://www.michaelshell.org/tex/ieeetran/bibtex/
+-- See the "IEEEtran_bst_HOWTO.pdf" manual for usage information.
+** Sorting version - not for normal IEEE work.
+** IEEEtran BST control entry "bstctl:etal" detected.
+** IEEEtran BST control entry "bstctl:nodash" detected.
+** IEEEtran BST control entry "bstctl:simpurl" detected.
+Warning--missing publisher in macsim
+
+Done.
+You've used 15 entries,
+            4498 wiz_defined-function locations,
+            969 strings with 10713 characters,
+and the built_in function-call counts, 11308 in all, are:
+= -- 1011
+> -- 316
+< -- 78
++ -- 164
+- -- 92
+* -- 614
+:= -- 1734
+add.period$ -- 26
+call.type$ -- 15
+change.case$ -- 102
+chr.to.int$ -- 188
+cite$ -- 16
+duplicate$ -- 669
+empty$ -- 843
+format.name$ -- 101
+if$ -- 2510
+int.to.chr$ -- 0
+int.to.str$ -- 12
+missing$ -- 112
+newline$ -- 67
+num.names$ -- 24
+pop$ -- 309
+preamble$ -- 1
+purify$ -- 89
+quote$ -- 8
+skip$ -- 822
+stack$ -- 0
+substring$ -- 497
+swap$ -- 513
+text.length$ -- 17
+text.prefix$ -- 0
+top$ -- 9
+type$ -- 132
+warning$ -- 1
+while$ -- 57
+width$ -- 14
+write$ -- 145
+(There was 1 warning)
